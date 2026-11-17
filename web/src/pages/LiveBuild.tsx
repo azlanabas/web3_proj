@@ -98,7 +98,7 @@ cast logs --address $ESCROW --from-block ${c?.deployBlock ?? "0"}${explorer ? `\
           rows={[
             ["1", "Open Overview", "The money waits in a contract, not in our account — that is the whole thesis."],
             ["2", "One sale, end to end", "Six steps: list, open, fund, ship, confirm, index. Every one is a transaction."],
-            ["3", "Live walkthrough", "Start a session, open an escrow, fund it. Point at the header: the badge reads the network from the API."],
+            ["3", "Run an escrow", "Start a session and follow the turns: seller lists, buyer funds, seller ships, buyer confirms. Each turn shows its transaction."],
             ["4", "This page", "These are the real transactions, with block numbers. Etherscan will show the same hashes."],
             ["5", "Networks & testnets", "Sepolia is live; mainnet is deliberately not, because it needs an audit."],
           ]}
