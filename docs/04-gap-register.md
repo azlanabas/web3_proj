@@ -62,6 +62,26 @@ or decided**, not when someone assumes an answer.
 | — | Whether `heurist.online` is on GoDaddy | Verified via live NS lookup | 2026-11-17 |
 | — | Whether a wildcard DNS record exists | Verified: none | 2026-11-17 |
 
+## Closed on 2026-11-17 (AWS authenticated)
+
+| ID | Gap | Resolution |
+|---|---|---|
+| G-01 | AWS session expired | Owner ran `aws login`; `sts get-caller-identity` succeeds (still an `:root` session) |
+| G-02 | EC2 identity unknown | Existing `t4g.small`, arm64, Ubuntu 24.04.4, reused as instructed |
+| G-03 | Chain choice | D-11 LOCKED — Ethereum Sepolia |
+| G-05 | ORM choice | D-10 LOCKED — Prisma |
+| G-06 | Public IP | Elastic IP attached; stable, so the DNS record can be created now |
+| G-09 | Deploy path | `/srv/web3proj` (host already uses `/srv/<app>`) |
+| G-11 | Git remote | D-13 LOCKED — repo created and pushed |
+
+**New gaps found while authenticating:**
+
+| ID | Gap | Blocks |
+|---|---|---|
+| G-21 | No IAM instance profile — S3 access would otherwise need long-lived keys | DEPLOY |
+| G-22 | Docker absent; runtime is now systemd (D-15), so the runbook must be rewritten | BUILD |
+| G-23 | Live `seoads` app shares the host (~8 GB disk, ~700 MB RAM); capacity must be watched | DEPLOY |
+
 ## Standing caveat
 
 Items marked with a live measurement carry the timestamp of that measurement. Everything

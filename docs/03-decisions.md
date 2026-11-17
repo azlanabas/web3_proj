@@ -132,7 +132,7 @@ this folder stays documentation. Not yet confirmed by the owner.
 
 ## D-09 — Settlement asset: USDC
 
-**Status:** OPEN — recommendation only
+**Status:** LOCKED (2026-11-17)
 
 USDC, an ERC-20 stablecoin, rather than ETH.
 
@@ -143,9 +143,9 @@ contract cannot hedge. Stablecoin removes it.
 
 ---
 
-## D-10 — ORM: Prisma vs TypeORM
+## D-10 — ORM: Prisma
 
-**Status:** OPEN
+**Status:** LOCKED (2026-11-17) — Prisma
 
 The `prd` skill's Stack C text names TypeORM; the skill also lists Prisma as an accepted
 data mapper. No owner instruction exists.
@@ -157,7 +157,7 @@ requires versioned migrations. Do not treat this as decided.
 
 ## D-11 — Chain: Ethereum Sepolia for the MVP
 
-**Status:** OPEN — recommendation only
+**Status:** LOCKED (2026-11-17)
 
 The brief says Ethereum. For an MVP that must not spend real money, Sepolia testnet with
 test USDC is the natural target; mainnet later.
@@ -183,7 +183,7 @@ robbed. That asymmetry is the mitigation.
 
 ## D-13 — Repository: `github.com/azlanabas`
 
-**Status:** OPEN — pending owner confirmation
+**Status:** LOCKED (2026-11-17) — repo created, public, corpus pushed
 
 Workspace default for new projects is the personal GitHub account `azlanabas` (per
 `WORKSPACE.md` §4). No repo has been created.
@@ -197,3 +197,21 @@ Workspace default for new projects is the personal GitHub account `azlanabas` (p
 Where buyers, sellers and vehicles are located, and therefore which escrow and title rules
 apply. Left open deliberately; the brief brief is jurisdiction-agnostic and the MVP can be
 built on a testnet without resolving it, but **mainnet requires it**.
+
+---
+
+## D-15 — Runtime model: systemd, no Docker
+
+**Status:** LOCKED (2026-11-17) — **SUPERSEDES the Compose assumption in 02-architecture**
+
+The API runs as a `systemd` service under Node 24, the database is the instance's existing
+PostgreSQL 16, and the frontend is a static Vite build served by nginx.
+
+**Rationale:** Docker is not installed on the instance, and the box has ~1.1 GB free RAM while
+already running a Next.js app and Postgres. A Docker daemon plus image build is a credible OOM
+risk. The host's own established pattern is systemd + local Postgres + nginx.
+
+**Cost accepted:** no container isolation, no `docker compose up` reproducibility, and the
+deploy path is more manual. Accepted for an MVP on a shared small instance.
+
+**Reverses if:** the app moves to a larger instance, or a second environment is needed.

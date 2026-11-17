@@ -22,7 +22,7 @@ Solidity, Ethereum*. That maps onto the workspace's documented **Stack C**:
 | ORM | ⚠️ OPEN — Prisma vs TypeORM | see D-10 |
 | Contracts | Solidity + Foundry | ⚠️ pin at scaffold |
 | Chain client | viem | ⚠️ pin at scaffold |
-| Process control | Docker Compose on EC2 | Docker Compose |
+| Process control | **systemd** service (no Docker — D-15) | n/a |
 | Storage | AWS S3 | — |
 | Reverse proxy / TLS | Nginx + certbot on the EC2 host | — |
 
@@ -64,7 +64,7 @@ by guessing. Pillar II of the `prd` skill requires exact pins.
 | Service | Port | Exposure |
 |---|---|---|
 | Nginx | 80, 443 | public |
-| NestJS API | 8310 | localhost only |
+| NestJS API | 8310 | localhost only (systemd unit) |
 | Postgres | 5432 | localhost only — **never public** |
 | Frontend | static files, no port | served by Nginx |
 
@@ -154,8 +154,10 @@ the frontend bundle, or logs.
 |---|---|
 | Account | `<AWS_ACCOUNT_ID>` |
 | Region | `ap-southeast-1` |
-| Compute | ⚠️ existing EC2, instance ID unknown |
-| Public IP | ⚠️ unknown — determines the DNS A record |
+| Compute | existing EC2, **t4g.small, arm64, Ubuntu 24.04.4**, reused |
+| Public IP | **Elastic IP** attached — stable across restarts |
+| Runtime | Node 24.21.0 · PostgreSQL 16.15 · nginx 1.24.0 · no Docker |
+| Capacity | 1.8 GB RAM (~1.1 GB free) · 4 GB swap · 11 GB disk free |
 | Storage | S3 bucket, name TBD |
 | Database | Postgres in Docker on the EC2 host (RDS deferred past MVP) |
 
