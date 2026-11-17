@@ -183,6 +183,15 @@ export default function App() {
 
           <footer className="border-t border-line px-6 py-6 text-center font-mono text-[10px] text-faint">
             web3_proj · AWS ap-southeast-1 · anvil 31337 · on-chain with test USDC
+            <span className="mx-2 text-faint">·</span>
+            <a
+              href="https://github.com/azlanabas/web3_proj"
+              target="_blank"
+              rel="noreferrer"
+              className="text-accent underline-offset-4 transition hover:underline"
+            >
+              source on GitHub
+            </a>
           </footer>
         </div>
       </div>

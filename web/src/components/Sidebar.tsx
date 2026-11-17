@@ -70,8 +70,21 @@ export function Sidebar({
         </nav>
 
         <a
+          href="https://github.com/azlanabas/web3_proj"
+          target="_blank"
+          rel="noreferrer"
+          className="mt-6 block rounded-xl border border-line p-3 transition hover:border-accent/60"
+        >
+          <p className="font-mono text-[10px] uppercase tracking-wider text-faint">Source</p>
+          <p className="mt-1 text-[12px] font-medium text-ink">github.com/azlanabas</p>
+          <p className="mt-1 text-[10px] leading-snug text-faint">
+            Public repository · commits, CI, contracts
+          </p>
+        </a>
+
+        <a
           href="/system.html"
-          className="mt-6 block rounded-xl border border-line p-3 transition hover:border-accent/40"
+          className="mt-2 block rounded-xl border border-line p-3 transition hover:border-accent/60"
         >
           <p className="font-mono text-[10px] uppercase tracking-wider text-faint">Blueprint</p>
           <p className="mt-1 text-[12px] font-medium text-ink">Full system map →</p>
