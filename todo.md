@@ -69,6 +69,12 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 - [ ] Double-fund reverts
 - [ ] Reentrancy attempt on release is rejected
 - [ ] Cancel only before funding
+- [ ] `dispute()` only while shipped and undisputed
+- [ ] `releaseByTimeout` pays seller after 14 days
+- [ ] `releaseByTimeout` reverts while disputed
+- [ ] `releaseToSeller` callable only by arbiter, only when disputed
+- [ ] Arbiter cannot pay an arbitrary address
+- [ ] Time-travel test with `vm.warp` across the 14-day boundary
 - [ ] `forge test --gas-report` reviewed
 
 ### Deploy

@@ -234,9 +234,9 @@ at `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238` reports `symbol()`/`name()` `"US
 
 ---
 
-## D-17 — Buyer-ghosting deadlock is UNRESOLVED
+## D-17 — Buyer-ghosting deadlock
 
-**Status:** OPEN — **blocks freezing the contract interface**
+**Status:** LOCKED (2026-11-17) — resolves A-1
 
 If the buyer never confirms after shipment, funds are locked permanently: the arbiter can
 refund but not release, so nothing can move the money to the seller.
@@ -248,6 +248,16 @@ Options considered:
 - **(b)** Give the arbiter release power after the timeout. Simpler, but weakens the core
   invariant that the arbiter can never pay the seller.
 - **(c)** Leave it. Unacceptable — sellers would lose funds to an unresponsive buyer.
+
+**Chosen: (a).** 14 days in `SHIPPED` with no dispute → anyone may call `releaseByTimeout()`
+and the seller is paid. `dispute()` by the buyer before expiry freezes the timer and the
+arbiter resolves with `refund()` or `releaseToSeller()`.
+
+**Consequence accepted:** the arbiter now holds release power, but only inside a raised
+dispute. Invariant 3 is restated accordingly: the arbiter can never pay itself or an arbitrary
+address, and can only pay the seller once a dispute exists.
+
+**Known residual:** a buyer may grief a seller by disputing at day 13.99. Accepted for MVP.
 
 **Reverses if:** the escrow model changes to a licensed custodian, where a human arbiter
 resolves every case.

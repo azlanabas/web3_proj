@@ -177,18 +177,32 @@ model ChainEvent {
 ## 6. Escrow state machine
 
 ```
-CREATED ──fund──▶ FUNDED ──ship──▶ SHIPPED ──confirm──▶ RELEASED
-   │                 │                 │
-   │cancel           │refund           │refund
-   ▼                 ▼                 ▼
-CANCELLED         REFUNDED          REFUNDED
+                 fund           ship            confirm
+CREATED ───────────▶ FUNDED ─────────▶ SHIPPED ─────────▶ RELEASED
+   │                    │                 │  │
+   │ cancel             │ refund          │  │ timeout 14d, undisputed
+   ▼                    ▼                 │  └──────────────▶ RELEASED
+CANCELLED           REFUNDED              │      (callable by anyone)
+                                          │
+                                          │ dispute — buyer, before timeout
+                                          ▼
+                                      DISPUTED
+                                          │
+                            ┌─────────────┴─────────────┐
+                     refund │                           │ releaseToSeller
+                            ▼                           ▼
+                        REFUNDED                     RELEASED
 ```
 
 Terminal: `RELEASED`, `REFUNDED`, `CANCELLED`. No transition out.
 
-**Deadlock risk — unresolved.** If the seller ships and the buyer simply never confirms,
-funds are locked forever: the arbiter can refund but cannot release, and the buyer has no
-incentive to act. This is a genuine hole in the "arbiter is refund-only" model. See §11.
+**Buyer-ghosting is resolved (D-17).** After 14 days in `SHIPPED` with no dispute, anyone may
+call `releaseByTimeout()` and the seller is paid. The buyer can freeze that clock by calling
+`dispute()` before it expires; the arbiter then chooses `refund()` (buyer) or
+`releaseToSeller()` (seller).
+
+Consequence: the arbiter *does* hold release power, but **only inside a raised dispute**. The
+automatic path never consults it.
 
 ## 7. Contract — `VehicleEscrow.sol`
 
@@ -204,8 +218,14 @@ struct Escrow {
 }
 ```
 
-Functions: `createEscrow`, `fund`, `markShipped`, `confirmDelivery`, `refund`, `cancel`.
-Events: `EscrowCreated`, `Funded`, `Shipped`, `Released`, `Refunded`, `Cancelled`.
+Functions: `createEscrow`, `fund`, `markShipped`, `confirmDelivery`, `dispute`,
+`releaseByTimeout`, `refund`, `releaseToSeller`, `cancel`.
+
+Events: `EscrowCreated`, `Funded`, `Shipped`, `Disputed`, `Released`, `Refunded`, `Cancelled`.
+
+`Escrow` also carries `shippedAt` and `disputedAt` timestamps; the timeout is
+`shippedAt + 14 days`, and `dispute()` is only valid while `shippedAt != 0` and
+`disputedAt == 0`.
 
 One deployment holds many escrows keyed by `escrowId`. **No proxy, no upgradeability** — an
 escrow users can trust should not be silently mutable.
@@ -214,10 +234,13 @@ Invariants:
 
 1. Funds move only to the recorded buyer or seller.
 2. `refund` is callable **only** by the arbiter.
-3. The arbiter can never send funds to the seller.
+3. The arbiter can move funds to the seller **only** after a dispute and only via
+   `releaseToSeller`. It can never pay itself or an arbitrary address.
 4. Terminal states are terminal.
 5. `cancel` is impossible once funded.
 6. Reentrancy on every state transition is blocked.
+7. `releaseByTimeout` reverts while a dispute is open.
+8. The 14-day constant is immutable after deployment.
 
 ## 8. API
 
@@ -274,7 +297,7 @@ Ports: API **8310** (must confirm free), Postgres 5432 localhost only, `seoads` 
 
 | ID | Question | Why it matters |
 |---|---|---|
-| A-1 | **Buyer-ghosting deadlock** — what releases funds if the buyer never confirms? | Seller funds locked forever. Options: (a) timeout auto-release to seller after N days, buyer can dispute before it; (b) arbiter gains release power after timeout (weakens invariant 3); (c) do nothing. **Recommend (a).** |
+| A-1 | ~~Buyer-ghosting deadlock~~ | **RESOLVED 2026-11-17 — D-17.** 14-day timeout auto-release; buyer may dispute to freeze it. |
 | A-2 | Who pays gas at each step? | Buyer pays fund + confirm; seller pays ship. Affects UI guidance. |
 | A-3 | Where does vehicle media live before S3 exists? | No bucket, no IAM role yet (G-21). |
 | A-4 | Does USDC on Sepolia support EIP-2612 `permit`? | If yes, one-tx fund instead of approve + fund. Unverified. |
@@ -293,4 +316,4 @@ auctions, email, mobile app, mainnet, upgradeable contracts, or indexing service
 | 11 GB free disk | Build space exhausted | Prune npm cache; build in `/tmp` with cleanup |
 | Arbiter key on disk | Mass refunds if leaked | 600 perms, never logged, rotate plan |
 | No contract audit | Unsafe on mainnet | Testnet only |
-| Buyer-ghosting | Stuck funds | A-1 must be decided before Phase 1 freezes the interface |
+| Buyer-ghosting | Stuck funds | Resolved by D-17 timeout; griefing via day-13 dispute is accepted for MVP |

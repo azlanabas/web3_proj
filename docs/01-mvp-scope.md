@@ -63,6 +63,10 @@ single most important constraint in this document; every feature below is subord
 
 **Terminal states:** `RELEASED`, `REFUNDED`, `CANCELLED`. There is no transition out of them.
 
+**Amended 2026-11-17 (D-17):** `IN_TRANSIT` gains a 14-day timer. If it expires with no
+dispute, anyone may release funds to the seller. The buyer may raise `DISPUTED` before expiry,
+which freezes the timer and hands the decision to the arbiter (`refund` or `releaseToSeller`).
+
 ## In scope
 
 | # | Feature | Acceptance criterion |
