@@ -66,17 +66,19 @@ interface Props {
   onSelect: (id: string) => void;
   onAct: (action: string) => void;
   onReset: () => void;
+  canTimeTravel?: boolean;
 }
 
 export function EscrowPanel(props: Props) {
   const { listings, escrows, selected, events, busy, signedIn } = props;
+  const canTimeTravel = props.canTimeTravel ?? false;
   const status = selected?.status;
 
   const canFund = status === "CREATED";
   const canShip = status === "FUNDED";
   const canConfirm = status === "SHIPPED";
   const canDispute = status === "SHIPPED";
-  const canTimeTravel = status === "SHIPPED";
+  const showTimeTravel = status === "SHIPPED" && canTimeTravel;
   const canTimeoutRelease = status === "SHIPPED";
   const canArbitrate = status === "DISPUTED";
   const canRefund = status === "FUNDED" || status === "SHIPPED" || status === "DISPUTED";
@@ -188,8 +190,8 @@ export function EscrowPanel(props: Props) {
                   <Action label="Mark shipped" onClick={() => props.onAct("ship")} enabled={canShip} busy={busy} />
                   <Action label="Confirm delivery" onClick={() => props.onAct("confirm")} enabled={canConfirm} busy={busy} />
                   <Action label="Raise dispute" onClick={() => props.onAct("dispute")} enabled={canDispute} busy={busy} />
-                  <Action label="Simulate 14 days" onClick={() => props.onAct("simulate-timeout")} enabled={canTimeTravel} busy={busy} muted />
-                  <Action label="Release by timeout" onClick={() => props.onAct("timeout-release")} enabled={canTimeoutRelease} busy={busy} muted />
+                  <Action label="Simulate 14 days" onClick={() => props.onAct("simulate-timeout")} enabled={showTimeTravel} busy={busy} muted />
+                  <Action label="Release by timeout" onClick={() => props.onAct("timeout-release")} enabled={canTimeoutRelease && canTimeTravel} busy={busy} muted />
                   <Action label="Arbiter → seller" onClick={() => props.onAct("release")} enabled={canArbitrate} busy={busy} />
                   <Action label="Arbiter → refund" onClick={() => props.onAct("refund")} enabled={canRefund} busy={busy} />
                 </div>
@@ -197,6 +199,12 @@ export function EscrowPanel(props: Props) {
                   Actions are role-gated in production. In demo mode one session may drive every
                   step, the way an operator would.
                 </p>
+                {!canTimeTravel && (
+                  <p className="mt-2 text-[11px] leading-relaxed text-warn">
+                    Time-travel is disabled: this deployment settles on a public chain, where the
+                    14-day window must actually elapse.
+                  </p>
+                )}
               </div>
             ) : (
               <div className="rounded-xl border border-dashed border-line p-10 text-center text-sm text-muted">

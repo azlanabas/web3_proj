@@ -165,7 +165,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
         <Table
           head={["Real", "Not real (deliberately)"]}
           rows={[
-            ["Escrow contract deployed and executing on an EVM", "The chain is local anvil, not Sepolia or mainnet"],
+            ["Escrow contract deployed and executing on Ethereum Sepolia", "No independent audit, and not mainnet"],
             ["Every action is a signed transaction with a receipt", "The USDC is a test token we minted"],
             ["Events indexed from chain logs", "No independent contract audit"],
             ["TLS, DNS, systemd, backups, rate limits, CI", "No wallet connect, the server holds demo keys"],
@@ -173,7 +173,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
         />
         <Callout tone="slate" title="The sentence to remember">
           <p>
-            The escrow mechanics are real; the money and the network are not. Everything on this
+            The escrow mechanics and the network are real; the money is testnet currency. Everything on this
             site is built to survive that question rather than avoid it.
           </p>
         </Callout>

@@ -376,8 +376,13 @@ export class EscrowService {
     return updated;
   }
 
-  /** Advances chain time by 14 days so the timeout path can be demonstrated. */
+  /** Advances chain time — only possible on the local development chain. */
   async simulateTimeout(id: string) {
+    if (!this.chain.supportsTimeTravel) {
+      throw new BadRequestException(
+        "time travel is only available on the local chain; on a public network the 14-day window must elapse",
+      );
+    }
     const e = await this.load(id);
     this.assertState(e.status, EscrowStatus.SHIPPED);
 

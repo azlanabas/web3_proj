@@ -11,14 +11,14 @@ const NETWORKS: { name: string; id: string; status: Status; note: string; link?:
   {
     name: "Anvil",
     id: "31337",
-    status: "Active",
-    note: "Local EVM run by this deployment. Every escrow in the app settles here.",
+    status: "Retired",
+    note: "Local EVM used during the build. Settlement moved to Sepolia once the deploy was funded; anvil remains available as CHAIN_MODE=local.",
   },
   {
     name: "Ethereum Sepolia",
     id: "11155111",
-    status: "Ready",
-    note: "Deploy script written and refuses to run unfunded. Sign it from your own wallet on the deploy page.",
+    status: "Active",
+    note: "Live settlement network. Real transactions, real gas, verified on Etherscan.",
     link: "https://sepolia.etherscan.io",
   },
   {

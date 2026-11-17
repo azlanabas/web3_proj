@@ -4,8 +4,9 @@ import { EscrowPanel } from "../components/EscrowPanel";
 import { Card, List, Page } from "../components/ui";
 import { api } from "../lib/api";
 import type { ChainEvent, Escrow, Listing } from "../types";
+import type { Meta } from "../lib/meta";
 
-export function Demo() {
+export function Demo({ meta }: { meta: Meta | null }) {
   const [signedIn, setSignedIn] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
   const [escrows, setEscrows] = useState<Escrow[]>([]);
@@ -115,6 +116,7 @@ export function Demo() {
           onSelect={select}
           onAct={act}
           onReset={reset}
+          canTimeTravel={meta?.chain.supportsTimeTravel ?? false}
         />
       </div>
       {error && (

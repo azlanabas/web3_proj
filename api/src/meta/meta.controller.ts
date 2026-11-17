@@ -164,6 +164,18 @@ export class MetaController {
     return { address: privateKeyToAccount(key).address };
   }
 
+  /** Recent indexed events, so the site can show the real transactions. */
+  @Get("chain/events")
+  async events() {
+    const rows = await this.prisma.chainEvent.findMany({ orderBy: { id: "desc" }, take: 25 });
+    return rows.map((r) => ({
+      eventName: r.eventName,
+      txHash: r.txHash,
+      blockNumber: r.blockNumber.toString(),
+      escrowId: (r.payload as { escrowId?: string } | null)?.escrowId ?? null,
+    }));
+  }
+
   @Get("chain/block")
   async block() {
     if (!this.chain.enabled) return { available: false };

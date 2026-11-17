@@ -35,6 +35,7 @@ export const SECTIONS: Section[] = [
   { id: "tooling",      group: "3 · The chain", label: "Tooling map", blurb: "What is used, what is not, and why" },
   { id: "references",   group: "3 · The chain", label: "External references", blurb: "Explorers, standards, docs" },
 
+  { id: "live",         group: "4 · The evidence", label: "The live build", blurb: "Deployed addresses, real transactions" },
   { id: "explorer",     group: "4 · The evidence", label: "API explorer", blurb: "Call the live endpoints" },
   { id: "security",     group: "4 · The evidence", label: "Security model", blurb: "Trust boundaries and threats" },
   { id: "operations",   group: "4 · The evidence", label: "Operations", blurb: "Hosting, TLS, backups, CI" },

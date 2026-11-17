@@ -1,0 +1,118 @@
+import { useEffect, useState } from "react";
+import { Badge, Callout, Card, Code, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
+import type { Meta } from "../lib/meta";
+
+interface ChainEventRow {
+  eventName: string;
+  txHash: string;
+  blockNumber: string;
+  escrowId: string | null;
+}
+
+export function LiveBuild({ meta }: { meta: Meta | null }) {
+  const [events, setEvents] = useState<ChainEventRow[]>([]);
+  useEffect(() => {
+    fetch("/api/chain/events")
+      .then((r) => r.json())
+      .then((rows: ChainEventRow[]) => setEvents(rows))
+      .catch(() => setEvents([]));
+  }, []);
+
+  const c = meta?.chain;
+  const live = c && c.mode !== "simulated";
+  const publicChain = c?.mode === "sepolia" || c?.mode === "mainnet";
+  const explorer = c?.mode === "sepolia" ? "https://sepolia.etherscan.io" : null;
+
+  return (
+    <Page
+      kicker={kickerFor("live")}
+      title="The live build"
+      lede="This deployment is not a mock. Everything below is read from the running service and the chain it is settling on — addresses, block height, and the actual transactions that produced each event."
+    >
+      <Card title="Where it is deployed" tag="live from /api/meta">
+        <Table
+          head={["Property", "Value"]}
+          rows={[
+            ["Network", <span className="font-medium text-ink">{c?.network ?? "…"}</span>],
+            ["Chain id", c ? String(c.chainId) : "…"],
+            ["Mode", <code className="font-mono text-[11px]">{c?.mode ?? "…"}</code>],
+            ["Escrow contract", <code className="font-mono text-[10px] break-all">{c?.escrow || "…"}</code>],
+            ["Settlement token", <code className="font-mono text-[10px] break-all">{c?.token || "…"}</code>],
+            ["Token decimals", c?.tokenDecimals ?? "…"],
+            ["Release timeout", c?.timeoutSeconds ? `${Number(c.timeoutSeconds) / 86400} days` : "…"],
+            ["Deploy block", c?.deployBlock ?? "…"],
+            ["Current block", c?.blockNumber ?? "…"],
+            ["Escrows recorded", meta ? String(meta.counts.escrows) : "…"],
+            ["Events indexed", meta ? String(meta.counts.events) : "…"],
+          ]}
+        />
+        <p className="flex flex-wrap gap-2 pt-1">
+          {publicChain ? <Badge>public testnet</Badge> : <Badge tone="amber">local chain</Badge>}
+          <Badge tone="slate">{live ? "real transactions" : "simulated"}</Badge>
+          {explorer && (
+            <a href={`${explorer}/address/${c?.escrow}`} target="_blank" rel="noreferrer" className="font-mono text-[11px] text-accent underline-offset-4 hover:underline">
+              view on Etherscan ↗
+            </a>
+          )}
+        </p>
+      </Card>
+
+      <Card title="The transactions that prove it" tag="recent events, newest first">
+        {events.length === 0 ? (
+          <p className="text-muted">No events indexed yet.</p>
+        ) : (
+          <Table
+            head={["Event", "Block", "Transaction", "Escrow"]}
+            rows={events.slice(0, 12).map((e) => [
+              <span className="font-mono text-[11px] text-accent">{e.eventName}</span>,
+              <span className="font-mono text-[11px]">{e.blockNumber}</span>,
+              explorer ? (
+                <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer" className="font-mono text-[10px] text-muted underline-offset-4 hover:text-accent hover:underline">
+                  {e.txHash.slice(0, 14)}…
+                </a>
+              ) : (
+                <span className="font-mono text-[10px]">{e.txHash.slice(0, 14)}…</span>
+              ),
+              <span className="font-mono text-[11px]">#{e.escrowId ?? "—"}</span>,
+            ])}
+          />
+        )}
+        <p className="text-xs">
+          Each row was written by the indexer after reading a log from the chain — not by the page
+          you are looking at.
+        </p>
+      </Card>
+
+      <Card title="Verify it yourself, in four commands" tag="no trust required">
+        <Code>{`cast chain-id --rpc-url $RPC            # ${c?.chainId ?? "chain id"}
+cast call $ESCROW "getEscrow(uint256)(address,address,uint256,uint64,uint64,uint8)" 1
+cast call $TOKEN  "balanceOf(address)(uint256)" $SELLER
+cast logs --address $ESCROW --from-block ${c?.deployBlock ?? "0"}${explorer ? `\n# or on Etherscan: ${explorer}/address/${c?.escrow}` : ""}`}</Code>
+      </Card>
+
+      <Card title="Five-minute walkthrough" tag="what to click and say">
+        <Table
+          head={["Step", "Do", "Say"]}
+          rows={[
+            ["1", "Open Overview", "The money waits in a contract, not in our account — that is the whole thesis."],
+            ["2", "Follow one sale", "Six steps: list, open, fund, ship, confirm, index. Every one is a transaction."],
+            ["3", "Live walkthrough", "Start a session, open an escrow, fund it. Point at the header: the badge reads the network from the API."],
+            ["4", "This page", "These are the real transactions, with block numbers. Etherscan will show the same hashes."],
+            ["5", "Networks & testnets", "Sepolia is live; mainnet is deliberately not, because it needs an audit."],
+          ]}
+        />
+      </Card>
+
+      <Callout tone="slate" title="What changed when this left anvil">
+        <p>
+          On a local chain, gas is free and nothing can go wrong. On Sepolia the first attempt failed
+          for a reason worth knowing: the three demo addresses were anvil&apos;s well-known defaults,
+          and all three already have contract code on Sepolia — sweepers, because those private keys
+          are published everywhere. Funds sent to them were forwarded immediately. Three fresh keys
+          were generated and the contracts redeployed.
+        </p>
+      </Callout>
+    </Page>
+  );
+}

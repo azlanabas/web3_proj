@@ -22,8 +22,8 @@ export function Chain({ meta }: { meta: Meta | null }) {
         <Table
           head={["Network", "Chain id", "RPC", "Status", "Purpose"]}
           rows={[
-            ["Anvil (local EVM)", "31337", <code className="font-mono text-[10px]">127.0.0.1:8545</code>, "Active", "Runs the live demo; deterministic accounts, instant blocks"],
-            ["Ethereum Sepolia", "11155111", <code className="font-mono text-[10px]">Alchemy</code>, "Configured", "Public testnet; needs a funded key, same contracts"],
+            ["Anvil (local EVM)", "31337", <code className="font-mono text-[10px]">127.0.0.1:8545</code>, "Offline", "Used during the build; kept as CHAIN_MODE=local for offline work"],
+            ["Ethereum Sepolia", "11155111", <code className="font-mono text-[10px]">public RPC</code>, "Active", "Live settlement network; real transactions and gas"],
             ["Ethereum mainnet", "1", <code className="font-mono text-[10px]">—</code>, "Not used", "Real money; requires an audit first"],
           ]}
         />
@@ -71,7 +71,7 @@ export function Chain({ meta }: { meta: Meta | null }) {
         </p>
       </Card>
 
-      <Card title="Why start on a local chain" tag="deliberate">
+      <Card title="Why the build started on a local chain" tag="history">
         <List
           items={[
             "Sepolia requires testnet ETH for gas; every faucet needs a browser session or a mainnet balance.",
@@ -108,7 +108,7 @@ cast chain-id --rpc-url http://127.0.0.1:8545        # 31337
 cast block-number --rpc-url http://127.0.0.1:8545
 
 # escrow state for escrow #1
-cast call 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 \\
+cast call $ESCROW \\
   "getEscrow(uint256)(address,address,uint256,uint64,uint64,uint8)" 1 \\
   --rpc-url http://127.0.0.1:8545`}</Code>
       </Card>

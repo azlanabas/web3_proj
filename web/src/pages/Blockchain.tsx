@@ -84,18 +84,19 @@ block N+1 header.parentHash = hash(N)`}</Code>
 -- Funded, Shipped, Released, Refunded, Disputed, EscrowCreated`}</Code>
       </Card>
 
-      <Card title="Where is the distributed part?" tag="say it plainly">
+      <Card title="Where is the distributed part?" tag="it is real now">
         <Callout tone="slate" title="There isn't one, here.">
           <p>
             A blockchain is distributed because many independent nodes each hold a copy and agree on
-            ordering. This deployment runs <strong>one</strong> anvil node on one machine. There are
-            no peers, no replication, no consensus, and no independent verification — if the process
-            dies, the state dies with it.
+            ordering. Earlier in this project the settlement chain was a single local anvil node —
+            no peers, no replication, no consensus. It is now deployed to <strong>Ethereum
+            Sepolia</strong>, where the ledger genuinely is replicated across independent nodes and
+            the state is verified by validators.
           </p>
           <p className="mt-2">
-            What is genuine is the <em>structure</em>: hash-linked blocks, signed transactions,
-            receipts, logs, and a state machine that cannot be argued with. That structure is what a
-            public chain adds distribution to.
+            What anvil demonstrated was the <em>structure</em>: hash-linked blocks, signed
+            transactions, receipts, logs, and a state machine that cannot be argued with. Sepolia adds
+            replication and independent verification on top of exactly that structure.
           </p>
         </Callout>
         <Table

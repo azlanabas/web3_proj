@@ -10,6 +10,7 @@ import { Api } from "./pages/Api";
 import { Data } from "./pages/Data";
 import { Demo } from "./pages/Demo";
 import { Explorer } from "./pages/Explorer";
+import { LiveBuild } from "./pages/LiveBuild";
 import { Lifecycle } from "./pages/Lifecycle";
 import { Operations } from "./pages/Operations";
 import { Overview } from "./pages/Overview";
@@ -184,7 +185,8 @@ export default function App() {
             {route === "lifecycle" && <Lifecycle />}
             {route === "references" && <References />}
             {route === "tooling" && <ToolingMap />}
-            {route === "demo" && <Demo />}
+            {route === "demo" && <Demo meta={meta} />}
+            {route === "live" && <LiveBuild meta={meta} />}
             {route === "explorer" && <Explorer meta={meta} />}
             {route === "security" && <Security />}
             {route === "operations" && <Operations />}
