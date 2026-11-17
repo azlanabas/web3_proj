@@ -190,7 +190,7 @@ privilege runtime role (the app role currently owns the DB).
 - [x] Nginx vhost for `web3.heurist.online`, proxy `/api/` → `:8310`
 - [x] `nginx -t` then reload
 - [x] `certbot --nginx -d web3.heurist.online --redirect`
-- [ ] `certbot renew --dry-run`
+- [x] `certbot renew --dry-run` — both certs simulated OK
 - [x] Postgres bound to localhost only (verified: `127.0.0.1:5432`)
 - [ ] Nightly `pg_dump` cron with 7-day rotation
 - [ ] Log rotation configured
