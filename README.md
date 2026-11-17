@@ -13,7 +13,7 @@ This folder holds documents only — no application source. Per workspace rule 4
 authored on the target host, not here.
 
 **Status: LIVE MVP.** `https://web3.heurist.online` is a navigable system walkthrough with
-16 sections — overview, **architecture (every component and how it is built)**, requirement map, web/API/data tiers, four Web3 pages (chain, token, contract, transactions), escrow lifecycle,
+16 sections — overview, **architecture (every component and how it is built)**, requirement map, web/API/data tiers, seven Web3 pages (ethereum basics, where things live, chain, token, contract, transactions, lifecycle), escrow lifecycle,
 live demo, API explorer, security, operations and roadmap. The smart contract is **deployed and executing** on a
 local anvil EVM: escrow actions are signed transactions and the event log is read back from
 chain logs. Test USDC only — not real money.

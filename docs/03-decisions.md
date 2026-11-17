@@ -391,3 +391,23 @@ Replaced the dark slate-and-emerald theme with a warm paper background, ink text
 navy accent. Rationale: the dark gradient palette is the default output of generative UI tools
 and reads as template rather than product. Green is now reserved for status, red for errors,
 amber for warnings — colour carries meaning instead of decoration.
+
+---
+
+## D-24 — Web3 fundamentals and a source map
+
+**Status:** LOCKED (2026-11-17)
+
+Two pages added after a walkthrough review found that the site explained *our* contract but never
+Ethereum itself.
+
+- **Ethereum basics** — ETH and gas (measured: 1 gwei, 48,851 gas per escrow action), accounts
+  and keys, transaction anatomy, mempool/block/receipt/logs, Proof of Stake and staking (32 ETH,
+  slots, epochs, ~12.8 min finality, slashing), the three different meanings of "proof",
+  sequencers, L1 versus L2. Each concept is marked used or not used here, so nothing is implied
+  that the project does not do.
+- **Where things live** — every Web3 component with its source path, its runtime location
+  (address, port, unit) and the command to verify it. States plainly that the browser holds no
+  wallet and no RPC access; all signing is server-side.
+
+The blueprint page gained the same concept table.

@@ -14,6 +14,8 @@ export const SECTIONS: Section[] = [
   { id: "api",          group: "Components", label: "API tier",          blurb: "NestJS, REST, auth, validation" },
   { id: "data",         group: "Components", label: "Data tier",         blurb: "PostgreSQL, Prisma, migrations" },
 
+  { id: "fundamentals", group: "Web3",       label: "Ethereum basics",    blurb: "ETH, gas, staking, proofs, sequencer" },
+  { id: "sourcemap",    group: "Web3",       label: "Where things live",  blurb: "Source path and runtime address" },
   { id: "chain",        group: "Web3",       label: "Chain & networks",   blurb: "Ethereum, EVM, Sepolia, RPC" },
   { id: "token",        group: "Web3",       label: "USDC & ERC-20",      blurb: "Token, decimals, approvals" },
   { id: "contract",     group: "Web3",       label: "Escrow contract",    blurb: "Solidity, invariants, gas" },

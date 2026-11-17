@@ -172,6 +172,23 @@
       <tr><td>Tests</td><td class="mono">23 / 23 passing</td><td>Foundry, incl. reentrancy attack</td></tr>
     </table>
 
+
+    <h3 style="margin-top:30px">Ethereum concepts, and whether they apply here</h3>
+    <table>
+      <tr><th>Concept</th><th>What it is</th><th>In this project</th></tr>
+      <tr><td>ETH</td><td>Native currency, used only to pay gas</td><td>Test ETH; contract holds 0 ETH</td></tr>
+      <tr><td>Gas</td><td>Units of computation, priced in ETH</td><td>1 gwei; ~48,851 gas per escrow action</td></tr>
+      <tr><td>Account / EOA</td><td>Address controlled by a private key</td><td>Three demo signers, server-held</td></tr>
+      <tr><td>Transaction</td><td>Signed instruction to change state</td><td>Every escrow action</td></tr>
+      <tr><td>Receipt + logs</td><td>Proof of execution, and emitted events</td><td>Required before any database write</td></tr>
+      <tr><td>Proof of Stake</td><td>Validators stake 32 ETH to propose and attest</td><td>Not used — local chain has no consensus</td></tr>
+      <tr><td>Staking / slashing</td><td>Bonded ETH securing consensus; loss for misbehaviour</td><td>Not used</td></tr>
+      <tr><td>Finality</td><td>~12.8 minutes after two epochs on mainnet</td><td>Not modelled; local chain is instant</td></tr>
+      <tr><td>Proofs (ZK / fraud)</td><td>Evidence of correct execution on rollups</td><td>Not used — not a rollup</td></tr>
+      <tr><td>Sequencer</td><td>Whoever orders transactions into blocks</td><td>anvil, a single sequencer</td></tr>
+      <tr><td>L1 / L2</td><td>Ethereum mainnet, and rollups that settle to it</td><td>Local L1-style chain only</td></tr>
+    </table>
+
     <h3 style="margin-top:30px">Accounts</h3>
     <table>
       <tr><th>Role</th><th>Address</th><th>Power</th></tr>

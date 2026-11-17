@@ -18,6 +18,8 @@ import { Roadmap } from "./pages/Roadmap";
 import { Security } from "./pages/Security";
 import { Web } from "./pages/Web";
 import { Chain } from "./pages/Chain";
+import { Fundamentals } from "./pages/Fundamentals";
+import { SourceMap } from "./pages/SourceMap";
 import { Token } from "./pages/Token";
 import { Contract } from "./pages/Contract";
 import { Transactions } from "./pages/Transactions";
@@ -145,6 +147,8 @@ export default function App() {
             {route === "web" && <Web />}
             {route === "api" && <Api meta={meta} />}
             {route === "data" && <Data />}
+            {route === "fundamentals" && <Fundamentals />}
+            {route === "sourcemap" && <SourceMap />}
             {route === "chain" && <Chain />}
             {route === "token" && <Token />}
             {route === "contract" && <Contract />}
