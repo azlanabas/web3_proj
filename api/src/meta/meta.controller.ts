@@ -1,70 +1,172 @@
 import { Controller, Get } from "@nestjs/common";
+import { PATH_METADATA, METHOD_METADATA } from "@nestjs/common/constants";
+import { DiscoveryService, MetadataScanner, ModulesContainer } from "@nestjs/core";
+import { RequestMethod } from "@nestjs/common";
+import { EscrowStatus } from "@prisma/client";
+import { ChainService, ERC20_ABI, ESCROW_ABI } from "../chain/chain.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { ROUTE_PREFIX } from "../config";
+import { API_DOC_KEY, ApiDocMeta } from "./api-doc.decorator";
 
-const ENDPOINTS = [
-  { method: "GET",    path: "/api/health",                    auth: "public", purpose: "Liveness probe used by nginx and status checks" },
-  { method: "GET",    path: "/api/meta",                      auth: "public", purpose: "Machine-readable description of this service" },
-  { method: "POST",   path: "/api/demo/session",              auth: "public", purpose: "Issues a demo session cookie and seeds sample vehicles" },
-  { method: "POST",   path: "/api/demo/reset",                auth: "public", purpose: "Clears escrows and chain events (demo only)" },
-  { method: "POST",   path: "/api/auth/siwe/nonce",           auth: "public", purpose: "Issues a single-use SIWE nonce, 5 minute TTL" },
-  { method: "POST",   path: "/api/auth/siwe/verify",          auth: "public", purpose: "Verifies a wallet signature, sets an httpOnly session cookie" },
-  { method: "POST",   path: "/api/auth/logout",               auth: "session", purpose: "Clears the session cookie" },
-  { method: "GET",    path: "/api/auth/me",                   auth: "session", purpose: "Returns the authenticated wallet and role" },
-  { method: "GET",    path: "/api/listings",                  auth: "public", purpose: "Paginated listings, filterable by make and year" },
-  { method: "GET",    path: "/api/listings/:id",              auth: "public", purpose: "Single listing with images" },
-  { method: "POST",   path: "/api/listings",                  auth: "seller", purpose: "Creates a listing owned by the caller" },
-  { method: "PATCH",  path: "/api/listings/:id",              auth: "owner",  purpose: "Updates a listing the caller owns" },
-  { method: "GET",    path: "/api/escrows",                   auth: "session", purpose: "All escrows with buyer, seller and listing" },
-  { method: "GET",    path: "/api/escrows/:id",               auth: "session", purpose: "Escrow detail plus its ordered chain events" },
-  { method: "POST",   path: "/api/escrows",                   auth: "buyer",  purpose: "Opens an escrow against a listing" },
-  { method: "POST",   path: "/api/escrows/:id/fund",          auth: "buyer",  purpose: "CREATED → FUNDED, records the funding transaction" },
-  { method: "POST",   path: "/api/escrows/:id/ship",          auth: "seller", purpose: "FUNDED → SHIPPED, starts the 14 day timer" },
-  { method: "POST",   path: "/api/escrows/:id/confirm",       auth: "buyer",  purpose: "SHIPPED → RELEASED, pays the seller" },
-  { method: "POST",   path: "/api/escrows/:id/dispute",       auth: "buyer",  purpose: "SHIPPED → DISPUTED, freezes the timer" },
-  { method: "POST",   path: "/api/escrows/:id/refund",        auth: "arbiter", purpose: "Returns funds to the buyer" },
-  { method: "POST",   path: "/api/escrows/:id/release",       auth: "arbiter", purpose: "Pays the seller from a disputed escrow" },
-  { method: "POST",   path: "/api/escrows/:id/timeout-release", auth: "any",  purpose: "Pays the seller once 14 days have elapsed undisputed" },
-  { method: "POST",   path: "/api/escrows/:id/simulate-timeout", auth: "any", purpose: "Backdates shipment by 14 days (demo affordance)" },
-];
+const METHOD_NAMES: Record<number, string> = {
+  [RequestMethod.GET]: "GET",
+  [RequestMethod.POST]: "POST",
+  [RequestMethod.PUT]: "PUT",
+  [RequestMethod.PATCH]: "PATCH",
+  [RequestMethod.DELETE]: "DELETE",
+};
 
-@Controller("meta")
+@Controller()
 export class MetaController {
-  @Get()
-  meta() {
+  private readonly startedAt = Date.now();
+
+  constructor(
+    private readonly discovery: DiscoveryService,
+    private readonly modules: ModulesContainer,
+    private readonly scanner: MetadataScanner,
+    private readonly prisma: PrismaService,
+    private readonly chain: ChainService,
+  ) {}
+
+  /** Every route is read from the router at runtime — nothing here is a typed-in list. */
+  private endpoints() {
+    const out: { method: string; path: string; auth: string; purpose: string }[] = [];
+    for (const wrapper of this.discovery.getControllers()) {
+      const { metatype } = wrapper;
+      if (!metatype) continue;
+      const controllerPath = Reflect.getMetadata(PATH_METADATA, metatype) ?? "";
+      const prototype = metatype.prototype;
+      for (const name of this.scanner.getAllMethodNames(prototype)) {
+        const handler = prototype[name];
+        const methodId = Reflect.getMetadata(METHOD_METADATA, handler);
+        const routePath = Reflect.getMetadata(PATH_METADATA, handler);
+        if (methodId === undefined || routePath === undefined) continue;
+
+        const doc =
+          (Reflect.getMetadata(API_DOC_KEY, handler) as ApiDocMeta | undefined) ??
+          (Reflect.getMetadata(API_DOC_KEY, metatype) as ApiDocMeta | undefined);
+
+        const guards =
+          (Reflect.getMetadata("__guards__", handler) as unknown[] | undefined) ??
+          (Reflect.getMetadata("__guards__", metatype) as unknown[] | undefined) ??
+          [];
+        const guarded = guards.length > 0;
+
+        const clean = (s: string) => String(s ?? "").replace(/^\/+|\/+$/g, "");
+        const segments = [ROUTE_PREFIX, clean(controllerPath), clean(routePath)].filter(Boolean);
+        out.push({
+          method: METHOD_NAMES[methodId] ?? String(methodId),
+          path: "/" + segments.join("/"),
+          auth: doc?.auth ?? (guarded ? "session" : "public"),
+          purpose: doc?.purpose ?? "",
+        });
+      }
+    }
+    return out.sort((a, b) => a.path.localeCompare(b.path) || a.method.localeCompare(b.method));
+  }
+
+  @Get("meta")
+  async meta() {
+    const [listings, escrows, events] = await Promise.all([
+      this.prisma.listing.count(),
+      this.prisma.escrow.count(),
+      this.prisma.chainEvent.count(),
+    ]);
+
+    let blockNumber: string | null = null;
+    let gasPriceWei: string | null = null;
+    let timeoutSeconds: string | null = null;
+    let tokenDecimals: number | null = null;
+    const accounts = { arbiter: "", seller: "", buyer: "" };
+
+    if (this.chain.enabled) {
+      const safe = async (fn: () => Promise<void>) => {
+        try {
+          await fn();
+        } catch {
+          /* a single failed read must not blank the whole response */
+        }
+      };
+      await safe(async () => {
+        blockNumber = (await this.chain.blockNumber()).toString();
+      });
+      await safe(async () => {
+        gasPriceWei = (await this.chain.publicClient.getGasPrice()).toString();
+      });
+      await safe(async () => {
+        timeoutSeconds = (
+          await this.chain.read<bigint>({
+            address: this.chain.escrow,
+            abi: ESCROW_ABI,
+            functionName: "RELEASE_TIMEOUT",
+          })
+        ).toString();
+      });
+      await safe(async () => {
+        tokenDecimals = Number(
+          await this.chain.read<number>({
+            address: this.chain.token,
+            abi: ERC20_ABI,
+            functionName: "decimals",
+          }),
+        );
+      });
+      await safe(async () => {
+        accounts.arbiter = await this.chain.address("arbiter");
+      });
+      await safe(async () => {
+        accounts.seller = await this.chain.address("seller");
+      });
+      await safe(async () => {
+        accounts.buyer = await this.chain.address("buyer");
+      });
+    }
+
     return {
       service: "web3proj-api",
-      version: "0.1.0",
-      generatedAt: new Date().toISOString(),
+      version: process.env.npm_package_version ?? "0.1.0",
+      startedAt: new Date(this.startedAt).toISOString(),
+      uptimeSeconds: Math.round((Date.now() - this.startedAt) / 1000),
       runtime: {
         node: process.version,
-        framework: "NestJS 12.5.1",
-        language: "TypeScript 5.9.3 (strict)",
-        orm: "Prisma 6.19.3",
-        database: "PostgreSQL 16.15",
-        validation: "Zod 4.6.7",
-        auth: "SIWE (EIP-4361) + HMAC session cookie",
+        platform: process.platform,
+        arch: process.arch,
+        memoryMb: Math.round(process.memoryUsage().rss / 1048576),
       },
-      web3: {
-        chain: process.env.CHAIN_MODE === "local" ? "Anvil (local EVM)" : "Ethereum Sepolia",
-        chainId: Number(process.env.CHAIN_ID ?? 11155111),
-        token: "USDC",
-        tokenAddress: process.env.TOKEN_ADDRESS ?? "",
-        tokenDecimals: 6,
-        escrowContract: process.env.CONTRACT_ADDRESS ?? "",
-        solidity: "0.8.28",
-        openzeppelin: "5.7.0",
-        chainMode: process.env.CHAIN_MODE ?? "simulated",
-        settlement: process.env.CHAIN_MODE === "local" ? "on-chain" : "simulated",
-        note:
-          process.env.CHAIN_MODE === "local"
-            ? "Real transactions on a local anvil chain. Every state change is a mined transaction and every event is read back from logs."
-            : "Contract is written and tested (23/23) but not deployed; transitions are recorded, not mined.",
+      chain: {
+        mode: this.chain.mode,
+        network: this.chain.networkName,
+        chainId: this.chain.chainId,
+        rpcHost: this.chain.rpcHost,
+        escrow: this.chain.escrow,
+        token: this.chain.token,
+        deployBlock: this.chain.deployBlock,
+        blockNumber,
+        gasPriceWei,
+        timeoutSeconds,
+        tokenDecimals,
+        accounts,
+        supportsTimeTravel: this.chain.supportsTimeTravel,
       },
-      escrow: {
-        states: ["CREATED", "FUNDED", "SHIPPED", "DISPUTED", "RELEASED", "REFUNDED", "CANCELLED"],
-        releaseTimeoutDays: 14,
-        arbitration: "refund or release to seller, only inside a dispute",
-      },
-      endpoints: ENDPOINTS,
+      counts: { listings, escrows, events },
+      escrowStates: Object.keys(EscrowStatus),
+      endpoints: this.endpoints(),
+    };
+  }
+
+  @Get("chain/block")
+  async block() {
+    if (!this.chain.enabled) return { available: false };
+    const block = await this.chain.publicClient.getBlock();
+    return {
+      available: true,
+      number: block.number?.toString(),
+      hash: block.hash,
+      parentHash: block.parentHash,
+      stateRoot: block.stateRoot,
+      timestamp: block.timestamp?.toString(),
+      gasUsed: block.gasUsed?.toString(),
+      transactions: block.transactions.length,
     };
   }
 }

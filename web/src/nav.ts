@@ -103,6 +103,7 @@ export const HANDOFFS: Record<string, string> = {
   sourcemap: "The application is mapped. The next act goes down to the chain it settles on, starting with Ethereum itself.",
   fundamentals: "Those are the concepts. Here is the chain actually running.",
   chain: "Networks decide where blocks come from. This page is what a block contains, and why blocks chain.",
+  networks: "Networks are where blocks come from. This page is the one this deployment actually uses.",
   blockchain: "Blocks are held together by hashes. So is every transaction, address, selector and login.",
   crypto: "Authentication uses keccak and HMAC. The money uses a token standard, which is next.",
   token: "USDC is the asset. The contract is what holds it and decides when it moves.",

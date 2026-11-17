@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
+import { ROUTE_PREFIX } from "./config";
 
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON = function (
   this: bigint,
@@ -13,7 +14,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { logger: ["error", "warn", "log"] });
   app.use(helmet());
   app.use(cookieParser());
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix(ROUTE_PREFIX);
   const allowed = process.env.SIWE_ORIGIN?.split(",").filter(Boolean);
   app.enableCors({ origin: allowed ?? false, credentials: true });
 

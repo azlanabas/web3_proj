@@ -1,5 +1,6 @@
 import { Badge, Callout, Card, Code, Page, Stats, Table } from "../components/ui";
-import { ACTS, SECTIONS, firstOfAct, sectionsOf } from "../nav";
+import { ACTS, SECTIONS, firstOfAct, kickerFor, sectionsOf } from "../nav";
+import type { Meta } from "../lib/meta";
 
 const STEPS = [
   {
@@ -46,10 +47,10 @@ const STEPS = [
   },
 ];
 
-export function Overview() {
+export function Overview({ meta }: { meta: Meta | null }) {
   return (
     <Page
-      kicker="Start"
+      kicker={kickerFor("overview")}
       title="A vehicle marketplace where the money waits in a contract"
       lede="A buyer will not pay before delivery; a seller will not hand over the keys before payment. This app closes that gap with an escrow contract instead of a bank account, so the platform never holds anyone else's money."
     >
@@ -148,10 +149,15 @@ export function Overview() {
 
       <Stats
         items={[
-          { value: "7", label: "escrow states, terminal states final" },
+          { value: String(meta?.escrowStates.length ?? "—"), label: "escrow states, terminal states final" },
           { value: "23/23", label: "contract tests passing" },
-          { value: "14d", label: "seller protection against a silent buyer" },
-          { value: "0", label: "customer funds the platform holds" },
+          {
+            value: meta?.chain.timeoutSeconds
+              ? `${Math.round(Number(meta.chain.timeoutSeconds) / 86400)}d`
+              : "—",
+            label: "seller protection against a silent buyer",
+          },
+          { value: String(meta?.counts.escrows ?? "—"), label: "escrows recorded on this deployment" },
         ]}
       />
 

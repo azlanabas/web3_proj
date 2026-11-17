@@ -18,10 +18,10 @@ export class AuthService {
   }
 
   async verify(message: string, signature: string): Promise<{ address: string }> {
-    const siwe = new SiweMessage(message);
-
+    let siwe: SiweMessage;
     let result: Awaited<ReturnType<SiweMessage["verify"]>>;
     try {
+      siwe = new SiweMessage(message);
       result = await siwe.verify({ signature });
     } catch {
       throw new UnauthorizedException("malformed SIWE message");

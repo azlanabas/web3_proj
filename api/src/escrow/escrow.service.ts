@@ -382,7 +382,7 @@ export class EscrowService {
     this.assertState(e.status, EscrowStatus.SHIPPED);
 
     const backdated = new Date(Date.now() - RELEASE_TIMEOUT_MS - 1000);
-    if (this.chain.enabled) {
+    if (this.chain.supportsTimeTravel) {
       await this.chain.increaseTime(14 * 24 * 60 * 60 + 60);
     }
     return this.prisma.escrow.update({

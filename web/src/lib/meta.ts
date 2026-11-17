@@ -8,21 +8,36 @@ export interface Endpoint {
 export interface Meta {
   service: string;
   version: string;
-  generatedAt: string;
-  runtime: Record<string, string>;
-  web3: {
-    chain: string;
+  startedAt: string;
+  uptimeSeconds: number;
+  runtime: { node: string; platform: string; arch: string; memoryMb: number };
+  chain: {
+    mode: string;
+    network: string;
     chainId: number;
+    rpcHost: string;
+    escrow: string;
     token: string;
-    tokenAddress: string;
-    tokenDecimals: number;
-    escrowContract: string;
-    solidity: string;
-    openzeppelin: string;
-    chainMode: "local" | "simulated" | string;
-    settlement: string;
-    note: string;
+    deployBlock: string | null;
+    blockNumber: string | null;
+    gasPriceWei: string | null;
+    supportsTimeTravel: boolean;
+    timeoutSeconds: string | null;
+    tokenDecimals: number | null;
+    accounts: { arbiter: string; seller: string; buyer: string };
   };
-  escrow: { states: string[]; releaseTimeoutDays: number; arbitration: string };
+  escrowStates: string[];
+  counts: { listings: number; escrows: number; events: number };
   endpoints: Endpoint[];
+}
+
+export interface Block {
+  available: boolean;
+  number?: string;
+  hash?: string;
+  parentHash?: string;
+  stateRoot?: string;
+  timestamp?: string;
+  gasUsed?: string;
+  transactions?: number;
 }

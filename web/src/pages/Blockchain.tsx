@@ -1,24 +1,34 @@
+import { useEffect, useState } from "react";
 import { Callout, Card, Code, List, Page, Table } from "../components/ui";
 import { kickerFor } from "../nav";
+import type { Block, Meta } from "../lib/meta";
 
-export function Blockchain() {
+export function Blockchain({ meta }: { meta: Meta | null }) {
+  const [block, setBlock] = useState<Block | null>(null);
+  useEffect(() => {
+    fetch("/api/chain/block")
+      .then((r) => r.json())
+      .then((b: Block) => setBlock(b))
+      .catch(() => setBlock({ available: false }));
+  }, []);
+
   return (
     <Page
       kicker={kickerFor("blockchain")}
       title="Blockchain and the ledger"
       lede="What a block actually contains here, how blocks are chained, what the ledger is made of, and the honest answer to 'where is the distributed part?'"
     >
-      <Card title="A real block from this chain" tag="measured">
+      <Card title="A real block from this chain" tag="live from /api/chain/block">
         <Table
           head={["Field", "Value", "What it is"]}
           rows={[
-            ["number", "2138", "Its position in the chain"],
-            ["hash", <code className="font-mono text-[10px]">0xc00fc2c15f69…</code>, "keccak-256 of the header"],
-            ["parentHash", <code className="font-mono text-[10px]">0xe1458166da0e…</code>, "The hash of block 2137 — this is the link"],
-            ["stateRoot", <code className="font-mono text-[10px]">0x2d73596160b3…</code>, "Root of the world state after execution"],
-            ["timestamp", "1796143973", "Unix seconds; drives the 14-day timeout"],
-            ["gasUsed", "0", "This one is empty — anvil mines on a 1s timer regardless"],
-            ["transactions", "0", "Blocks can be empty; ours often are"],
+            ["number", block?.number ?? "…", "Its position in the chain"],
+            ["hash", <code className="font-mono text-[10px]">{block?.hash ? block.hash.slice(0, 18) + "…" : "…"}</code>, "keccak-256 of the header"],
+            ["parentHash", <code className="font-mono text-[10px]">{block?.parentHash ? block.parentHash.slice(0, 18) + "…" : "…"}</code>, "The previous block — this is the link"],
+            ["stateRoot", <code className="font-mono text-[10px]">{block?.stateRoot ? block.stateRoot.slice(0, 18) + "…" : "…"}</code>, "Root of the world state after execution"],
+            ["timestamp", block?.timestamp ?? "…", "Unix seconds; drives the release timeout"],
+            ["gasUsed", block?.gasUsed ?? "…", "Zero when the block is empty, which anvil still mines on its timer"],
+            ["transactions", block ? String(block.transactions ?? 0) : "…", "Blocks can be empty"],
           ]}
         />
       </Card>

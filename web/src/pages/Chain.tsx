@@ -1,7 +1,8 @@
 import { Callout, Card, Code, List, Page, Stats, Table } from "../components/ui";
 import { kickerFor } from "../nav";
+import type { Meta } from "../lib/meta";
 
-export function Chain() {
+export function Chain({ meta }: { meta: Meta | null }) {
   return (
     <Page
       kicker={kickerFor("chain")}
@@ -89,10 +90,10 @@ export function Chain() {
         <Table
           head={["Role", "Address", "Holds key", "Power"]}
           rows={[
-            ["Arbiter / deployer", <code className="font-mono text-[10px]">0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</code>, "API env (mode 600)", "Refund, and release only inside a dispute"],
-            ["Seller", <code className="font-mono text-[10px]">0x70997970C51812dc3A010C7d01b50e0d17dc79C8</code>, "API env (mode 600)", "Marks shipped, receives funds"],
-            ["Buyer", <code className="font-mono text-[10px]">0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC</code>, "API env (mode 600)", "Funds, confirms, disputes"],
-            ["Escrow contract", <code className="font-mono text-[10px]">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</code>, "—", "Holds funds, enforces rules"],
+            ["Arbiter / deployer", <code className="font-mono text-[10px]">{meta?.chain.accounts.arbiter ?? "…"}</code>, "API env (mode 600)", "Refund, and release only inside a dispute"],
+            ["Seller", <code className="font-mono text-[10px]">{meta?.chain.accounts.seller ?? "…"}</code>, "API env (mode 600)", "Marks shipped, receives funds"],
+            ["Buyer", <code className="font-mono text-[10px]">{meta?.chain.accounts.buyer ?? "…"}</code>, "API env (mode 600)", "Funds, confirms, disputes"],
+            ["Escrow contract", <code className="font-mono text-[10px]">{meta?.chain.escrow ?? "…"}</code>, "—", "Holds funds, enforces rules"],
           ]}
         />
         <p className="text-xs text-muted">

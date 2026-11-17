@@ -90,7 +90,7 @@ export default function App() {
           onNavigate={navigate}
           open={navOpen}
           onClose={() => setNavOpen(false)}
-          mode={meta?.web3.chainMode ?? "simulated"}
+          mode={meta?.chain.mode ?? "simulated"}
         />
 
         <div className="min-w-0 flex-1">
@@ -124,12 +124,12 @@ export default function App() {
               </div>
               <span
                 className={`hidden rounded-full border px-2.5 py-1 font-mono text-[10px] sm:inline ${
-                  meta?.web3.chainMode !== "simulated"
+                  meta?.chain.mode !== "simulated"
                     ? "border-good/40 bg-good-soft text-good"
                     : "border-warn/40 bg-warn-soft text-warn"
                 }`}
               >
-                {meta?.web3.chainMode === "sepolia" ? "sepolia" : meta?.web3.chainMode === "local" ? "anvil" : "simulated"}
+                {meta?.chain.mode ?? "…"}
               </span>
               <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[10px] text-muted">
                 v{meta?.version ?? "0.1.0"}
@@ -147,7 +147,7 @@ export default function App() {
           </header>
           <div className="cluster-ticks" aria-hidden="true" />
 
-          {meta && meta.web3.chainMode !== "sepolia" && meta.web3.chainMode !== "mainnet" && (
+          {meta && meta.chain.mode !== "sepolia" && meta.chain.mode !== "mainnet" && (
             <div className="border-b border-line bg-surface">
               <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-6 py-2.5">
                 <p className="font-mono text-[11px] text-muted">
@@ -166,17 +166,17 @@ export default function App() {
 
           <main className="pb-4">
             <RouteContext.Provider value={route}>
-            {route === "overview" && <Overview />}
+            {route === "overview" && <Overview meta={meta} />}
             {route === "architecture" && <Architecture />}
             {route === "requirements" && <Requirements />}
             {route === "web" && <Web />}
             {route === "api" && <Api meta={meta} />}
             {route === "data" && <Data />}
             {route === "fundamentals" && <Fundamentals />}
-            {route === "sourcemap" && <SourceMap />}
-            {route === "chain" && <Chain />}
+            {route === "sourcemap" && <SourceMap meta={meta} />}
+            {route === "chain" && <Chain meta={meta} />}
             {route === "networks" && <Networks meta={meta} />}
-            {route === "blockchain" && <Blockchain />}
+            {route === "blockchain" && <Blockchain meta={meta} />}
             {route === "crypto" && <Crypto />}
             {route === "token" && <Token />}
             {route === "contract" && <Contract />}

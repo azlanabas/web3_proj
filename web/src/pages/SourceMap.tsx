@@ -1,13 +1,15 @@
 import { Badge, Callout, Card, Code, Page, Table } from "../components/ui";
+import type { Meta } from "../lib/meta";
 import { kickerFor } from "../nav";
 
-const ROWS: [string, string, string, string][] = [
+function rowsFor(meta: Meta | null): [string, string, string, string][] {
+  return [
   ["Escrow contract (source)", "contracts/src/VehicleEscrow.sol", "214 lines, Solidity 0.8.28", "cat contracts/src/VehicleEscrow.sol"],
   ["Escrow tests", "contracts/test/VehicleEscrow.t.sol", "23 tests", "forge test -vv"],
   ["Compiled artifact (ABI + bytecode)", "contracts/out/VehicleEscrow.sol/VehicleEscrow.json", "produced by forge build", "jq .abi contracts/out/…json"],
-  ["Deployed escrow", "address in api/.env → CONTRACT_ADDRESS", "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9", "cast code 0xCf7E… --rpc-url …"],
+  ["Deployed escrow", "api/.env → CONTRACT_ADDRESS", meta?.chain.escrow ?? "…", "cast code $CONTRACT_ADDRESS --rpc-url $RPC"],
   ["Test token (source)", "contracts/src/MockUSDC.sol", "6-decimal ERC-20", "cat contracts/src/MockUSDC.sol"],
-  ["Deployed token", "api/.env → TOKEN_ADDRESS", "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", "cast call … decimals()"],
+  ["Deployed token", "api/.env → TOKEN_ADDRESS", meta?.chain.token ?? "…", "cast call $TOKEN_ADDRESS decimals()"],
   ["Contract ABIs used by the API", "api/src/chain/chain.service.ts", "ESCROW_ABI, ERC20_ABI via viem parseAbi", "grep -n parseAbi src/chain/chain.service.ts"],
   ["Chain clients + role keys", "api/src/chain/chain.service.ts", "publicClient, wallet per buyer/seller/arbiter", "—"],
   ["Event indexer", "api/src/chain/indexer.service.ts", "getLogs → ChainEvent rows", "journalctl -u web3proj-api -f"],
@@ -18,9 +20,10 @@ const ROWS: [string, string, string, string][] = [
   ["Redeploy helper", "scripts/redeploy-local.sh", "recreates contracts if the chain restarts", "…/redeploy-local.sh"],
   ["Deployment record", "docs/03-decisions.md D-20", "address, chain, verification", "—"],
   ["Browser Web3 code", "none", "the UI has no wallet and no RPC access", "grep -r viem web/src → no results"],
-];
+  ];
+}
 
-export function SourceMap() {
+export function SourceMap({ meta }: { meta: Meta | null }) {
   return (
     <Page
       kicker={kickerFor("sourcemap")}
@@ -29,7 +32,7 @@ export function SourceMap() {
     >
       <Table
         head={["Component", "Source", "Runtime location", "Verify with"]}
-        rows={ROWS.map(([name, source, runtime, verify]) => [
+        rows={rowsFor(meta).map(([name, source, runtime, verify]) => [
           name,
           <code className="font-mono text-[10px] break-all">{source}</code>,
           <span className="text-[12px]">{runtime}</span>,

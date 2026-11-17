@@ -21,6 +21,10 @@ export const ESCROW_ABI = parseAbi([
   "function refund(uint256 escrowId)",
   "function releaseToSeller(uint256 escrowId)",
   "function cancel(uint256 escrowId)",
+  "function RELEASE_TIMEOUT() view returns (uint64)",
+  "function nextEscrowId() view returns (uint256)",
+  "function usdc() view returns (address)",
+  "function arbiter() view returns (address)",
   "event EscrowCreated(uint256 indexed escrowId, bytes32 indexed listingId, address indexed buyer, address seller, uint256 amount)",
   "event Funded(uint256 indexed escrowId, uint256 amount)",
   "event Shipped(uint256 indexed escrowId, uint64 shippedAt)",
@@ -34,6 +38,8 @@ export const ERC20_ABI = parseAbi([
   "function approve(address spender, uint256 amount) returns (bool)",
   "function allowance(address owner, address spender) view returns (uint256)",
   "function balanceOf(address) view returns (uint256)",
+  "function decimals() view returns (uint8)",
+  "function totalSupply() view returns (uint256)",
 ]);
 
 type Role = "buyer" | "seller" | "arbiter";
@@ -47,7 +53,23 @@ const KEYS: Record<Role, string> = {
 @Injectable()
 export class ChainService {
   private readonly logger = new Logger(ChainService.name);
-  readonly enabled = process.env.CHAIN_MODE === "local";
+  /** Any real network, local or public. Only "simulated" writes no transactions. */
+  readonly mode = process.env.CHAIN_MODE ?? "simulated";
+  readonly enabled = this.mode !== "simulated";
+  /** Time travel is an anvil cheat code; a public chain cannot do it. */
+  readonly supportsTimeTravel = this.mode === "local";
+  readonly chainId = Number(process.env.CHAIN_ID ?? 0);
+  readonly deployBlock = process.env.CONTRACT_DEPLOY_BLOCK ?? null;
+  readonly networkName =
+    process.env.CHAIN_NAME ??
+    (this.mode === "local" ? "Anvil (local EVM)" : this.mode === "sepolia" ? "Ethereum Sepolia" : "Simulated");
+  readonly rpcHost = (() => {
+    try {
+      return new URL(process.env.RPC_URL ?? "").host;
+    } catch {
+      return "";
+    }
+  })();
   readonly escrow = (process.env.CONTRACT_ADDRESS ?? "") as Address;
   readonly token = (process.env.TOKEN_ADDRESS ?? "") as Address;
 
