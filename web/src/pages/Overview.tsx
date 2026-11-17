@@ -88,7 +88,9 @@ export function Overview({ meta }: { meta: Meta | null }) {
             <p className="px-5 py-4 font-mono text-[12px] text-faint">Reading the chain…</p>
           )}
           {txs.map((tx, i) => {
-            const amount = tx.amountUsdc ? `${(Number(tx.amountUsdc) / 1_000_000).toLocaleString("en-US")} USDC` : null;
+            const amount = tx.amountUsdc
+              ? `${Number(tx.amountUsdc).toLocaleString("en-US", { maximumFractionDigits: 2 })} USDC`
+              : null;
             const short = (a: string | null) => (a ? `${a.slice(0, 6)}…${a.slice(-4)}` : "—");
             const subject = tx.vehicle ?? "the vehicle";
             const detail =
