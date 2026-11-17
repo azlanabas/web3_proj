@@ -18,6 +18,8 @@ export const api = {
   startSession: () => req<{ walletAddress: string }>("/session", { method: "POST" }),
   listings: () => req<{ items: Listing[]; total: number }>("/listings"),
   escrows: () => req<Escrow[]>("/escrows"),
+  prepareAction: (id: string, action: string) =>
+    req<{ to: string; data: string; chainId: number; from: string }>(`/escrows/${id}/tx/${action}`),
   receipt: (id: string) =>
     req<{
       event: string | null;
@@ -25,6 +27,8 @@ export const api = {
       block: string | null;
       tx: { from: string; to: string; gasUsed: string; status: string; block: string } | null;
       amountUsdc: string;
+      buyer: string;
+      seller: string;
       balances: { buyer: string; seller: string; escrow: string };
     }>(`/escrows/${id}/receipt`),
   detail: (id: string) => req<{ escrow: Escrow; events: ChainEvent[] }>(`/escrows/${id}`),
