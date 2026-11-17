@@ -7,6 +7,7 @@ export interface Section {
 
 export const SECTIONS: Section[] = [
   { id: "overview",     group: "Start",      label: "Overview",          blurb: "What this is and why it exists" },
+  { id: "architecture", group: "Start",      label: "Architecture",      blurb: "Every component and how it is built" },
   { id: "requirements", group: "Start",      label: "Requirement map",   blurb: "Every line of the brief, traced" },
 
   { id: "web",          group: "Components", label: "Web tier",          blurb: "React, Vite, Tailwind, nginx" },

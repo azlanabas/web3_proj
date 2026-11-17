@@ -36,11 +36,11 @@ const LAYERS = [
 export function Layers() {
   return (
     <section id="how" className="mx-auto max-w-6xl px-6 py-20">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">How it works</p>
-      <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
+      <h2 className="mt-3 text-3xl font-semibold text-ink sm:text-4xl">
         Four layers, one transaction
       </h2>
-      <p className="mt-3 max-w-2xl text-slate-400">
+      <p className="mt-3 max-w-2xl text-muted">
         A vehicle sale crosses all four. Each layer has exactly one job, and each hands off a
         narrow contract to the next.
       </p>
@@ -49,19 +49,19 @@ export function Layers() {
         {LAYERS.map((layer) => (
           <article
             key={layer.name}
-            className="group relative rounded-2xl border border-slate-800 bg-slate-900/50 p-6 transition hover:border-emerald-500/40"
+            className="group relative rounded-2xl border border-line bg-surface p-6 transition hover:border-accent/40"
           >
             <div className="flex items-baseline justify-between">
-              <span className="font-mono text-xs text-slate-600">{layer.tag}</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/70" />
+              <span className="font-mono text-xs text-faint">{layer.tag}</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-soft" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-white">{layer.name}</h3>
-            <p className="mt-1 font-mono text-[11px] text-emerald-400/80">{layer.stack}</p>
-            <p className="mt-3 text-sm leading-relaxed text-slate-400">{layer.body}</p>
+            <h3 className="mt-4 text-lg font-semibold text-ink">{layer.name}</h3>
+            <p className="mt-1 font-mono text-[11px] text-accent/80">{layer.stack}</p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{layer.body}</p>
             <ul className="mt-4 space-y-1.5">
               {layer.points.map((p) => (
-                <li key={p} className="flex gap-2 text-xs text-slate-500">
-                  <span className="text-emerald-500">▸</span>
+                <li key={p} className="flex gap-2 text-xs text-muted">
+                  <span className="text-accent">▸</span>
                   {p}
                 </li>
               ))}

@@ -16,7 +16,7 @@ export function Token() {
             ["Mainnet", <code className="font-mono text-[10px]">0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48</code>, "6", "No"],
           ]}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           The Sepolia row was verified by calling <code className="font-mono text-[11px]">symbol()</code>{" "}
           and <code className="font-mono text-[11px]">decimals()</code> on the contract, not from
           documentation. The local token is ours: a 6-decimal ERC-20, because Circle&apos;s token
@@ -59,7 +59,7 @@ buyer ──fund(escrowId)──▶ Escrow ──transferFrom(buyer, escrow, amo
           receive materially less than agreed purely from volatility, and the contract has no way
           to hedge. A stablecoin makes the amount that was agreed the amount that is paid.
         </p>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           Tradeoff accepted: a stablecoin introduces issuer and depeg risk. For a vehicle sale with
           a two-week settlement window, that is the smaller of the two risks.
         </p>

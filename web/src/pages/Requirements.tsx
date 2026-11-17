@@ -30,11 +30,11 @@ export function Requirements() {
         rows={ROWS.map(([req, where, layer]) => [
           req,
           where,
-          <span className="font-mono text-[10px] text-slate-400">{layer}</span>,
+          <span className="font-mono text-[10px] text-muted">{layer}</span>,
           <Badge>Working</Badge>,
         ])}
       />
-      <p className="text-xs leading-relaxed text-slate-500">
+      <p className="text-xs leading-relaxed text-muted">
         One deliberate deviation from the brief: Docker was replaced with a systemd runtime
         (D-15), because the host has about one gigabyte of free memory and already serves another
         application. Items that are genuinely outside the MVP — public testnet deployment,

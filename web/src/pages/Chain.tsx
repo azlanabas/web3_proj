@@ -43,7 +43,7 @@ export function Chain() {
             "The transaction path is identical: real signing, real broadcast, real receipts, real logs.",
           ]}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           What it does not prove: mempool contention, reorgs, or gas-price spikes on a public
           network. Those are the reasons Sepolia comes next.
         </p>
@@ -59,7 +59,7 @@ export function Chain() {
             ["Escrow contract", <code className="font-mono text-[10px]">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</code>, "—", "Holds funds, enforces rules"],
           ]}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           On a public network the buyer and seller keys belong to users&apos; wallets, not the
           server. Only the arbiter key stays server-side.
         </p>

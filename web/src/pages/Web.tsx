@@ -43,7 +43,7 @@ dist/assets/index-*.js      238.51 kB │ gzip: 74.31 kB`}</Code>
       </Card>
 
       <Card title="Component map" tag="structure">
-        <Table head={["File", "Responsibility"]} rows={COMPONENTS.map(([f, r]) => [<code className="font-mono text-[11px] text-emerald-300">{f}</code>, r])} />
+        <Table head={["File", "Responsibility"]} rows={COMPONENTS.map(([f, r]) => [<code className="font-mono text-[11px] text-accent">{f}</code>, r])} />
       </Card>
 
       <Card title="How the browser talks to the server" tag="data flow">

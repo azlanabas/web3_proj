@@ -75,7 +75,7 @@ export function Security() {
           <Badge tone="slate">KMS-held arbiter key</Badge>
           <Badge tone="slate">Sepolia / mainnet</Badge>
         </p>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           These are scoped out of the MVP rather than incomplete. A public-network launch requires
           all four, and the audit is the gating item.
         </p>

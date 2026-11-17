@@ -29,14 +29,14 @@ export function Api({ meta }: { meta: Meta | null }) {
       lede="A NestJS REST service that owns authentication, validation, the escrow state machine and the audit trail. Thin controllers, fat services, and every request validated before it reaches business logic."
     >
       <Card title="Module map" tag="structure">
-        <Table head={["Module", "Responsibility"]} rows={MODULES.map(([m, r]) => [<code className="font-mono text-[11px] text-emerald-300">{m}</code>, r])} />
+        <Table head={["Module", "Responsibility"]} rows={MODULES.map(([m, r]) => [<code className="font-mono text-[11px] text-accent">{m}</code>, r])} />
       </Card>
 
       <Card title="Request lifecycle" tag="pipeline">
         <ol className="space-y-2">
           {LIFECYCLE.map((step, i) => (
             <li key={step} className="flex gap-3">
-              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 font-mono text-[10px] text-emerald-300">
+              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border border-accent/40 bg-accent-soft font-mono text-[10px] text-accent">
                 {i + 1}
               </span>
               <span>{step}</span>
@@ -46,15 +46,15 @@ export function Api({ meta }: { meta: Meta | null }) {
       </Card>
 
       <Card title={`Endpoints (${endpoints.length})`} tag="live from /api/meta">
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           This table is fetched from the running service, not hardcoded — if a route changes, this
           page changes with it.
         </p>
         <Table
           head={["Method", "Path", "Auth", "Purpose"]}
           rows={endpoints.map((e) => [
-            <span className={`font-mono text-[11px] ${e.method === "GET" ? "text-emerald-300" : "text-amber-300"}`}>{e.method}</span>,
-            <code className="font-mono text-[11px] text-slate-300">{e.path}</code>,
+            <span className={`font-mono text-[11px] ${e.method === "GET" ? "text-accent" : "text-warn"}`}>{e.method}</span>,
+            <code className="font-mono text-[11px] text-ink">{e.path}</code>,
             <Badge tone="slate">{e.auth}</Badge>,
             e.purpose,
           ])}

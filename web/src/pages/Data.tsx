@@ -30,7 +30,7 @@ export function Data() {
       </Card>
 
       <Card title="Tables" tag="schema">
-        <Table head={["Table", "Columns", "Purpose"]} rows={TABLES.map(([t, c, p]) => [<code className="font-mono text-[11px] text-emerald-300">{t}</code>, <span className="font-mono text-[10px]">{c}</span>, p])} />
+        <Table head={["Table", "Columns", "Purpose"]} rows={TABLES.map(([t, c, p]) => [<code className="font-mono text-[11px] text-accent">{t}</code>, <span className="font-mono text-[10px]">{c}</span>, p])} />
       </Card>
 
       <Card title="Money is never a float" tag="correctness">
@@ -78,7 +78,7 @@ amountUsdc Decimal @db.Decimal(20, 6)
           <Badge>Migration history</Badge>
           <Badge tone="slate">read replica — post-MVP</Badge>
         </p>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           Backups run at 03:00 GMT+8 to /srv/web3proj/backups as compressed pg_dump archives with a
           seven-day retention window. A read replica is only meaningful once traffic justifies one.
         </p>

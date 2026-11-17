@@ -95,7 +95,7 @@ export function Demo() {
               "Timeout path: open escrow → fund → ship → simulate 14 days → release by timeout. Protects a seller from a silent buyer.",
             ]}
           />
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-muted">
             In demo mode a single session may act as buyer, seller and arbiter, the way an operator
             walking through the product would.
           </p>
@@ -117,9 +117,9 @@ export function Demo() {
         />
       </div>
       {error && (
-        <div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-rose-500/40 bg-rose-950/90 px-4 py-3 font-mono text-xs text-rose-200 shadow-xl">
+        <div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-danger/40 bg-surface px-4 py-3 font-mono text-xs text-danger shadow-xl">
           {error}
-          <button onClick={() => setError(null)} className="ml-4 text-rose-400 hover:text-rose-200">
+          <button onClick={() => setError(null)} className="ml-4 text-danger hover:text-danger">
             dismiss
           </button>
         </div>

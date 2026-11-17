@@ -24,24 +24,24 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-slate-950 px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(16,185,129,0.12),transparent)]" />
+    <div className="relative flex min-h-screen items-center justify-center bg-paper px-6">
+      <div className="pointer-events-none absolute inset-0 bg-paper" />
       <div className="relative w-full max-w-sm">
         <div className="mb-8 text-center">
-          <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-emerald-500 font-mono text-lg font-bold text-slate-950">
+          <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-accent font-mono text-lg font-bold text-white">
             ◈
           </span>
-          <h1 className="mt-5 font-mono text-lg tracking-tight text-white">web3_proj</h1>
-          <p className="mt-1.5 text-sm text-slate-500">
+          <h1 className="mt-5 font-mono text-lg tracking-tight text-ink">web3_proj</h1>
+          <p className="mt-1.5 text-sm text-muted">
             Vehicle escrow MVP — sign in to continue
           </p>
         </div>
 
         <form
           onSubmit={submit}
-          className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur"
+          className="rounded-2xl border border-line bg-surface p-6 backdrop-blur"
         >
-          <label className="block text-xs font-medium uppercase tracking-wider text-slate-500">
+          <label className="block text-xs font-medium uppercase tracking-wider text-muted">
             Username
             <input
               type="text"
@@ -49,25 +49,25 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
               onChange={(e) => setUsername(e.target.value)}
               autoComplete="username"
               autoFocus
-              className="mt-1.5 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none transition focus:border-emerald-500/60"
+              className="mt-1.5 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none transition focus:border-accent/40"
               placeholder="username"
             />
           </label>
 
-          <label className="mt-4 block text-xs font-medium uppercase tracking-wider text-slate-500">
+          <label className="mt-4 block text-xs font-medium uppercase tracking-wider text-muted">
             Password
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
-              className="mt-1.5 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none transition focus:border-emerald-500/60"
+              className="mt-1.5 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none transition focus:border-accent/40"
               placeholder="••••"
             />
           </label>
 
           {error && (
-            <p className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-300">
+            <p className="mt-4 rounded-lg border border-danger/40 bg-danger-soft px-3 py-2 text-xs text-danger">
               {error}
             </p>
           )}
@@ -75,14 +75,14 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="submit"
             disabled={busy || !username || !password}
-            className="mt-5 w-full rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-5 w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-40"
           >
             {busy ? "Checking…" : "Enter"}
           </button>
 
         </form>
 
-        <p className="mt-6 text-center font-mono text-[10px] leading-relaxed text-slate-700">
+        <p className="mt-6 text-center font-mono text-[10px] leading-relaxed text-faint">
           Demo gate only — not access control.
           <br />
           Settlement simulated on a local EVM with test USDC.

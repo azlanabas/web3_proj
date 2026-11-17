@@ -51,8 +51,8 @@ export function Explorer({ meta }: { meta: Meta | null }) {
         <Table
           head={["", "Method", "Path", "Auth", "Call"]}
           rows={endpoints.map((e) => [
-            <span className="text-xs text-slate-500">{e.purpose}</span>,
-            <span className={`font-mono text-[11px] ${e.method === "GET" ? "text-emerald-300" : "text-amber-300"}`}>
+            <span className="text-xs text-muted">{e.purpose}</span>,
+            <span className={`font-mono text-[11px] ${e.method === "GET" ? "text-accent" : "text-warn"}`}>
               {e.method}
             </span>,
             <code className="font-mono text-[11px]">{e.path}</code>,
@@ -61,12 +61,12 @@ export function Explorer({ meta }: { meta: Meta | null }) {
               <button
                 onClick={() => call(e)}
                 disabled={busy === e.path}
-                className="rounded border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 font-mono text-[10px] text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40"
+                className="rounded border border-accent/40 bg-accent-soft px-2 py-1 font-mono text-[10px] text-accent hover:bg-accent-soft disabled:opacity-40"
               >
                 {busy === e.path ? "…" : "call"}
               </button>
             ) : (
-              <span className="font-mono text-[10px] text-slate-600">mutating</span>
+              <span className="font-mono text-[10px] text-faint">mutating</span>
             ),
           ])}
         />
@@ -75,15 +75,15 @@ export function Explorer({ meta }: { meta: Meta | null }) {
       <Card title="Response" tag={result ? `${result.status} · ${result.ms}ms` : "idle"}>
         {result ? (
           <>
-            <p className="font-mono text-[11px] text-slate-500">
+            <p className="font-mono text-[11px] text-muted">
               {result.path} → {result.status}
             </p>
-            <pre className="max-h-96 overflow-auto rounded-xl border border-slate-800 bg-black/50 p-4 font-mono text-[11px] leading-relaxed text-slate-300">
+            <pre className="max-h-96 overflow-auto rounded-xl border border-line bg-paper p-4 font-mono text-[11px] leading-relaxed text-ink">
               {result.body}
             </pre>
           </>
         ) : (
-          <p className="text-slate-500">Press call on any GET endpoint above.</p>
+          <p className="text-muted">Press call on any GET endpoint above.</p>
         )}
       </Card>
     </Page>

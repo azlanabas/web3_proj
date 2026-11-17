@@ -38,7 +38,7 @@ CANCELLED           REFUNDED              │
           <Badge>RELEASED</Badge>
           <Badge>REFUNDED</Badge>
           <Badge>CANCELLED</Badge>
-          <span className="text-xs text-slate-500">— terminal, no transition out</span>
+          <span className="text-xs text-muted">— terminal, no transition out</span>
         </p>
       </Card>
 
@@ -46,8 +46,8 @@ CANCELLED           REFUNDED              │
         <Table
           head={["From", "To", "Actor", "Rule and effect"]}
           rows={TRANSITIONS.map(([from, to, actor, rule]) => [
-            <code className="font-mono text-[10px] text-slate-400">{from}</code>,
-            <code className="font-mono text-[10px] text-emerald-300">{to}</code>,
+            <code className="font-mono text-[10px] text-muted">{from}</code>,
+            <code className="font-mono text-[10px] text-accent">{to}</code>,
             actor,
             rule,
           ])}

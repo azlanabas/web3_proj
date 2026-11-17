@@ -35,7 +35,7 @@ uint64 public constant RELEASE_TIMEOUT = 14 days;
 
 IERC20  public immutable usdc;
 address public immutable arbiter;      // one address, fixed at construction`}</Code>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           The arbiter is immutable and global rather than passed per escrow. A per-escrow arbiter
           would let the buyer — who calls <code className="font-mono text-[11px]">createEscrow</code>{" "}
           — nominate themselves and refund their own escrow after the seller ships.
@@ -112,7 +112,7 @@ address public immutable arbiter;      // one address, fixed at construction`}</
             ["timeout release", "323,396", "—"],
           ]}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           Gas is not the economic constraint here: a vehicle sale dwarfs it. The constraint is the
           number of signatures a user tolerates, which is why the happy path is four.
         </p>

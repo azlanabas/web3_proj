@@ -16,13 +16,13 @@ export function Overview() {
     >
       <div className="grid gap-3 sm:grid-cols-4">
         {FLOW.map((step, i) => (
-          <div key={step.name} className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+          <div key={step.name} className="rounded-xl border border-line bg-surface p-4">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] text-slate-600">0{i + 1}</span>
-              <span className="text-emerald-500">→</span>
+              <span className="font-mono text-[10px] text-faint">0{i + 1}</span>
+              <span className="text-accent">→</span>
             </div>
-            <p className="mt-2 text-sm font-semibold text-white">{step.name}</p>
-            <p className="mt-0.5 font-mono text-[10px] text-slate-500">{step.detail}</p>
+            <p className="mt-2 text-sm font-semibold text-ink">{step.name}</p>
+            <p className="mt-0.5 font-mono text-[10px] text-muted">{step.detail}</p>
           </div>
         ))}
       </div>
@@ -43,7 +43,7 @@ export function Overview() {
       <Card title="What the platform owns, and what it never touches" tag="boundary">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">Owns</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-accent">Owns</p>
             <List
               items={[
                 "Listings, vehicles and photos",
@@ -54,7 +54,7 @@ export function Overview() {
             />
           </div>
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-rose-400">Never owns</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-danger">Never owns</p>
             <List
               items={[
                 "Buyer funds, at any moment",

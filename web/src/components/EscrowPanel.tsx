@@ -30,11 +30,11 @@ function StepBar({ status }: { status: EscrowStatus }) {
         const isSettled = step.key === "SETTLED";
         const tone = done
           ? isSettled && status === "REFUNDED"
-            ? "bg-rose-500"
-            : "bg-emerald-500"
+            ? "bg-danger"
+            : "bg-accent"
           : current
-            ? "bg-amber-400"
-            : "bg-slate-700";
+            ? "bg-warn"
+            : "bg-line";
         return (
           <div key={step.key} className="flex flex-1 flex-col items-center gap-2">
             <div className="flex w-full items-center">
@@ -42,7 +42,7 @@ function StepBar({ status }: { status: EscrowStatus }) {
             </div>
             <span
               className={`text-[10px] uppercase tracking-wider ${
-                done || current ? "text-slate-300" : "text-slate-600"
+                done || current ? "text-ink" : "text-faint"
               }`}
             >
               {step.label}
@@ -82,17 +82,17 @@ export function EscrowPanel(props: Props) {
   const canRefund = status === "FUNDED" || status === "SHIPPED" || status === "DISPUTED";
 
   return (
-    <section id="demo" className="border-t border-slate-800/60 bg-slate-950">
+    <section id="demo" className="border-t border-line bg-paper">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
               Live walkthrough
             </p>
-            <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold text-ink sm:text-4xl">
               Run an escrow yourself
             </h2>
-            <p className="mt-3 max-w-2xl text-slate-400">
+            <p className="mt-3 max-w-2xl text-muted">
               Pick a vehicle, open an escrow, then move it through every state. Each step writes
               a chain event you can inspect on the right.
             </p>
@@ -101,7 +101,7 @@ export function EscrowPanel(props: Props) {
             <button
               onClick={props.onReset}
               disabled={busy}
-              className="rounded-lg border border-slate-700 px-3 py-2 text-xs text-slate-400 transition hover:border-slate-500 hover:text-slate-200 disabled:opacity-40"
+              className="rounded-lg border border-line px-3 py-2 text-xs text-muted transition hover:border-muted hover:text-ink disabled:opacity-40"
             >
               Reset demo data
             </button>
@@ -109,7 +109,7 @@ export function EscrowPanel(props: Props) {
             <button
               onClick={props.onLogin}
               disabled={busy}
-              className="rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 disabled:opacity-50"
+              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-strong disabled:opacity-50"
             >
               Start demo session
             </button>
@@ -119,37 +119,37 @@ export function EscrowPanel(props: Props) {
         <div className="mt-8 grid gap-4 lg:grid-cols-12">
           {/* Vehicles */}
           <div className="lg:col-span-4">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
               Vehicles ({listings.length})
             </h3>
             <div className="space-y-2">
               {listings.map((l) => (
                 <div
                   key={l.id}
-                  className="rounded-xl border border-slate-800 bg-slate-900/50 p-4"
+                  className="rounded-xl border border-line bg-surface p-4"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-white">{l.title}</p>
-                      <p className="mt-0.5 font-mono text-[11px] text-slate-500">
+                      <p className="font-medium text-ink">{l.title}</p>
+                      <p className="mt-0.5 font-mono text-[11px] text-muted">
                         {l.year} · {l.mileage.toLocaleString()} km · VIN {l.vin}
                       </p>
                     </div>
-                    <p className="whitespace-nowrap font-mono text-sm text-emerald-300">
+                    <p className="whitespace-nowrap font-mono text-sm text-accent">
                       ${usd(l.priceUsdc)}
                     </p>
                   </div>
                   <button
                     onClick={() => props.onOpen(l.id)}
                     disabled={busy || !signedIn}
-                    className="mt-3 w-full rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-3 py-1.5 text-xs font-medium text-emerald-300 transition hover:bg-emerald-500/15 disabled:opacity-40"
+                    className="mt-3 w-full rounded-lg border border-accent/40 bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent transition hover:bg-accent-soft disabled:opacity-40"
                   >
                     Open escrow
                   </button>
                 </div>
               ))}
               {listings.length === 0 && (
-                <p className="rounded-xl border border-dashed border-slate-800 p-6 text-center text-sm text-slate-500">
+                <p className="rounded-xl border border-dashed border-line p-6 text-center text-sm text-muted">
                   {signedIn ? "No listings yet." : "Start a demo session to load vehicles."}
                 </p>
               )}
@@ -158,23 +158,23 @@ export function EscrowPanel(props: Props) {
 
           {/* Escrow + state machine */}
           <div className="lg:col-span-5">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
               Escrow
             </h3>
             {selected ? (
-              <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
+              <div className="rounded-xl border border-line bg-surface p-5">
                 <div className="flex items-center justify-between">
-                  <p className="font-mono text-xs text-slate-500">
+                  <p className="font-mono text-xs text-muted">
                     escrow #{selected.onchainId}
                   </p>
-                  <span className="rounded-full border border-slate-700 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-300">
+                  <span className="rounded-full border border-line px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-ink">
                     {selected.status}
                   </span>
                 </div>
-                <p className="mt-2 font-mono text-2xl text-white">
-                  ${usd(selected.amountUsdc)} <span className="text-sm text-slate-500">USDC</span>
+                <p className="mt-2 font-mono text-2xl text-ink">
+                  ${usd(selected.amountUsdc)} <span className="text-sm text-muted">USDC</span>
                 </p>
-                <p className="mt-1 font-mono text-[10px] text-slate-600">
+                <p className="mt-1 font-mono text-[10px] text-faint">
                   chain {selected.chainId} · {short(selected.contractAddress, 8)}
                 </p>
 
@@ -192,13 +192,13 @@ export function EscrowPanel(props: Props) {
                   <Action label="Arbiter → seller" onClick={() => props.onAct("release")} enabled={canArbitrate} busy={busy} />
                   <Action label="Arbiter → refund" onClick={() => props.onAct("refund")} enabled={canRefund} busy={busy} />
                 </div>
-                <p className="mt-3 text-[11px] leading-relaxed text-slate-500">
+                <p className="mt-3 text-[11px] leading-relaxed text-muted">
                   Actions are role-gated in production. In demo mode one session may drive every
                   step, the way an operator would.
                 </p>
               </div>
             ) : (
-              <div className="rounded-xl border border-dashed border-slate-800 p-10 text-center text-sm text-slate-500">
+              <div className="rounded-xl border border-dashed border-line p-10 text-center text-sm text-muted">
                 Open an escrow to begin.
                 {escrows.length > 0 && (
                   <div className="mt-4 space-y-1">
@@ -206,7 +206,7 @@ export function EscrowPanel(props: Props) {
                       <button
                         key={e.id}
                         onClick={() => props.onSelect(e.id)}
-                        className="block w-full rounded border border-slate-800 px-3 py-1.5 font-mono text-[11px] text-slate-400 hover:border-slate-600"
+                        className="block w-full rounded border border-line px-3 py-1.5 font-mono text-[11px] text-muted hover:border-line"
                       >
                         #{e.onchainId} · {e.status} · ${usd(e.amountUsdc)}
                       </button>
@@ -219,19 +219,19 @@ export function EscrowPanel(props: Props) {
 
           {/* Event log */}
           <div className="lg:col-span-3">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
               Chain events
             </h3>
-            <div className="h-full rounded-xl border border-slate-800 bg-black/40 p-4">
+            <div className="h-full rounded-xl border border-line bg-paper p-4">
               {events.length === 0 ? (
-                <p className="font-mono text-[11px] text-slate-600">no events yet</p>
+                <p className="font-mono text-[11px] text-faint">no events yet</p>
               ) : (
                 <ul className="space-y-3">
                   {events.map((e) => (
                     <li key={e.id} className="font-mono text-[11px]">
-                      <p className="text-emerald-300">{e.eventName}</p>
-                      <p className="truncate text-slate-500">{short(e.txHash, 14)}</p>
-                      <p className="text-slate-700">block {e.blockNumber}</p>
+                      <p className="text-accent">{e.eventName}</p>
+                      <p className="truncate text-muted">{short(e.txHash, 14)}</p>
+                      <p className="text-faint">block {e.blockNumber}</p>
                     </li>
                   ))}
                 </ul>
@@ -263,8 +263,8 @@ function Action({
       disabled={!enabled || busy}
       className={`rounded-lg px-3 py-2 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-25 ${
         muted
-          ? "border border-slate-700 text-slate-300 hover:border-slate-500"
-          : "bg-emerald-500 text-slate-950 hover:bg-emerald-400"
+          ? "border border-line text-ink hover:border-muted"
+          : "bg-accent text-white hover:bg-accent-strong"
       }`}
     >
       {label}

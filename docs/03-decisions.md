@@ -376,3 +376,18 @@ rather than a dashboard.
 
 **If real protection is ever needed:** HTTP Basic Auth at nginx (protects static files and the
 API together), or move authentication into the API session model that already exists for SIWE.
+
+---
+
+## D-23 — Architecture page, and a paper-and-ink palette
+
+**Status:** LOCKED (2026-11-17)
+
+Added an Architecture page that inventories every file in the build (contracts, API, web, ops)
+and explains how each artefact is produced, the dependency graph, the build order and the
+configuration surface.
+
+Replaced the dark slate-and-emerald theme with a warm paper background, ink text and a single
+navy accent. Rationale: the dark gradient palette is the default output of generative UI tools
+and reads as template rather than product. Green is now reserved for status, red for errors,
+amber for warnings — colour carries meaning instead of decoration.

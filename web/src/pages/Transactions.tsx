@@ -41,7 +41,7 @@ browser  refetch → state bar advances, event appears`}</Code>
             "Every state change also produces a log, so the database can be rebuilt from the chain alone.",
           ]}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted">
           This ordering is the difference between an app that uses a blockchain and an app that
           merely stores hashes. Ours refuses to advance state until the receipt confirms.
         </p>
