@@ -12,7 +12,7 @@ export interface Section {
  * then the chain that settles it, then the evidence that it runs.
  */
 export const SECTIONS: Section[] = [
-  { id: "overview", group: "Start", label: "Overview", blurb: "Why this exists, in one page" },
+  { id: "overview", group: "Start", label: "Overview", blurb: "Purpose, architecture and current state" },
 
   { id: "requirements", group: "1 · The product", label: "Requirement map", blurb: "Every line of the brief, traced" },
   { id: "lifecycle",    group: "1 · The product", label: "Escrow lifecycle", blurb: "Every state and its guards" },
