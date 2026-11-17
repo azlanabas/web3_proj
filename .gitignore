@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+out/
+target/
+
+# Environment and secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+.secrets/
+
+# Tooling
+.DS_Store
+coverage/
+*.log
+*.tsbuildinfo
+
+# Local data
+pgdata/
+*.sqlite
+*.sqlite3
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
