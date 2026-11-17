@@ -1,4 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, NotFoundException } from "@nestjs/common";
+import { privateKeyToAccount } from "viem/accounts";
+import type { Hex } from "viem";
 import { PATH_METADATA, METHOD_METADATA } from "@nestjs/common/constants";
 import { DiscoveryService, MetadataScanner, ModulesContainer } from "@nestjs/core";
 import { RequestMethod } from "@nestjs/common";
@@ -152,6 +154,14 @@ export class MetaController {
       escrowStates: Object.keys(EscrowStatus),
       endpoints: this.endpoints(),
     };
+  }
+
+  /** The Sepolia deployer address, derived from the configured key at request time. */
+  @Get("deployer")
+  deployer() {
+    const key = process.env.SEPOLIA_DEPLOYER_KEY as Hex | undefined;
+    if (!key) throw new NotFoundException("no deployer key configured");
+    return { address: privateKeyToAccount(key).address };
   }
 
   @Get("chain/block")

@@ -46,8 +46,27 @@
 <div class="wrap">
   <p class="kicker">Deploy · Ethereum Sepolia</p>
   <h1>Deploy the escrow from your own wallet</h1>
-  <p>Six transactions, signed by you. Nothing leaves your wallet except gas.</p>
-  <ol class="plan">
+  <p>Two ways to get this onto Sepolia. Either one ends with the operator repointing the API at the new addresses.</p>
+  
+
+  <div class="card">
+    <p class="kicker">Fastest — one transaction</p>
+    <p style="margin-top:8px">
+      Send 0.01 Sepolia ETH to the deployment address. The operator then runs the deploy script,
+      which creates both contracts and funds every signer. One signature instead of six.
+    </p>
+    <p style="margin-top:12px">Deployment address<br><code id="depAddr">loading…</code></p>
+    <div class="row">
+      <button id="fund">Send 0.01 ETH</button>
+      <span class="pill" id="fundState">not sent</span>
+    </div>
+    <p id="fundMsg"></p>
+  </div>
+
+  <div class="card">
+    <p class="kicker">Or do the whole deployment yourself</p>
+    <p class="note">Six transactions, signed by you. Nothing leaves your wallet except gas.</p>
+    <ol class="plan">
     <li>Deploy a 6-decimal test USDC token</li>
     <li>Deploy the escrow, naming the API&rsquo;s arbiter key</li>
     <li>Mint 1,000,000 USDC <strong>to the demo buyer</strong> &mdash; the API signs as that account, not as you</li>
@@ -58,7 +77,8 @@
   <p class="note">
     All three signers need gas: buyer funds and confirms, seller ships, arbiter refunds. The USDC goes
     to the demo buyer for the same reason &mdash; the API signs as that account, not as you.
-  </p><div class="card">
+  </p>
+
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
       <span class="pill" id="net">network: unknown</span>
       <span class="pill" id="acct">wallet: not connected</span>
@@ -145,6 +165,32 @@ async function send(data, to) {
   if (receipt.status !== "0x1") throw new Error("transaction reverted");
   return { hash, receipt };
 }
+
+let deployerAddr = null;
+fetch("/api/deployer")
+  .then((r) => r.json())
+  .then((d) => { deployerAddr = d.address; el("depAddr").textContent = d.address; })
+  .catch(() => { el("depAddr").textContent = "unavailable"; });
+
+el("fund").onclick = async () => {
+  if (!window.ethereum) { el("fundMsg").textContent = "No wallet found."; return; }
+  try {
+    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    const from = accounts[0];
+    if (!(await ensureChain())) return;
+    el("fund").disabled = true;
+    el("fundState").textContent = "confirm in wallet";
+    const hash = await window.ethereum.request({
+      method: "eth_sendTransaction",
+      params: [{ from, to: deployerAddr, value: "0x2386f26fc10000" }],
+    });
+    el("fundState").textContent = "sent";
+    el("fundMsg").innerHTML = "Transaction sent: <code>" + hash + "</code>. Tell the operator.";
+  } catch (e) {
+    el("fundMsg").textContent = e.message || String(e);
+    el("fund").disabled = false;
+  }
+};
 
 el("connect").onclick = async () => {
   if (!window.ethereum) return setMsg("No wallet found. Install MetaMask.", true);
