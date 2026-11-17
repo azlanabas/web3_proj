@@ -43,7 +43,7 @@ export function Explorer({ meta }: { meta: Meta | null }) {
 
   return (
     <Page
-      kicker="Practice"
+      kicker="Practice · 2 of 5"
       title="API explorer"
       lede="The endpoint list on this page is fetched from /api/meta at runtime, so it always matches what the service actually exposes. Read-only routes can be called live from here; mutating routes are shown but disabled."
     >

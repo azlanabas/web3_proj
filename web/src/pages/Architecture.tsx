@@ -51,7 +51,7 @@ const OPS: [string, string][] = [
 export function Architecture() {
   return (
     <Page
-      kicker="Start"
+      kicker="Start · Architecture"
       title="Architecture: every component, and how it is built"
       lede="A complete inventory of what exists in this system, which tool produces each artefact, and the order the pieces were assembled in. If it is not on this page, it is not in the build."
     >

@@ -3,7 +3,7 @@ import { Callout, Card, Code, List, Page, Stats, Table } from "../components/ui"
 export function Chain() {
   return (
     <Page
-      kicker="Web3 · 1 of 4"
+      kicker="Web3 · 3 of 11"
       title="Chain and networks"
       lede="Ethereum is a state machine: accounts hold balances, transactions mutate state, and every mutation produces a receipt with logs. This escrow uses that machine for exactly one thing — deciding when money moves."
     >

@@ -21,7 +21,7 @@ const ROWS: [string, string, string][] = [
 export function Requirements() {
   return (
     <Page
-      kicker="Start"
+      kicker="Start · Requirements"
       title="Every line of the brief, and where it actually lives"
       lede="The original brief was a recruitment message describing a vehicle marketplace with crypto escrow and smart contracts. This maps each stated requirement onto the component that implements it."
     >

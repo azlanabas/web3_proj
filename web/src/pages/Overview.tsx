@@ -10,7 +10,7 @@ const LAYERS = [
 export function Overview() {
   return (
     <Page
-      kicker="Overview"
+      kicker="Start · Overview"
       title="A vehicle marketplace where the money waits in a contract, not in our account"
       lede="This page explains the whole thing: why it exists, what it does, where it runs, how a sale moves through it, and which parts are real versus deliberately deferred. If you read only one page before the walkthrough, read this one."
     >

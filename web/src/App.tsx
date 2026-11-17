@@ -23,6 +23,7 @@ import { Crypto } from "./pages/Crypto";
 import { Fundamentals } from "./pages/Fundamentals";
 import { SourceMap } from "./pages/SourceMap";
 import { References } from "./pages/References";
+import { ToolingMap } from "./pages/ToolingMap";
 import { Token } from "./pages/Token";
 import { Contract } from "./pages/Contract";
 import { Transactions } from "./pages/Transactions";
@@ -161,6 +162,7 @@ export default function App() {
             {route === "transactions" && <Transactions />}
             {route === "lifecycle" && <Lifecycle />}
             {route === "references" && <References />}
+            {route === "tooling" && <ToolingMap />}
             {route === "demo" && <Demo />}
             {route === "explorer" && <Explorer meta={meta} />}
             {route === "security" && <Security />}

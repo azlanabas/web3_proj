@@ -83,7 +83,7 @@ export function Demo() {
   return (
     <>
       <Page
-        kicker="Practice"
+        kicker="Practice · 1 of 5"
         title="Live walkthrough"
         lede="This runs against the production API you are reading this page from. Start a demo session, open an escrow on a vehicle, then drive it through every state. Each action writes a chain event on the right."
       >
