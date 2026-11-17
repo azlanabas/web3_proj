@@ -13,12 +13,12 @@ This folder holds documents only — no application source. Per workspace rule 4
 authored on the target host, not here.
 
 **Status: LIVE MVP.** `https://web3.heurist.online` is a navigable system walkthrough with
-12 sections — overview, requirement map, web/API/data/web3 component pages, escrow lifecycle,
+15 sections — overview, requirement map, web/API/data tiers, four Web3 pages (chain, token, contract, transactions), escrow lifecycle,
 live demo, API explorer, security, operations and roadmap. The smart contract is **deployed and executing** on a
 local anvil EVM: escrow actions are signed transactions and the event log is read back from
 chain logs. Test USDC only — not real money.
 
-The API describes itself at `GET /api/meta` (23 endpoints + runtime), and the UI renders that
+A standalone printable blueprint lives at `/system.html`. The API describes itself at `GET /api/meta` (23 endpoints + runtime), and the UI renders that
 response rather than hardcoding a route list.
 Facts below were measured **2026-11-17 23:35 GMT+8**.
 

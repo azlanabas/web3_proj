@@ -14,7 +14,10 @@ import { Requirements } from "./pages/Requirements";
 import { Roadmap } from "./pages/Roadmap";
 import { Security } from "./pages/Security";
 import { Web } from "./pages/Web";
-import { Web3 } from "./pages/Web3";
+import { Chain } from "./pages/Chain";
+import { Token } from "./pages/Token";
+import { Contract } from "./pages/Contract";
+import { Transactions } from "./pages/Transactions";
 
 function currentRoute(): string {
   const hash = window.location.hash.replace(/^#\/?/, "");
@@ -109,7 +112,10 @@ export default function App() {
             {route === "web" && <Web />}
             {route === "api" && <Api meta={meta} />}
             {route === "data" && <Data />}
-            {route === "web3" && <Web3 />}
+            {route === "chain" && <Chain />}
+            {route === "token" && <Token />}
+            {route === "contract" && <Contract />}
+            {route === "transactions" && <Transactions />}
             {route === "lifecycle" && <Lifecycle />}
             {route === "demo" && <Demo />}
             {route === "explorer" && <Explorer meta={meta} />}

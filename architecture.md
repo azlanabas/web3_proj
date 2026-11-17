@@ -331,9 +331,11 @@ Settlement is **on-chain on a local anvil EVM** (D-20): every escrow action is a
 transaction, receipts are awaited, and events are indexed from logs. Test USDC only. A
 `CHAIN_MODE=simulated` fallback remains for resilience.
 
-**Documentation UI (2026-11-17):** the frontend is a 12-section navigable walkthrough driven by a
-section registry, with hash routing, per-component pages and an API explorer that reads
-`GET /api/meta`. Bundle: 274 kB raw / 85.5 kB gzipped.
+**Documentation UI (2026-11-17):** the frontend is a 15-section navigable walkthrough driven by a
+section registry, with hash routing, per-component pages, four dedicated Web3 pages
+(chain, token, contract, transactions) and an API explorer that reads
+`GET /api/meta`. Bundle: 290 kB raw / 91 kB gzipped. A standalone self-contained
+blueprint is served at `/system.html`.
 
 ## 13. Known risks
 

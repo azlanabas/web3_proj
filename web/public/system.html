@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>web3_proj — system blueprint</title>
+<style>
+  :root{
+    --bg:#020617; --panel:#0f172a; --line:#1e293b; --text:#e2e8f0;
+    --muted:#94a3b8; --dim:#64748b; --accent:#10b981; --accent-dim:#065f46;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  header{border-bottom:1px solid var(--line);padding:56px 0 40px;
+    background:radial-gradient(60% 120% at 50% 0%,rgba(16,185,129,.10),transparent)}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--accent)}
+  h1{font-size:38px;line-height:1.15;margin:14px 0 12px;letter-spacing:-.02em}
+  h2{font-size:22px;margin:0 0 6px;letter-spacing:-.01em}
+  h3{font-size:15px;margin:0 0 8px}
+  .lede{color:var(--muted);max-width:70ch;font-size:16px}
+  section{padding:44px 0;border-bottom:1px solid var(--line)}
+  .secnum{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.16em}
+  .grid{display:grid;gap:14px;margin-top:22px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card p{margin:6px 0 0;color:var(--muted);font-size:13.5px}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .mono{font-family:var(--mono);font-size:12px}
+  .dim{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:13.5px}
+  th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--dim);padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid rgba(30,41,59,.7);color:var(--muted);vertical-align:top}
+  td:first-child{color:var(--text)}
+  tr:hover td{background:rgba(15,23,42,.6)}
+  pre{background:#000;border:1px solid var(--line);border-radius:12px;padding:16px;
+    overflow-x:auto;font-family:var(--mono);font-size:11.5px;line-height:1.65;color:#cbd5e1}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-family:var(--mono);
+    font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    border:1px solid rgba(16,185,129,.35);background:rgba(16,185,129,.10);color:#6ee7b7}
+  .pill.neutral{border-color:#334155;background:rgba(51,65,85,.25);color:#cbd5e1}
+  .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin-top:22px}
+  .node{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:14px}
+  .node .n{font-family:var(--mono);font-size:10px;color:var(--dim)}
+  .node .t{font-weight:600;margin-top:4px}
+  .node .d{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:2px}
+  .arrow{align-self:center;color:var(--accent);font-size:18px}
+  @media(max-width:820px){.arrow{display:none}}
+  .stat{font-family:var(--mono);font-size:24px;color:#fff}
+  .statl{font-size:11px;color:var(--dim);margin-top:2px}
+  footer{padding:34px 0;color:var(--dim);font-family:var(--mono);font-size:11px}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  @media print{
+    body{background:#fff;color:#111}
+    .card,table,pre{border-color:#ccc;background:#fff;color:#111}
+    header{background:none}
+    a{color:#111}
+    td,th{color:#111}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="kicker">System blueprint · web3_proj</p>
+    <h1>Every component of the MVP, on one page.</h1>
+    <p class="lede">
+      A vehicle marketplace where a buyer&rsquo;s USDC is held by a smart contract until delivery is
+      confirmed. Four layers, twenty-three endpoints, one escrow state machine, and a real EVM.
+      This page is the complete map; the interactive version lives at
+      <a href="/">the main site</a>.
+    </p>
+    <div class="legend">
+      <span class="pill">all in-scope systems operational</span>
+      <span class="pill neutral">local EVM · chain 31337</span>
+      <span class="pill neutral">test USDC only</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="secnum">01 — System</p>
+    <h2>Four layers, one transaction</h2>
+    <div class="flow">
+      <div class="node"><div class="n">01</div><div class="t">Web</div><div class="d">React 19 · Vite · Tailwind</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">02</div><div class="t">Server</div><div class="d">NestJS 12 · PostgreSQL 16</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">03</div><div class="t">App</div><div class="d">escrow state machine</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">04</div><div class="t">Web3</div><div class="d">EVM · USDC · Solidity</div></div>
+    </div>
+
+    <pre>Browser ──HTTPS──▶ nginx :443 ──/api/*──▶ NestJS :8310 ──▶ PostgreSQL :5432
+                       │                        │
+                       └──/──▶ React build      └──viem──▶ anvil :8545
+                                                            │
+                                            indexer ◀── getLogs ──┘</pre>
+
+    <div class="grid g4">
+      <div class="card"><div class="tag">Web</div><p>Static SPA. No secrets, no chain calls, same-origin API only.</p></div>
+      <div class="card"><div class="tag">Server</div><p>Auth, validation, persistence, audit trail. Thin controllers, fat services.</p></div>
+      <div class="card"><div class="tag">App</div><p>7 escrow states, role-gated, terminal states final.</p></div>
+      <div class="card"><div class="tag">Web3</div><p>Immutable Solidity escrow holding USDC; platform never custodies.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="secnum">02 — Web3</p>
+    <h2>Chain, token and contract</h2>
+    <table>
+      <tr><th>Component</th><th>Value</th><th>Notes</th></tr>
+      <tr><td>Network (active)</td><td class="mono">anvil · chain 31337</td><td>1s blocks, deterministic accounts</td></tr>
+      <tr><td>Network (target)</td><td class="mono">Ethereum Sepolia · 11155111</td><td>Same code path; needs a funded key</td></tr>
+      <tr><td>Escrow contract</td><td class="mono">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</td><td>VehicleEscrow.sol, 214 lines</td></tr>
+      <tr><td>Settlement token</td><td class="mono">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</td><td>6-decimal test USDC (local)</td></tr>
+      <tr><td>Sepolia USDC (reference)</td><td class="mono">0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238</td><td>Verified symbol/decimals on-chain</td></tr>
+      <tr><td>Compiler</td><td class="mono">Solidity 0.8.28</td><td>OpenZeppelin 5.7.0</td></tr>
+      <tr><td>Tests</td><td class="mono">23 / 23 passing</td><td>Foundry, incl. reentrancy attack</td></tr>
+    </table>
+
+    <h3 style="margin-top:30px">Accounts</h3>
+    <table>
+      <tr><th>Role</th><th>Address</th><th>Power</th></tr>
+      <tr><td>Arbiter</td><td class="mono">0xf39Fd6e5…2266</td><td>Refund; release only inside a dispute</td></tr>
+      <tr><td>Seller</td><td class="mono">0x70997970…79C8</td><td>Marks shipped, receives funds</td></tr>
+      <tr><td>Buyer</td><td class="mono">0x3C44CdDd…93BC</td><td>Funds, confirms, disputes</td></tr>
+    </table>
+
+    <h3 style="margin-top:30px">Escrow lifecycle</h3>
+    <pre>CREATED ──fund──▶ FUNDED ──ship──▶ SHIPPED ──confirm──▶ RELEASED
+   │                 │                 │  │
+   │cancel           │refund           │  │ timeout 14d, undisputed ──▶ RELEASED
+   ▼                 ▼                 │  ▼
+CANCELLED         REFUNDED              DISPUTED ──arbiter──▶ REFUNDED | RELEASED</pre>
+
+    <h3 style="margin-top:30px">Transaction path</h3>
+    <pre>POST /api/escrows/:id/fund
+  → EscrowService: state + role checks
+  → viem walletClient.writeContract  (signed locally)
+  → anvil mempool → block → execution → logs
+  → waitForTransactionReceipt (status must be success)
+  → escrow.status updated in PostgreSQL
+  → indexer getLogs → decode → ChainEvent row
+  → UI advances</pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="secnum">03 — Application</p>
+    <h2>Web, API and data</h2>
+    <div class="grid g3">
+      <div class="card">
+        <div class="tag">Web</div>
+        <p class="mono">React 19.3.1 · Vite 8.3.8 · Tailwind 4.3.5</p>
+        <p>274 kB raw / 86 kB gzipped. Served by nginx as static files.</p>
+      </div>
+      <div class="card">
+        <div class="tag">API</div>
+        <p class="mono">NestJS 12.5.1 · TypeScript 5.9.3</p>
+        <p>SIWE auth, Zod validation, throttling, session cookies.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Data</div>
+        <p class="mono">PostgreSQL 16.15 · Prisma 6.19.3</p>
+        <p>6 tables, money as numeric(20,6), unique event index.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:30px">Tables</h3>
+    <table>
+      <tr><th>Table</th><th>Purpose</th></tr>
+      <tr><td class="mono">User</td><td>Wallet identity and role</td></tr>
+      <tr><td class="mono">Listing</td><td>Vehicle, soft deleted, price in USDC</td></tr>
+      <tr><td class="mono">ListingImage</td><td>Object-storage pointers</td></tr>
+      <tr><td class="mono">Escrow</td><td>State machine, tx hashes, timestamps</td></tr>
+      <tr><td class="mono">ChainEvent</td><td>Append-only, unique (txHash, logIndex)</td></tr>
+      <tr><td class="mono">SiweNonce</td><td>Single-use login challenges</td></tr>
+    </table>
+
+    <h3 style="margin-top:30px">API surface</h3>
+    <pre>GET    /api/health                     GET    /api/listings
+GET    /api/meta                       GET    /api/listings/:id
+POST   /api/demo/session               POST   /api/listings
+POST   /api/demo/reset                 PATCH  /api/listings/:id
+POST   /api/auth/siwe/nonce            GET    /api/escrows
+POST   /api/auth/siwe/verify           GET    /api/escrows/:id
+POST   /api/auth/logout                POST   /api/escrows
+GET    /api/auth/me                    POST   /api/escrows/:id/{fund|ship|confirm|dispute}
+                                       POST   /api/escrows/:id/{refund|release}
+                                       POST   /api/escrows/:id/timeout-release</pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="secnum">04 — Operations</p>
+    <h2>Deployment and controls</h2>
+    <table>
+      <tr><th>Area</th><th>Implementation</th><th>State</th></tr>
+      <tr><td>Cloud</td><td>AWS ap-southeast-1, EC2 t4g.small, Elastic IP</td><td><span class="pill">working</span></td></tr>
+      <tr><td>Runtime</td><td>systemd units for API and chain; nginx + certbot TLS</td><td><span class="pill">working</span></td></tr>
+      <tr><td>Access</td><td>SSH over Tailscale; port 22 closed publicly</td><td><span class="pill">working</span></td></tr>
+      <tr><td>Database roles</td><td>Runtime DML-only role; separate migration owner</td><td><span class="pill">working</span></td></tr>
+      <tr><td>Backups</td><td>Nightly pg_dump 03:00 GMT+8, 7-day rotation</td><td><span class="pill">working</span></td></tr>
+      <tr><td>Rate limiting</td><td>120/min global, 10/min auth</td><td><span class="pill">working</span></td></tr>
+      <tr><td>CI</td><td>GitHub Actions: Foundry tests, API typecheck, web build</td><td><span class="pill">working</span></td></tr>
+      <tr><td>Audit</td><td>Post-MVP — required before mainnet</td><td><span class="pill neutral">deferred</span></td></tr>
+      <tr><td>Public testnet</td><td>Post-MVP — needs funded key</td><td><span class="pill neutral">deferred</span></td></tr>
+    </table>
+
+    <div class="grid g4" style="margin-top:26px">
+      <div class="card"><div class="stat">70 MB</div><div class="statl">API resident memory</div></div>
+      <div class="card"><div class="stat">23</div><div class="statl">REST endpoints</div></div>
+      <div class="card"><div class="stat">7</div><div class="statl">escrow states</div></div>
+      <div class="card"><div class="stat">23/23</div><div class="statl">contract tests</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    web3_proj · system blueprint · generated from the running deployment ·
+    settlement on a local EVM with test USDC · <a href="/">open the interactive walkthrough →</a>
+  </div>
+</footer>
+</body>
+</html>

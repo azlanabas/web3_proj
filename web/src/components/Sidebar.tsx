@@ -69,7 +69,18 @@ export function Sidebar({
           ))}
         </nav>
 
-        <div className="mt-10 rounded-xl border border-slate-800 p-3">
+        <a
+          href="/system.html"
+          className="mt-6 block rounded-xl border border-slate-800 p-3 transition hover:border-emerald-500/40"
+        >
+          <p className="font-mono text-[10px] uppercase tracking-wider text-slate-600">Blueprint</p>
+          <p className="mt-1 text-[12px] font-medium text-slate-300">Full system map →</p>
+          <p className="mt-1 text-[10px] leading-snug text-slate-600">
+            Every component on one printable page
+          </p>
+        </a>
+
+        <div className="mt-4 rounded-xl border border-slate-800 p-3">
           <p className="font-mono text-[10px] uppercase tracking-wider text-slate-600">Settlement</p>
           <p className={`mt-1 font-mono text-[11px] ${onChain ? "text-emerald-300" : "text-amber-300"}`}>
             {onChain ? "on-chain" : "simulated"}
