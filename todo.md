@@ -90,34 +90,34 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 ## Phase 2 — Backend (NestJS)
 
 ### Foundation
-- [ ] Scaffold NestJS app in `api/`
-- [ ] Pin Node, NestJS, TypeScript, ORM versions in `package.json`
+- [x] Scaffold NestJS app in `api/`
+- [x] Pin Node, NestJS, TypeScript, ORM versions in `package.json`
 - [ ] systemd unit for the API (no Docker — D-15); Postgres 16 already on the host
 - [ ] Config module validating env vars at boot (fail fast, no defaults for secrets)
 - [ ] `.env.example` with names only, no values
-- [ ] Health endpoint `GET /api/health`
+- [x] Health endpoint `GET /api/health`
 
 ### Database
-- [ ] Migration: `users` (wallet, role)
-- [ ] Migration: `listings` (vehicle fields, `price_usdc numeric(20,6)`, `deleted_at`)
-- [ ] Migration: `listing_images`
-- [ ] Migration: `escrows` (chain_id, contract_address, onchain_escrow_id, tx hashes)
-- [ ] Migration: `chain_events` with `UNIQUE (tx_hash, log_index)`
+- [x] Migration: `users` (wallet, role)
+- [x] Migration: `listings` (vehicle fields, `price_usdc numeric(20,6)`, `deleted_at`)
+- [x] Migration: `listing_images`
+- [x] Migration: `escrows` (chain_id, contract_address, onchain_escrow_id, tx hashes)
+- [x] Migration: `chain_events` with `UNIQUE (tx_hash, log_index)`
 - [ ] Indexes on `listings.status`, `escrows.status`, `escrows.buyer_id`
 - [ ] Least-privilege DB role (no DDL) for the app at runtime
 - [ ] Seed script for local development
 
 ### Auth
-- [ ] SIWE nonce issuance (`POST /api/auth/siwe/nonce`), single-use, 5 min expiry
-- [ ] SIWE verification (`POST /api/auth/siwe/verify`), session cookie HttpOnly+Secure+SameSite
+- [x] SIWE nonce issuance (`POST /api/auth/siwe/nonce`), single-use, 5 min expiry
+- [x] SIWE verification (`POST /api/auth/siwe/verify`), session cookie HttpOnly+Secure+SameSite
 - [ ] Role guard: seller / buyer / arbiter / operator
 - [ ] Rate limit auth endpoints
 
 ### Listings
-- [ ] `GET /api/listings` — paginated, filter by make/year/price
-- [ ] `GET /api/listings/:id`
-- [ ] `POST /api/listings` — seller only, draft state
-- [ ] `PATCH /api/listings/:id` — owner only
+- [x] `GET /api/listings` — paginated, filter by make/year/price
+- [x] `GET /api/listings/:id`
+- [x] `POST /api/listings` — seller only, draft state
+- [x] `PATCH /api/listings/:id` — owner only
 - [ ] S3 pre-signed upload for images; store keys, not blobs
 
 ### Escrow
@@ -138,6 +138,13 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 - [ ] Unit tests for services; e2e test for the escrow loop
 - [ ] Structured logs with no PII and no secrets
 - [ ] Global exception filter returning JSON
+
+**Done so far (2026-11-17):** DB + role `web3app`, migrations applied, SIWE auth, listings
+CRUD. Verified end-to-end: nonce → signature → session cookie → create listing → public list;
+401 on unauthenticated create; 401 on nonce replay; 400 on invalid price precision.
+
+**Still open:** escrow endpoints, indexer, role guards, rate limiting, S3 uploads, least-
+privilege runtime role (the app role currently owns the DB).
 
 **Gate:** full loop via REST on Sepolia · DB correct after restart.
 
