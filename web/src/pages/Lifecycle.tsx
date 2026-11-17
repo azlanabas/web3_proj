@@ -15,7 +15,7 @@ const TRANSITIONS: [string, string, string, string][] = [
 export function Lifecycle() {
   return (
     <Page
-      kicker="Web3 · 9 of 11"
+      kicker="1 · The product · 2 of 3"
       title="Escrow lifecycle"
       lede="Seven states, one terminal outcome per path, and no transition that can be skipped. This is the part a buyer has to trust, so it is also the part that is most tightly specified."
     >

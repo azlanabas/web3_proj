@@ -3,7 +3,7 @@ import { Badge, Callout, Card, List, Page, Table } from "../components/ui";
 export function Security() {
   return (
     <Page
-      kicker="Practice · 3 of 5"
+      kicker="4 · The evidence · 2 of 5"
       title="Security model"
       lede="The interesting security question here is not whether the server is hardened — it is which party has to be trusted at each moment, and what the damage is when that trust is misplaced."
     >

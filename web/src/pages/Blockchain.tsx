@@ -3,7 +3,7 @@ import { Callout, Card, Code, List, Page, Table } from "../components/ui";
 export function Blockchain() {
   return (
     <Page
-      kicker="Web3 · 4 of 11"
+      kicker="3 · The chain · 3 of 9"
       title="Blockchain and the ledger"
       lede="What a block actually contains here, how blocks are chained, what the ledger is made of, and the honest answer to 'where is the distributed part?'"
     >

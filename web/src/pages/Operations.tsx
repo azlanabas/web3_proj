@@ -3,7 +3,7 @@ import { Badge, Card, Code, List, Page, Stats, Table } from "../components/ui";
 export function Operations() {
   return (
     <Page
-      kicker="Practice · 4 of 5"
+      kicker="4 · The evidence · 3 of 5"
       title="Operations"
       lede="Where this actually runs, how it is deployed, and what it costs the host. The constraint that shaped it: a 2 GB instance that is already serving another application."
     >

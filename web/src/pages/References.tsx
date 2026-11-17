@@ -65,7 +65,7 @@ const SECTIONS: { title: string; tag: string; rows: Row[] }[] = [
 export function References() {
   return (
     <Page
-      kicker="Web3 · 10 of 11"
+      kicker="3 · The chain · 9 of 9"
       title="External references"
       lede="Every third-party component this project depends on, with the primary source. Local contracts have no public explorer — they exist only on the anvil chain on this host — so those rows point at the standards and tools rather than an address page."
     >

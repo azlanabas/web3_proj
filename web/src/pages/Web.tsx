@@ -18,7 +18,7 @@ const COMPONENTS: [string, string][] = [
 export function Web() {
   return (
     <Page
-      kicker="Components · 01"
+      kicker="2 · How it is built · 2 of 5"
       title="Web tier"
       lede="A single-page React application, statically built and served by nginx. It holds no secrets, makes no direct blockchain calls, and talks only to the JSON API behind the same origin."
     >

@@ -24,7 +24,7 @@ export function Api({ meta }: { meta: Meta | null }) {
   const endpoints = meta?.endpoints ?? [];
   return (
     <Page
-      kicker="Components · 02"
+      kicker="2 · How it is built · 3 of 5"
       title="API tier"
       lede="A NestJS REST service that owns authentication, validation, the escrow state machine and the audit trail. Thin controllers, fat services, and every request validated before it reaches business logic."
     >

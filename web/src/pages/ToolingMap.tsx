@@ -26,7 +26,7 @@ const tone = (use: Use) =>
 export function ToolingMap() {
   return (
     <Page
-      kicker="Web3 · 11 of 11"
+      kicker="3 · The chain · 8 of 9"
       title="Tooling map: what is used, and what is not"
       lede="A typical Web3 bookmark bar has twenty tools. This build needs five. Here is every common one, whether it appears in this project, and the reason either way — including the one that no longer exists."
     >

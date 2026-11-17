@@ -12,7 +12,7 @@ const TABLES: [string, string, string][] = [
 export function Data() {
   return (
     <Page
-      kicker="Components · 03"
+      kicker="2 · How it is built · 4 of 5"
       title="Data tier"
       lede="PostgreSQL 16 with Prisma. The database is a read model and an audit log — the chain, not the database, is the source of truth for money, which is exactly why every transition also writes an event row."
     >

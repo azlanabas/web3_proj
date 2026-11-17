@@ -3,7 +3,7 @@ import { Callout, Card, Code, List, Page, Table } from "../components/ui";
 export function Contract() {
   return (
     <Page
-      kicker="Web3 · 7 of 11"
+      kicker="3 · The chain · 6 of 9"
       title="The escrow contract"
       lede="Two hundred and fourteen lines of Solidity that hold other people's money. Immutable, non-upgradeable, and designed so the platform can never pay itself."
     >

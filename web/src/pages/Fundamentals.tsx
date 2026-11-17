@@ -3,7 +3,7 @@ import { Badge, Card, Code, List, Page, Stats, Table } from "../components/ui";
 export function Fundamentals() {
   return (
     <Page
-      kicker="Web3 · 1 of 11"
+      kicker="3 · The chain · 1 of 9"
       title="Ethereum, explained through this app"
       lede="Every term in a Web3 conversation, placed somewhere real: what it is, whether this project uses it, and where you can see it on this chain. If a concept is not used here, it says so."
     >

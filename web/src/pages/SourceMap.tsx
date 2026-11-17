@@ -22,7 +22,7 @@ const ROWS: [string, string, string, string][] = [
 export function SourceMap() {
   return (
     <Page
-      kicker="Web3 · 2 of 11"
+      kicker="2 · How it is built · 5 of 5"
       title="Where every Web3 component lives"
       lede="Two locations matter for each component: the source in the repository, and the runtime location — an address on a chain, a port, or a unit. This is that map, with the command to verify each one."
     >

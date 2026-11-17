@@ -7,33 +7,44 @@ export interface Section {
   href?: string;
 }
 
+/**
+ * Ordered as a narrative: what it is, how a sale works, how it is built,
+ * then the chain that settles it, then the evidence that it runs.
+ */
 export const SECTIONS: Section[] = [
-  { id: "overview",     group: "Start",      label: "Overview",          blurb: "What this is and why it exists" },
-  { id: "architecture", group: "Start",      label: "Architecture",      blurb: "Every component and how it is built" },
-  { id: "requirements", group: "Start",      label: "Requirement map",   blurb: "Every line of the brief, traced" },
+  { id: "overview", group: "Start", label: "Overview", blurb: "Why this exists, in one page" },
 
-  { id: "web",          group: "Components", label: "Web tier",          blurb: "React, Vite, Tailwind, nginx" },
-  { id: "api",          group: "Components", label: "API tier",          blurb: "NestJS, REST, auth, validation" },
-  { id: "data",         group: "Components", label: "Data tier",         blurb: "PostgreSQL, Prisma, migrations" },
+  { id: "requirements", group: "1 · The product", label: "Requirement map", blurb: "Every line of the brief, traced" },
+  { id: "lifecycle",    group: "1 · The product", label: "Escrow lifecycle", blurb: "Every state and its guards" },
+  { id: "demo",         group: "1 · The product", label: "Live walkthrough", blurb: "Drive a real escrow" },
 
-  { id: "fundamentals", group: "Web3",       label: "Ethereum basics",    blurb: "ETH, gas, staking, proofs, sequencer" },
-  { id: "sourcemap",    group: "Web3",       label: "Where things live",  blurb: "Source path and runtime address" },
-  { id: "chain",        group: "Web3",       label: "Chain & networks",   blurb: "Ethereum, EVM, Sepolia, RPC" },
-  { id: "blockchain",   group: "Web3",       label: "Blockchain & ledger", blurb: "Blocks, chaining, what is really distributed" },
-  { id: "crypto",       group: "Web3",       label: "Hashing & auth",     blurb: "keccak, SHA-256, HMAC, SIWE" },
-  { id: "token",        group: "Web3",       label: "USDC & ERC-20",      blurb: "Token, decimals, approvals" },
-  { id: "contract",     group: "Web3",       label: "Escrow contract",    blurb: "Solidity, invariants, gas" },
-  { id: "transactions", group: "Web3",       label: "Transactions",       blurb: "Sign, mine, receipt, index" },
-  { id: "lifecycle",    group: "Web3",       label: "Escrow lifecycle",   blurb: "Every state and its guards" },
-  { id: "references",   group: "Web3",       label: "External references", blurb: "Explorers, standards, tooling" },
-  { id: "tooling",      group: "Web3",       label: "Tooling map",        blurb: "What is used, what is not, and why" },
+  { id: "architecture", group: "2 · How it is built", label: "Architecture", blurb: "Every component and how it is built" },
+  { id: "web",          group: "2 · How it is built", label: "Web tier", blurb: "React, Vite, Tailwind, nginx" },
+  { id: "api",          group: "2 · How it is built", label: "API tier", blurb: "NestJS, REST, auth, validation" },
+  { id: "data",         group: "2 · How it is built", label: "Data tier", blurb: "PostgreSQL, Prisma, migrations" },
+  { id: "sourcemap",    group: "2 · How it is built", label: "Where things live", blurb: "Source path and runtime address" },
 
-  { id: "demo",         group: "Practice",   label: "Live walkthrough",  blurb: "Drive a real escrow" },
-  { id: "explorer",     group: "Practice",   label: "API explorer",      blurb: "Call the live endpoints" },
-  { id: "security",     group: "Practice",   label: "Security model",    blurb: "Trust boundaries and threats" },
-  { id: "operations",   group: "Practice",   label: "Operations",        blurb: "Hosting, TLS, deployment" },
-  { id: "roadmap",      group: "Practice",   label: "Status & roadmap",  blurb: "Built, deferred, next" },
-  { id: "blueprint",    group: "Practice",   label: "System blueprint",  blurb: "Printable one-page map", href: "/system.html" },
+  { id: "fundamentals", group: "3 · The chain", label: "Ethereum basics", blurb: "ETH, gas, staking, proofs, sequencer" },
+  { id: "chain",        group: "3 · The chain", label: "Chain & networks", blurb: "Ethereum, EVM, Sepolia, RPC" },
+  { id: "blockchain",   group: "3 · The chain", label: "Blockchain & ledger", blurb: "Blocks, chaining, what is distributed" },
+  { id: "crypto",       group: "3 · The chain", label: "Hashing & auth", blurb: "keccak, SHA-256, HMAC, SIWE" },
+  { id: "token",        group: "3 · The chain", label: "USDC & ERC-20", blurb: "Token, decimals, approvals" },
+  { id: "contract",     group: "3 · The chain", label: "Escrow contract", blurb: "Solidity, invariants, gas" },
+  { id: "transactions", group: "3 · The chain", label: "Transactions", blurb: "Sign, mine, receipt, index" },
+  { id: "tooling",      group: "3 · The chain", label: "Tooling map", blurb: "What is used, what is not, and why" },
+  { id: "references",   group: "3 · The chain", label: "External references", blurb: "Explorers, standards, docs" },
+
+  { id: "explorer",     group: "4 · The evidence", label: "API explorer", blurb: "Call the live endpoints" },
+  { id: "security",     group: "4 · The evidence", label: "Security model", blurb: "Trust boundaries and threats" },
+  { id: "operations",   group: "4 · The evidence", label: "Operations", blurb: "Hosting, TLS, backups, CI" },
+  { id: "roadmap",      group: "4 · The evidence", label: "Status & roadmap", blurb: "Built, deferred, next" },
+  { id: "blueprint",    group: "4 · The evidence", label: "System blueprint", blurb: "Printable one-page map", href: "/system.html" },
 ];
 
-export const GROUPS = ["Start", "Components", "Web3", "Practice"];
+export const GROUPS = [
+  "Start",
+  "1 · The product",
+  "2 · How it is built",
+  "3 · The chain",
+  "4 · The evidence",
+];

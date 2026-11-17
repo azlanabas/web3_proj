@@ -3,7 +3,7 @@ import { Callout, Card, Code, List, Page, Table } from "../components/ui";
 export function Crypto() {
   return (
     <Page
-      kicker="Web3 · 5 of 11"
+      kicker="3 · The chain · 4 of 9"
       title="Hashing and authentication"
       lede="Where each hash is actually used — keccak on-chain, SHA-256 for the demo gate, HMAC for the session — and the two completely separate authentication systems in this app."
     >

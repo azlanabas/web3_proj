@@ -438,3 +438,25 @@ numerals, a single amber reading colour, red warnings, tick marks and hairline r
 
 **Genre clichés explicitly rejected:** emerald/violet crypto glow, radial gradient hero, glowing
 nodes, rounded "AI card" geometry, drop shadows, light-mode documentation styling.
+
+---
+
+## D-26 — Narrative restructuring and a redesigned Overview
+
+**Status:** LOCKED (2026-11-18)
+
+The Overview used four equal cards (01 Web / 02 Server / 03 App / 04 Web3) which explained nothing
+about why each layer exists. Navigation had also grown into a flat wall of eleven Web3 pages.
+
+**Overview** is now a story: the problem in two paragraphs, then *Follow one sale* — six steps with
+the actor and the layers involved at each step, then a real architecture diagram with the labelled
+handoffs (HTTPS/JSON, SQL, signed transaction, logs), then real-versus-not, then four onward links.
+
+**Navigation** is grouped into four acts rather than by technology:
+
+1. The product (requirement map, lifecycle, walkthrough)
+2. How it is built (architecture, web, API, data, source map)
+3. The chain (nine Web3 pages)
+4. The evidence (explorer, security, operations, roadmap, blueprint)
+
+Every page kicker was realigned to its act so the numbering matches the order a reader meets them.

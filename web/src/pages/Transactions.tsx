@@ -3,7 +3,7 @@ import { Callout, Card, Code, List, Page, Table } from "../components/ui";
 export function Transactions() {
   return (
     <Page
-      kicker="Web3 · 8 of 11"
+      kicker="3 · The chain · 7 of 9"
       title="Transaction lifecycle and indexing"
       lede="A click becomes a signed transaction, a mined block, a receipt, a log, a database row and finally a state change on screen. Nothing is written to the database that the chain did not first confirm."
     >
