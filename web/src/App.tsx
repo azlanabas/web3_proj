@@ -147,6 +147,23 @@ export default function App() {
           </header>
           <div className="cluster-ticks" aria-hidden="true" />
 
+          {meta && meta.web3.chainMode !== "sepolia" && meta.web3.chainMode !== "mainnet" && (
+            <div className="border-b border-line bg-surface">
+              <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-6 py-2.5">
+                <p className="font-mono text-[11px] text-muted">
+                  <span className="text-warn">local chain</span> · this deployment settles on anvil.
+                  Sepolia is one signature away.
+                </p>
+                <a
+                  href="/deploy.html"
+                  className="rounded border border-accent/40 bg-accent-soft px-3 py-1 font-mono text-[11px] text-accent transition hover:border-accent"
+                >
+                  Deploy to Sepolia →
+                </a>
+              </div>
+            </div>
+          )}
+
           <main className="pb-4">
             <RouteContext.Provider value={route}>
             {route === "overview" && <Overview />}
