@@ -9,6 +9,7 @@ import type { Meta } from "../lib/meta";
 export function Walkthrough({ meta }: { meta: Meta | null }) {
   const [viewAs, setViewAs] = useState<"buyer" | "seller" | "arbiter">("buyer");
   const [sellerReviewed, setSellerReviewed] = useState(false);
+  const [receipt, setReceipt] = useState<Awaited<ReturnType<typeof api.receipt>> | null>(null);
   const roleNote = {
     buyer: "The buyer funds the escrow, confirms delivery, or raises a dispute.",
     seller: "The seller marks the vehicle shipped once the escrow is funded.",
@@ -39,6 +40,7 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
     const detail = await api.detail(id);
     setSelected(detail.escrow);
     setEvents(detail.events);
+    setReceipt(await api.receipt(id));
   }, []);
 
   useEffect(() => {
@@ -158,6 +160,53 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
           </div>
         );
       })()}
+        {receipt && receipt.txHash && (
+          <div className="mt-4 rounded-lg border border-line">
+            <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line px-4 py-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+                transaction · {receipt.event}
+              </p>
+              <a
+                href={`https://sepolia.etherscan.io/tx/${receipt.txHash}`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-[11px] text-ink underline-offset-4 hover:text-accent hover:underline"
+              >
+                {receipt.txHash.slice(0, 18)}… ↗
+              </a>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 px-4 py-3 sm:grid-cols-4">
+              {[
+                ["block", receipt.tx?.block ?? receipt.block ?? "—"],
+                ["status", "success"],
+                ["gas used", receipt.tx?.gasUsed ?? "—"],
+                ["from", receipt.tx ? `${receipt.tx.from.slice(0, 6)}…${receipt.tx.from.slice(-4)}` : "—"],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-faint">{k}</p>
+                  <p className="font-mono text-[12px] text-ink">{v}</p>
+                </div>
+              ))}
+            </div>
+            <div className="border-t border-line px-4 py-3">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-faint">where the money is now</p>
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                {[
+                  ["buyer wallet", receipt.balances.buyer],
+                  ["in escrow", receipt.balances.escrow],
+                  ["seller wallet", receipt.balances.seller],
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <p className="font-mono text-[10px] text-faint">{k}</p>
+                    <p className="font-mono text-[13px] text-ink">
+                      {(Number(v) / 1e6).toLocaleString("en-US", { maximumFractionDigits: 0 })} USDC
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </Page>
 
 

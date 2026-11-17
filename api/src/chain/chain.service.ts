@@ -3,6 +3,7 @@ import {
   createPublicClient,
   createWalletClient,
   defineChain,
+  decodeEventLog,
   http,
   parseAbi,
   type Address,
@@ -151,6 +152,32 @@ export class ChainService {
       params: [seconds],
     } as never);
     await this.publicClient.request({ method: "evm_mine", params: [] } as never);
+  }
+
+  /** Verifies a user-submitted transaction: sender, target, receipt and the expected escrow event. */
+  async verifyTx(opts: {
+    hash: `0x${string}`;
+    from: string;
+    escrowId: bigint;
+    eventName: string;
+  }) {
+    const tx = await this.publicClient.getTransaction({ hash: opts.hash });
+    if (tx.to?.toLowerCase() !== this.escrow.toLowerCase()) throw new Error("transaction did not target the escrow");
+    if (tx.from.toLowerCase() !== opts.from.toLowerCase()) throw new Error("transaction was sent by a different account");
+    const receipt = await this.publicClient.getTransactionReceipt({ hash: opts.hash });
+    if (receipt.status !== "success") throw new Error("transaction reverted");
+    const found = receipt.logs.some((log) => {
+      if (log.address.toLowerCase() !== this.escrow.toLowerCase()) return false;
+      try {
+        const decoded = decodeEventLog({ abi: ESCROW_ABI, data: log.data, topics: log.topics });
+        return decoded.eventName === opts.eventName &&
+          (decoded.args as { escrowId?: bigint }).escrowId === opts.escrowId;
+      } catch {
+        return false;
+      }
+    });
+    if (!found) throw new Error(`no ${opts.eventName} event for this escrow in the transaction`);
+    return receipt;
   }
 
   async blockNumber(): Promise<bigint> {

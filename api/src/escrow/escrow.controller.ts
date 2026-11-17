@@ -69,6 +69,29 @@ export class EscrowController {
     return this.escrow.simulateTimeout(id);
   }
 
+  /** Latest transaction and live balances for this escrow. */
+  @Get(":id/receipt")
+  receipt(@Param("id") id: string) {
+    return this.escrow.receipt(id);
+  }
+
+  /** Calldata the connected wallet must sign for this action. */
+  @Get(":id/tx/:action")
+  prepare(@Req() req: AuthedRequest, @Param("id") id: string, @Param("action") action: string) {
+    return this.escrow.prepareAction(id, action as never, this.user(req).id);
+  }
+
+  /** Verify a wallet-submitted transaction, then advance the database. */
+  @Post(":id/tx/:action")
+  settle(
+    @Req() req: AuthedRequest,
+    @Param("id") id: string,
+    @Param("action") action: string,
+    @Body() body: { txHash: `0x${string}` },
+  ) {
+    return this.escrow.settleAction(id, action as never, body.txHash, this.user(req).id);
+  }
+
   private user(req: AuthedRequest) {
     return req.user as NonNullable<AuthedRequest["user"]>;
   }

@@ -18,6 +18,15 @@ export const api = {
   startSession: () => req<{ walletAddress: string }>("/session", { method: "POST" }),
   listings: () => req<{ items: Listing[]; total: number }>("/listings"),
   escrows: () => req<Escrow[]>("/escrows"),
+  receipt: (id: string) =>
+    req<{
+      event: string | null;
+      txHash: string | null;
+      block: string | null;
+      tx: { from: string; to: string; gasUsed: string; status: string; block: string } | null;
+      amountUsdc: string;
+      balances: { buyer: string; seller: string; escrow: string };
+    }>(`/escrows/${id}/receipt`),
   detail: (id: string) => req<{ escrow: Escrow; events: ChainEvent[] }>(`/escrows/${id}`),
   createEscrow: (listingId: string) =>
     req<Escrow>("/escrows", { method: "POST", body: JSON.stringify({ listingId }) }),

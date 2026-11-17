@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { EscrowStatus } from "@prisma/client";
 import { createHash, randomBytes } from "node:crypto";
-import { decodeEventLog, keccak256, toHex, type Address } from "viem";
+import { decodeEventLog, encodeFunctionData, keccak256, toHex, type Address } from "viem";
 import { ChainService, ERC20_ABI, ESCROW_ABI } from "../chain/chain.service";
 import { IndexerService } from "../chain/indexer.service";
 import { PrismaService } from "../prisma/prisma.service";
@@ -394,6 +394,130 @@ export class EscrowService {
       where: { id },
       data: { shippedAt: backdated },
     });
+  }
+
+  /** The most recent on-chain transaction for this escrow, plus live balances. */
+  async receipt(id: string) {
+    const e = await this.prisma.escrow.findUnique({
+      where: { id },
+      include: { buyer: true, seller: true },
+    });
+    if (!e) throw new NotFoundException("escrow not found");
+
+    const events = await this.prisma.chainEvent.findMany({ orderBy: { id: "desc" }, take: 50 });
+    const last = events.find((ev) => String((ev.payload as { escrowId?: string } | null)?.escrowId) === e.onchainId);
+
+    const balance = async (addr: string) =>
+      this.chain.enabled
+        ? (await this.chain.read<bigint>({ address: this.chain.token, abi: ERC20_ABI, functionName: "balanceOf", params: [addr as `0x${string}`] })).toString()
+        : "0";
+
+    let tx: { from: string; to: string; gasUsed: string; status: string; block: string } | null = null;
+    if (last && this.chain.enabled) {
+      try {
+        const [transaction, rc] = await Promise.all([
+          this.chain.publicClient.getTransaction({ hash: last.txHash as `0x${string}` }),
+          this.chain.publicClient.getTransactionReceipt({ hash: last.txHash as `0x${string}` }),
+        ]);
+        tx = {
+          from: transaction.from,
+          to: transaction.to ?? "",
+          gasUsed: rc.gasUsed.toString(),
+          status: rc.status,
+          block: rc.blockNumber.toString(),
+        };
+      } catch {
+        tx = null;
+      }
+    }
+
+    return {
+      event: last?.eventName ?? null,
+      txHash: last?.txHash ?? null,
+      block: last?.blockNumber?.toString() ?? null,
+      tx,
+      amountUsdc: e.amountUsdc.toString(),
+      balances: {
+        buyer: await balance(e.buyer.walletAddress),
+        seller: await balance(e.seller.walletAddress),
+        escrow: await balance(this.chain.escrow),
+      },
+    };
+  }
+
+  // -------------------------------------------------- wallet-signed actions
+
+  private static readonly SPEC = {
+    fund:    { fn: "fund",            event: "Funded",    role: "buyer"   },
+    ship:    { fn: "markShipped",     event: "Shipped",   role: "seller"  },
+    confirm: { fn: "confirmDelivery", event: "Released",  role: "buyer"   },
+    dispute: { fn: "dispute",         event: "Disputed",  role: "buyer"   },
+    refund:  { fn: "refund",          event: "Refunded",  role: "arbiter" },
+    release: { fn: "releaseToSeller", event: "Released",  role: "arbiter" },
+    cancel:  { fn: "cancel",          event: "Cancelled", role: "buyer"   },
+  } as const;
+
+  /** Returns the calldata a wallet must sign for this action. */
+  async prepareAction(id: string, action: keyof typeof EscrowService.SPEC, actorId: string) {
+    const spec = EscrowService.SPEC[action];
+    if (!spec) throw new BadRequestException("unknown action");
+    const e = await this.prisma.escrow.findUnique({
+      where: { id },
+      include: { buyer: true, seller: true },
+    });
+    if (!e) throw new NotFoundException("escrow not found");
+    this.assertActor(this.actorIdFor(spec.role, e), actorId, `only the ${spec.role} can ${action}`);
+
+    const to = this.chain.escrow as `0x${string}`;
+    const data = encodeFunctionData({
+      abi: ESCROW_ABI,
+      functionName: spec.fn,
+      args: [BigInt(e.onchainId)],
+    });
+    return { to, data, chainId: this.chain.chainId, from: await this.addressFor(spec.role, e) };
+  }
+
+  /** Verifies a wallet-submitted transaction and only then advances the database. */
+  async settleAction(id: string, action: keyof typeof EscrowService.SPEC, txHash: `0x${string}`, actorId: string) {
+    const spec = EscrowService.SPEC[action];
+    if (!spec) throw new BadRequestException("unknown action");
+    const e = await this.prisma.escrow.findUnique({
+      where: { id },
+      include: { buyer: true, seller: true },
+    });
+    if (!e) throw new NotFoundException("escrow not found");
+    this.assertActor(this.actorIdFor(spec.role, e), actorId, `only the ${spec.role} can ${action}`);
+
+    await this.chain.verifyTx({
+      hash: txHash,
+      from: await this.addressFor(spec.role, e),
+      escrowId: BigInt(e.onchainId),
+      eventName: spec.event,
+    });
+
+    const now = new Date();
+    const data: Record<string, unknown> = { status: undefined as unknown };
+    if (action === "fund") Object.assign(data, { status: EscrowStatus.FUNDED, fundTx: txHash });
+    if (action === "ship") Object.assign(data, { status: EscrowStatus.SHIPPED, shippedAt: now });
+    if (action === "confirm") Object.assign(data, { status: EscrowStatus.RELEASED, releaseTx: txHash });
+    if (action === "dispute") Object.assign(data, { status: EscrowStatus.DISPUTED, disputedAt: now });
+    if (action === "refund") Object.assign(data, { status: EscrowStatus.REFUNDED, refundTx: txHash });
+    if (action === "release") Object.assign(data, { status: EscrowStatus.RELEASED, releaseTx: txHash });
+    if (action === "cancel") Object.assign(data, { status: EscrowStatus.CANCELLED });
+
+    const updated = await this.prisma.escrow.update({ where: { id }, data });
+    await this.indexer.sync();
+    return updated;
+  }
+
+  private actorIdFor(role: string, e: { buyerId: string; sellerId: string }): string {
+    return role === "seller" ? e.sellerId : role === "buyer" ? e.buyerId : "arbiter";
+  }
+
+  private async addressFor(role: string, e: { buyer: { walletAddress: string }; seller: { walletAddress: string } }): Promise<string> {
+    if (role === "buyer") return e.buyer.walletAddress;
+    if (role === "seller") return e.seller.walletAddress;
+    return this.chain.address("arbiter");
   }
 
   // -------------------------------------------------------------- helpers
