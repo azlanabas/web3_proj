@@ -81,7 +81,7 @@ export default function App() {
           onNavigate={navigate}
           open={navOpen}
           onClose={() => setNavOpen(false)}
-          mode={meta?.chain.mode ?? "simulated"}
+          mode={meta?.chain.mode ?? "sepolia"}
         />
 
         <div className="min-w-0 flex-1">
