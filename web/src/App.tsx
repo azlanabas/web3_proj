@@ -32,6 +32,7 @@ export default function App() {
   const [meta, setMeta] = useState<Meta | null>(null);
   const [online, setOnline] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
     const onHash = () => {
@@ -40,6 +41,13 @@ export default function App() {
     };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -85,6 +93,13 @@ export default function App() {
                 aria-label="Open navigation"
               >
                 ☰
+              </button>
+              <button
+                onClick={() => navigate("overview")}
+                className="rounded-md border border-slate-700 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider text-slate-400 transition hover:border-emerald-500/50 hover:text-emerald-300"
+                aria-label="Back to home"
+              >
+                ⌂ Home
               </button>
               <div className="min-w-0">
                 <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-slate-600">
@@ -160,10 +175,21 @@ export default function App() {
           </nav>
 
           <footer className="border-t border-slate-800/60 px-6 py-6 text-center font-mono text-[10px] text-slate-600">
-            web3_proj · AWS ap-southeast-1 · Sepolia 11155111 · settlement simulated
+            web3_proj · AWS ap-southeast-1 · anvil 31337 · on-chain with test USDC
           </footer>
         </div>
       </div>
+
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-40 grid h-11 w-11 place-items-center rounded-full border border-slate-700 bg-slate-900/90 text-slate-300 shadow-lg backdrop-blur transition hover:border-emerald-500/60 hover:text-emerald-300"
+          aria-label="Back to top"
+          title="Back to top"
+        >
+          ↑
+        </button>
+      )}
     </div>
   );
 }

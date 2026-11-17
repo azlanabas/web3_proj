@@ -74,8 +74,26 @@
   .stat{font-family:var(--mono);font-size:24px;color:#fff}
   .statl{font-size:11px;color:var(--dim);margin-top:2px}
   footer{padding:34px 0;color:var(--dim);font-family:var(--mono);font-size:11px}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(2,6,23,.88);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar .inner{max-width:1080px;margin:0 auto;padding:12px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:#fff}
+  .brand .mark{display:grid;place-items:center;width:26px;height:26px;border-radius:7px;
+    background:var(--accent);color:#020617;font-weight:700;font-size:13px}
+  .home{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid #334155;border-radius:8px;padding:7px 13px;color:#cbd5e1;
+    transition:border-color .15s,color .15s}
+  .home:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+  .fab{position:fixed;right:22px;bottom:22px;z-index:60;width:44px;height:44px;border-radius:999px;
+    display:grid;place-items:center;cursor:pointer;
+    background:var(--panel);border:1px solid #334155;color:#cbd5e1;font-size:16px;
+    opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s,border-color .2s}
+  .fab.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .fab:hover{border-color:var(--accent);color:var(--accent)}
   .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
   @media print{
+    .topbar,.fab{display:none}
     body{background:#fff;color:#111}
     .card,table,pre{border-color:#ccc;background:#fff;color:#111}
     header{background:none}
@@ -85,6 +103,12 @@
 </style>
 </head>
 <body>
+<div class="topbar">
+  <div class="inner">
+    <span class="brand"><span class="mark">◈</span> web3_proj</span>
+    <a class="home" href="/">&larr; Back to app</a>
+  </div>
+</div>
 <header>
   <div class="wrap">
     <p class="kicker">System blueprint · web3_proj</p>
@@ -253,5 +277,20 @@ GET    /api/auth/me                    POST   /api/escrows/:id/{fund|ship|confir
     settlement on a local EVM with test USDC · <a href="/">open the interactive walkthrough →</a>
   </div>
 </footer>
+<button class="fab" id="toTop" aria-label="Back to top" title="Back to top">&uarr;</button>
+<script>
+  (function () {
+    var btn = document.getElementById("toTop");
+    function onScroll() {
+      if (window.scrollY > 320) btn.classList.add("show");
+      else btn.classList.remove("show");
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    btn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    onScroll();
+  })();
+</script>
 </body>
 </html>
