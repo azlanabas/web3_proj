@@ -30,6 +30,7 @@ pgdata/
 *.sqlite3
 
 # Foundry
+contracts/lib/
 contracts/out/
 contracts/cache/
 contracts/broadcast/
