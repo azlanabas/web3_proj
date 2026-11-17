@@ -168,13 +168,29 @@ export class MetaController {
   @Get("chain/events")
   async events() {
     const rows = await this.prisma.chainEvent.findMany({ orderBy: { id: "desc" }, take: 25 });
-    return rows.map((r) => ({
-      eventName: r.eventName,
-      txHash: r.txHash,
-      blockNumber: r.blockNumber.toString(),
-      escrowId: (r.payload as { escrowId?: string } | null)?.escrowId ?? null,
-      payload: r.payload,
-    }));
+    const ids = [...new Set(rows.map((r) => Number((r.payload as { escrowId?: string } | null)?.escrowId)))].filter(
+      (n) => Number.isFinite(n),
+    );
+    const escrows = await this.prisma.escrow.findMany({
+      where: { onchainId: { in: ids.map(String) } },
+      include: { listing: true, buyer: true, seller: true },
+    });
+    const byId = new Map(escrows.map((e) => [e.onchainId, e]));
+    return rows.map((r) => {
+      const id = (r.payload as { escrowId?: string } | null)?.escrowId ?? null;
+      const e = id ? byId.get(id) : undefined;
+      return {
+        eventName: r.eventName,
+        txHash: r.txHash,
+        blockNumber: r.blockNumber.toString(),
+        escrowId: id,
+        payload: r.payload,
+        vehicle: e ? `${e.listing.year} ${e.listing.make} ${e.listing.model}` : null,
+        amountUsdc: e ? e.amountUsdc.toString() : null,
+        buyer: e?.buyer.walletAddress ?? null,
+        seller: e?.seller.walletAddress ?? null,
+      };
+    });
   }
 
   @Get("chain/block")
