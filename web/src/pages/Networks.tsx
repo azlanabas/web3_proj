@@ -54,7 +54,7 @@ export function Networks({ meta }: { meta: Meta | null }) {
     <Page
       kicker={kickerFor("networks")}
       title="Networks and testnets"
-      lede="Every network this project has touched, and the one it is actually pointed at. Nothing on this page is typed in: the live values come from /api/meta, which the API builds from its own environment and the running chain."
+      lede="The networks used during development and the one in production. Live values are served by /api/meta from the running service."
     >
       <Card title="This deployment, live" tag="/api/meta">
         <Table

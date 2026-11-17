@@ -96,7 +96,7 @@ export function EscrowPanel(props: Props) {
             </h2>
             <p className="mt-3 max-w-2xl text-muted">
               Pick a vehicle, open an escrow, then move it through every state. Each step writes
-              a chain event you can inspect on the right.
+              a chain event recorded on the right.
             </p>
           </div>
           {signedIn ? (

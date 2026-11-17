@@ -46,7 +46,7 @@ export function Explorer({ meta }: { meta: Meta | null }) {
     <Page
       kicker={kickerFor("explorer")}
       title="API explorer"
-      lede="The endpoint list on this page is fetched from /api/meta at runtime, so it always matches what the service actually exposes. Read-only routes can be called live from here; mutating routes are shown but disabled."
+      lede="The live API surface, read from /api/meta at request time. Read-only routes can be called directly; mutating routes are disabled."
     >
       <Card title={`Endpoints (${endpoints.length})`} tag="live">
         <Table

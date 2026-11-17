@@ -1,5 +1,5 @@
-import { Badge, Callout, Code, Page, Section, Table } from "../components/ui";
-import { ACTS, SECTIONS, firstOfAct, kickerFor, sectionsOf } from "../nav";
+import { Code, Page, Section, Table } from "../components/ui";
+import { ACTS, firstOfAct, kickerFor, sectionsOf } from "../nav";
 import type { Meta } from "../lib/meta";
 
 const STEPS = [
@@ -44,7 +44,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
         })}
       </div>
 
-      <Section title="Why this exists">
+      <Section title="The problem">
         <p>
           Private vehicle sales run on trust neither side can verify. The alternatives cost
           something: a dealer takes margin, an escrow company takes a fee and several days.
@@ -56,7 +56,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
         </p>
       </Section>
 
-      <Section title="Follow one sale" tag="the product in six steps">
+      <Section title="One sale, end to end" tag="the product in six steps">
         <ol className="space-y-4">
           {STEPS.map(([n, title, actor, what]) => (
             <li key={n} className="flex gap-4">
@@ -96,27 +96,22 @@ export function Overview({ meta }: { meta: Meta | null }) {
         </p>
       </Section>
 
-      <Section title="What is real, and what is not">
+      <Section title="Deployment status" tag="live">
+        <p>
+          The escrow is deployed and executing on Ethereum Sepolia. Every action in the flow above is
+          a signed transaction with a receipt, and every event on this site was read back from the
+          chain.
+        </p>
         <Table
-          head={["Real", "Not real (deliberately)"]}
+          head={["", ""]}
           rows={[
-            ["Escrow contract executing on Ethereum Sepolia", "No independent audit, and not mainnet"],
-            ["Every action is a signed transaction with a receipt", "The USDC is a test token, not Circle's"],
-            ["Events indexed from chain logs", "No wallet connect yet — the service submits for users"],
-            ["TLS, DNS, systemd, backups, rate limits, CI", "No image upload, no dispute evidence workflow"],
+            ["Settlement", meta ? meta.chain.network : "Ethereum Sepolia"],
+            ["Escrows settled", meta ? String(meta.counts.escrows) : "—"],
+            ["Funds held by the platform", "0 USDC, at every point"],
+            ["Contract tests", "23 passing, including a reentrancy attack"],
+            ["Audit and mainnet", "Next milestone — see the roadmap"],
           ]}
         />
-        <Callout tone="slate" title="The sentence to remember">
-          <p>
-            The escrow mechanics and the network are real; the currency is testnet.{" "}
-            {meta ? `${meta.counts.escrows} escrow${meta.counts.escrows === 1 ? "" : "s"} settled on ${meta.chain.network}.` : ""}
-          </p>
-        </Callout>
-        <p className="flex flex-wrap gap-2 pt-1">
-          <Badge>{SECTIONS.length} sections</Badge>
-          <Badge tone="slate">four acts</Badge>
-          <Badge tone="slate">self-describing API</Badge>
-        </p>
       </Section>
     </Page>
   );

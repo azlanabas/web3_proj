@@ -6,7 +6,7 @@ export function Security() {
     <Page
       kicker={kickerFor("security")}
       title="Security model"
-      lede="The interesting security question here is not whether the server is hardened — it is which party has to be trusted at each moment, and what the damage is when that trust is misplaced."
+      lede="Trust boundaries, key custody, transport security and the controls in place."
     >
       <Card title="Trust boundaries" tag="what is assumed">
         <Table

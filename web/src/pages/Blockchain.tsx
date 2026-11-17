@@ -16,7 +16,7 @@ export function Blockchain({ meta }: { meta: Meta | null }) {
     <Page
       kicker={kickerFor("blockchain")}
       title="Blockchain and the ledger"
-      lede="What a block actually contains here, how blocks are chained, what the ledger is made of, and the honest answer to 'where is the distributed part?'"
+      lede="Block structure, hash chaining, the composition of the ledger, and the extent to which it is distributed."
     >
       <Card title="A real block from this chain" tag="live from /api/chain/block">
         <Table

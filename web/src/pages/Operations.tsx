@@ -6,7 +6,7 @@ export function Operations() {
     <Page
       kicker={kickerFor("operations")}
       title="Operations"
-      lede="Where this actually runs, how it is deployed, and what it costs the host. The constraint that shaped it: a 2 GB instance that is already serving another application."
+      lede="Hosting, deployment, resource usage and operational controls."
     >
       <Table
         head={["Component", "Value"]}

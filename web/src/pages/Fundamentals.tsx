@@ -6,7 +6,7 @@ export function Fundamentals() {
     <Page
       kicker={kickerFor("fundamentals")}
       title="Ethereum basics"
-      lede="Every term in a Web3 conversation, placed somewhere real: what it is, whether this project uses it, and where you can see it on this chain. If a concept is not used here, it says so."
+      lede="The Ethereum concepts this application relies on, each mapped to where it appears in the system, and marked where it does not apply."
     >
       <Stats
         items={[

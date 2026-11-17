@@ -28,7 +28,7 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
     <Page
       kicker={kickerFor("live")}
       title="The live build"
-      lede="This deployment is not a mock. Everything below is read from the running service and the chain it is settling on — addresses, block height, and the actual transactions that produced each event."
+      lede="Deployment record: contract addresses, block height, and the transactions produced by the running service."
     >
       <Card title="Where it is deployed" tag="live from /api/meta">
         <Table

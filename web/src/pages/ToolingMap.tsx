@@ -29,7 +29,7 @@ export function ToolingMap() {
     <Page
       kicker={kickerFor("tooling")}
       title="Tooling map"
-      lede="A typical Web3 bookmark bar has twenty tools. This build needs five. Here is every common one, whether it appears in this project, and the reason either way — including the one that no longer exists."
+      lede="The tooling this build depends on, and the common alternatives it omits, with the reason for each."
     >
       <Card title="The five things this project actually depends on" tag="the stack">
         <Table
@@ -79,7 +79,7 @@ export function ToolingMap() {
         />
       </Card>
 
-      <Card title="If asked &ldquo;why didn&rsquo;t you use X?&rdquo;" tag="answers">
+      <Card title="Why alternatives were not used" tag="rationale">
         <List
           items={[
             "MetaMask — the MVP has no wallet connect; the browser never signs. That is the next milestone, not a design preference.",
@@ -95,8 +95,8 @@ export function ToolingMap() {
         <p>
           This project uses <strong>Foundry, viem, OpenZeppelin, Alchemy and siwe</strong>. Everything
           else on a typical bookmark bar is either a reference, a future step, or a tool for a
-          different kind of product. A short dependency list is a feature in an MVP — each item you
-          do not add is a thing you do not have to secure, upgrade or explain.
+          different kind of product. A short dependency list is deliberate: each omitted tool is one
+          less to secure, upgrade and maintain.
         </p>
       </Card>
     </Page>

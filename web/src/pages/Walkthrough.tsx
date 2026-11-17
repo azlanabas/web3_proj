@@ -87,7 +87,7 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
       <Page
         kicker={kickerFor("walkthrough")}
         title="Live walkthrough"
-        lede="This runs against the production API you are reading this page from. Start a session, open an escrow on a vehicle, then drive it through every state. Each action writes a chain event on the right."
+        lede="The escrow lifecycle executed against the live API. Each action produces a transaction and a corresponding chain event."
       >
         <Card title="Two paths worth running" tag="script">
           <List

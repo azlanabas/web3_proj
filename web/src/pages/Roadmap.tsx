@@ -11,7 +11,7 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
     <Page
       kicker={kickerFor("roadmap")}
       title="Status and roadmap"
-      lede="What is running, what is deliberately deferred, and what a production launch would still require. The first two columns are the ones that matter in a review — the third is why this is not on mainnet."
+      lede="Current state, deferred work, and the requirements for a production launch."
     >
       <Card title="Running now" tag={live ? "live" : "local only"}>
         <Table
