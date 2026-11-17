@@ -20,8 +20,8 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 - [ ] Confirm SSH: user, key path, security group allows :22 from your IP
 
 ### DNS and TLS prerequisites
-- [ ] 🔴 Add GoDaddy A record: `web3` → Elastic IP, TTL 600
-- [ ] Verify propagation: `dig +short web3.heurist.online @1.1.1.1`
+- [x] GoDaddy A record added by owner — verified on 1.1.1.1, 8.8.8.8, 9.9.9.9
+- [x] Propagation verified on three public resolvers
 - [ ] Note: `heurist.online` apex has no A record (pre-existing, not ours)
 
 ### Repository
@@ -183,15 +183,15 @@ privilege runtime role (the app role currently owns the DB).
 
 ## Phase 5 — Deploy
 
-- [ ] Provision/prepare EC2: Node 24, Nginx, certbot, git (no Docker — D-15)
+- [x] Provision/prepare EC2: Node 24, Nginx, certbot, git (no Docker — D-15)
 - [ ] Create S3 bucket + **IAM instance profile** (no instance role exists yet — G-21)
 - [ ] Clone repo to the deploy path; write `.env` on the host (never committed)
 - [ ] `npm ci && npm run build`, then `systemctl restart web3proj-api`
-- [ ] Nginx vhost for `web3.heurist.online`, proxy `/api/` → `:8310`
-- [ ] `nginx -t` then reload
-- [ ] `certbot --nginx -d web3.heurist.online --redirect`
+- [x] Nginx vhost for `web3.heurist.online`, proxy `/api/` → `:8310`
+- [x] `nginx -t` then reload
+- [x] `certbot --nginx -d web3.heurist.online --redirect`
 - [ ] `certbot renew --dry-run`
-- [ ] Postgres bound to localhost only (verify with `ss -tlnp`)
+- [x] Postgres bound to localhost only (verified: `127.0.0.1:5432`)
 - [ ] Nightly `pg_dump` cron with 7-day rotation
 - [ ] Log rotation configured
 
@@ -201,10 +201,10 @@ privilege runtime role (the app role currently owns the DB).
 
 ## Phase 6 — Verification and handover
 
-- [ ] `curl -sI https://web3.heurist.online` → 200
-- [ ] `curl -s https://web3.heurist.online/api/health` → `{"status":"ok"}`
-- [ ] HTTP → HTTPS redirect verified (301)
-- [ ] TLS protocol verified with `openssl s_client`
+- [x] `curl -sI https://web3.heurist.online` → 200
+- [x] `curl -s https://web3.heurist.online/api/health` → `{"status":"ok"}`
+- [x] HTTP → HTTPS redirect verified (301)
+- [x] TLS verified: LE cert `CN=web3.heurist.online`, valid to 2027-02-15
 - [ ] End-to-end testnet run executed and tx hashes recorded
 - [ ] README updated with the live URL and the recorded run
 - [ ] Rollback procedure dry-run

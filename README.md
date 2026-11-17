@@ -12,7 +12,8 @@ Planning corpus for an **MVP Web3 vehicle marketplace with non-custodial USDC es
 This folder holds documents only — no application source. Per workspace rule 4, code is
 authored on the target host, not here.
 
-**Status: PLANNING. Nothing built, nothing deployed, no repository created.**
+**Status: LIVE (API only).** `https://web3.heurist.online` serves the API with valid TLS.
+The smart contract, the frontend and the escrow endpoints are **not** built yet.
 Facts below were measured **2026-11-17 23:35 GMT+8**.
 
 ## Reading order
