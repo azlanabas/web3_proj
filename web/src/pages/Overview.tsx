@@ -1,4 +1,4 @@
-import { Badge, Callout, Card, Code, Page, Stats, Table } from "../components/ui";
+import { Badge, Callout, Card, Code, Page, Table } from "../components/ui";
 import { ACTS, SECTIONS, firstOfAct, kickerFor, sectionsOf } from "../nav";
 import type { Meta } from "../lib/meta";
 
@@ -46,6 +46,15 @@ const STEPS = [
     layers: ["Web3", "API", "Data"],
   },
 ];
+
+function Fact({ headline, detail }: { headline: string; detail: string }) {
+  return (
+    <div className="rounded-xl border border-line bg-surface p-4">
+      <p className="text-sm font-semibold text-ink">{headline}</p>
+      <p className="mt-1 text-[12px] leading-relaxed text-muted">{detail}</p>
+    </div>
+  );
+}
 
 export function Overview({ meta }: { meta: Meta | null }) {
   return (
@@ -147,19 +156,28 @@ export function Overview({ meta }: { meta: Meta | null }) {
         </p>
       </Card>
 
-      <Stats
-        items={[
-          { value: String(meta?.escrowStates.length ?? "—"), label: "escrow states, terminal states final" },
-          { value: "23/23", label: "contract tests passing" },
-          {
-            value: meta?.chain.timeoutSeconds
-              ? `${Math.round(Number(meta.chain.timeoutSeconds) / 86400)}d`
-              : "—",
-            label: "seller protection against a silent buyer",
-          },
-          { value: String(meta?.counts.escrows ?? "—"), label: "escrows recorded on this deployment" },
-        ]}
-      />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Fact
+          headline={meta?.chain.network ?? "Ethereum Sepolia"}
+          detail={`Settles every escrow on a public testnet, chain ${meta?.chain.chainId ?? "11155111"}. Nothing is simulated.`}
+        />
+        <Fact
+          headline={
+            meta
+              ? `${meta.counts.escrows} escrow${meta.counts.escrows === 1 ? "" : "s"} settled`
+              : "Escrows settled"
+          }
+          detail="Funded, shipped and released on-chain — the seller holds the USDC and the contract is back to zero."
+        />
+        <Fact
+          headline="23 contract tests"
+          detail="Including a live reentrancy attack and the exact 14-day timeout boundary."
+        />
+        <Fact
+          headline="0 USDC held by the platform"
+          detail="At every point in the flow, the money is in the contract or in a user's wallet — never ours."
+        />
+      </div>
 
       <Card title="What is real, and what is not" tag="say it first">
         <Table
