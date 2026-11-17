@@ -28,13 +28,18 @@ const EVENT_COPY: Record<string, string> = {
 const usdc = (base?: string) =>
   base ? `${(Number(base) / 1_000_000).toLocaleString("en-US")} USDC` : null;
 
-const STEPS = [
-  ["01", "Seller lists a vehicle", "Seller", "Make, model, year, VIN, mileage, price. Stored in PostgreSQL and shown publicly."],
-  ["02", "Buyer opens an escrow", "Buyer", "The price becomes USDC base units and createEscrow is sent to the contract."],
-  ["03", "Buyer funds it", "Buyer", "USDC moves from the buyer into the contract, not to the platform. This is the moment money is locked."],
-  ["04", "Seller ships", "Seller", "A transaction records shipment and starts a 14-day timer on chain."],
-  ["05", "Buyer confirms delivery", "Buyer", "The contract pays the seller and the escrow becomes RELEASED, permanently."],
-  ["06", "The event is indexed", "System", "The log is read back into an append-only table, so the database mirrors what happened."],
+const SELLER = [
+  ["List the vehicle", "Enter make, model, year, VIN, mileage and price. The listing is public; no money is involved and nothing is committed."],
+  ["Wait for funding", "The escrow appears as CREATED. There is nothing to ship yet. If the buyer never funds it, either side can cancel."],
+  ["Ship once funded", "When the escrow shows FUNDED the USDC is already locked in the contract, so dispatch is safe. Marking it shipped starts a 14-day timer."],
+  ["Get paid", "The buyer confirming delivery releases the funds. If the buyer goes silent, anyone can release to the seller after 14 days."],
+];
+
+const BUYER = [
+  ["Open the escrow", "Choose the vehicle and open an escrow. This fixes the price in USDC and creates escrow #N. No money moves yet."],
+  ["Fund it", "Approve and deposit the USDC into the contract, not to the seller. From this moment the seller can ship knowing the money exists."],
+  ["Inspect on delivery", "The funds stay locked until the buyer confirms. Neither the seller nor the platform can withdraw them."],
+  ["Confirm or dispute", "Confirming releases payment to the seller. Raising a dispute freezes the timer and hands the decision to the arbiter."],
 ];
 
 export function Overview({ meta }: { meta: Meta | null }) {
@@ -161,25 +166,41 @@ export function Overview({ meta }: { meta: Meta | null }) {
         </p>
       </Section>
 
-      <Section title="One sale, end to end" tag="the product in six steps">
-        <ol className="space-y-4">
-          {STEPS.map(([n, title, actor, what]) => (
-            <li key={n} className="flex gap-4">
-              <span className="mt-0.5 font-mono text-[11px] text-faint">{n}</span>
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-baseline gap-2">
-                  <span className="text-sm font-semibold text-ink">{title}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-accent">{actor}</span>
-                </div>
-                <p className="mt-1 text-[13px] leading-relaxed text-muted">{what}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p className="text-xs">
-          Two branches leave this path: the buyer can dispute before confirming, which freezes the
-          timer for an arbiter; or, if the buyer goes silent for 14 days, anyone can release the
-          funds to the seller.
+      <Section title="What each side actually does" tag="buyer and seller">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div>
+            <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-accent">Seller</p>
+            <ol className="space-y-3">
+              {SELLER.map(([title, detail], i) => (
+                <li key={title} className="flex gap-3">
+                  <span className="font-mono text-[11px] text-faint">{i + 1}</span>
+                  <div>
+                    <p className="text-[13px] font-semibold text-ink">{title}</p>
+                    <p className="mt-0.5 text-[12px] leading-relaxed text-muted">{detail}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-accent">Buyer</p>
+            <ol className="space-y-3">
+              {BUYER.map(([title, detail], i) => (
+                <li key={title} className="flex gap-3">
+                  <span className="font-mono text-[11px] text-faint">{i + 1}</span>
+                  <div>
+                    <p className="text-[13px] font-semibold text-ink">{title}</p>
+                    <p className="mt-0.5 text-[12px] leading-relaxed text-muted">{detail}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+        <p className="border-t border-line pt-3 text-[12px]">
+          The seller cannot be paid without the buyer&apos;s confirmation or the 14-day timeout. The
+          buyer cannot recover funds after shipping without raising a dispute. The platform can do
+          neither, at any point.
         </p>
       </Section>
 
