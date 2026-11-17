@@ -327,8 +327,9 @@ The host `seoads` app was re-checked immediately after the build and still retur
 engine (7 states, role-gated, event-logged) and a demo session. React 19 + Vite 8 + Tailwind 4
 single-page walkthrough. Live at `https://web3.heurist.online`, systemd-managed, 72 MB RSS.
 
-Settlement is **simulated** (D-19): no chain transaction is sent. The contract is written and
-tested but undeployed.
+Settlement is **on-chain on a local anvil EVM** (D-20): every escrow action is a signed
+transaction, receipts are awaited, and events are indexed from logs. Test USDC only. A
+`CHAIN_MODE=simulated` fallback remains for resilience.
 
 **Documentation UI (2026-11-17):** the frontend is a 12-section navigable walkthrough driven by a
 section registry, with hash routing, per-component pages and an API explorer that reads

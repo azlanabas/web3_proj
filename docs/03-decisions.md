@@ -308,3 +308,35 @@ without waiting.
 
 **Reverses when:** a funded Sepolia deployer key is available — replace the simulation calls in
 `escrow.service.ts` with viem contract writes and point the indexer at the real address.
+
+---
+
+## D-20 — Escrow now settles on a real (local) chain
+
+**Status:** LOCKED (2026-11-17) — **supersedes the simulated-only part of D-19**
+
+`CHAIN_MODE=local` makes the API send real transactions to an anvil EVM on
+`127.0.0.1:8545` and read events back from logs:
+
+| Item | Value |
+|---|---|
+| Chain | anvil, chain id 31337, 1s block time |
+| Escrow contract | `0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9` |
+| Test USDC (6 dp) | `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` |
+| Signers | anvil deterministic accounts: arbiter, seller, buyer |
+| Indexer | polls `getLogs` from the last checkpoint into `ChainEvent` |
+
+Verified end to end: create → fund → ship → confirm released 21,750 USDC to the seller with the
+contract balance returning to zero; a disputed escrow refunded; a timeout escrow released after
+`evm_increaseTime`. On-chain state read back independently with `cast` matched the database.
+
+**Retained fallback:** `CHAIN_MODE=simulated` still exists. If the chain is unavailable, one env
+change keeps the demo alive; the UI badge reads the mode from `/api/meta` and states which is in
+use.
+
+**Operational risk:** anvil keeps state in memory. If the service restarts, the contracts are
+gone and the app points at nothing. `scripts/redeploy-local.sh` redeploys and prints the env
+lines to update.
+
+**Not done:** deployment to Sepolia. That needs a funded key and is a configuration change:
+`RPC_URL`, `CHAIN_ID`, `CONTRACT_ADDRESS`, real USDC.

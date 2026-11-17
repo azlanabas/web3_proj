@@ -5,12 +5,15 @@ export function Sidebar({
   onNavigate,
   open,
   onClose,
+  mode,
 }: {
   route: string;
   onNavigate: (id: string) => void;
   open: boolean;
   onClose: () => void;
+  mode: string;
 }) {
+  const onChain = mode === "local";
   return (
     <>
       {open && (
@@ -68,9 +71,11 @@ export function Sidebar({
 
         <div className="mt-10 rounded-xl border border-slate-800 p-3">
           <p className="font-mono text-[10px] uppercase tracking-wider text-slate-600">Settlement</p>
-          <p className="mt-1 font-mono text-[11px] text-amber-300">simulated</p>
+          <p className={`mt-1 font-mono text-[11px] ${onChain ? "text-emerald-300" : "text-amber-300"}`}>
+            {onChain ? "on-chain" : "simulated"}
+          </p>
           <p className="mt-1 text-[10px] leading-snug text-slate-600">
-            Contract written and tested, not deployed.
+            {onChain ? "Anvil local EVM · real transactions" : "Contract tested, not deployed."}
           </p>
         </div>
       </aside>

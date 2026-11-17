@@ -6,6 +6,9 @@ import {
 } from "@nestjs/common";
 import { EscrowStatus } from "@prisma/client";
 import { createHash, randomBytes } from "node:crypto";
+import { decodeEventLog, keccak256, toHex, type Address } from "viem";
+import { ChainService, ERC20_ABI, ESCROW_ABI } from "../chain/chain.service";
+import { IndexerService } from "../chain/indexer.service";
 import { PrismaService } from "../prisma/prisma.service";
 
 const RELEASE_TIMEOUT_MS = 14 * 24 * 60 * 60 * 1000;
@@ -24,11 +27,18 @@ function fakeTxHash(label: string): string {
 export class EscrowService {
   private eventSeq = 0;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly chain: ChainService,
+    private readonly indexer: IndexerService,
+  ) {}
 
-  /** In demo mode the acting user may drive every step, like a walkthrough. */
   private get demoMode(): boolean {
     return process.env.DEMO_MODE === "true";
+  }
+
+  private usdcUnits(amount: string): bigint {
+    return BigInt(Math.round(Number(amount) * 1_000_000));
   }
 
   async list() {
@@ -45,8 +55,9 @@ export class EscrowService {
       include: { listing: true, buyer: true, seller: true },
     });
     if (!escrow) throw new NotFoundException("escrow not found");
+
     const events = await this.prisma.chainEvent.findMany({
-      where: { payload: { path: ["escrowId"], equals: id } },
+      where: { payload: { path: ["escrowId"], equals: escrow.onchainId } },
       orderBy: { id: "asc" },
     });
     return { escrow, events };
@@ -62,6 +73,57 @@ export class EscrowService {
     }
 
     const count = await this.prisma.escrow.count();
+
+    if (this.chain.enabled) {
+      const seller = await this.prisma.user.findUniqueOrThrow({
+        where: { id: listing.sellerId },
+      });
+
+      const { receipt } = await this.chain.write("buyer", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "createEscrow",
+        params: [
+          keccak256(toHex(listing.id)),
+          seller.walletAddress as Address,
+          this.usdcUnits(listing.priceUsdc.toString()),
+        ],
+      });
+
+      let onchainId = String(count + 1);
+      for (const log of receipt.logs) {
+        try {
+          const decoded = decodeEventLog({
+            abi: ESCROW_ABI,
+            data: log.data,
+            topics: log.topics,
+          });
+          if (decoded.eventName === "EscrowCreated") {
+            onchainId = (decoded.args as unknown as { escrowId: bigint }).escrowId.toString();
+          }
+        } catch {
+          continue;
+        }
+      }
+
+      const created = await this.prisma.escrow.create({
+        data: {
+          listingId,
+          buyerId,
+          sellerId: listing.sellerId,
+          chainId: Number(process.env.CHAIN_ID ?? 31337),
+          contractAddress: this.chain.escrow,
+          onchainId,
+          amountUsdc: listing.priceUsdc,
+          status: EscrowStatus.CREATED,
+          simulated: false,
+        },
+        include: { listing: true },
+      });
+      await this.indexer.sync();
+      return created;
+    }
+
     const escrow = await this.prisma.escrow.create({
       data: {
         listingId,
@@ -76,7 +138,7 @@ export class EscrowService {
       },
       include: { listing: true },
     });
-    await this.log(escrow.id, "EscrowCreated", fakeTxHash("create"));
+    await this.log(escrow.id, escrow.onchainId, "EscrowCreated", fakeTxHash("create"));
     return escrow;
   }
 
@@ -85,12 +147,46 @@ export class EscrowService {
     this.assertState(e.status, EscrowStatus.CREATED);
     this.assertActor(e.buyerId, actorId, "only the buyer can fund");
 
+    if (this.chain.enabled) {
+      const buyer = await this.prisma.user.findUniqueOrThrow({ where: { id: e.buyerId } });
+      const amount = this.usdcUnits(e.amountUsdc.toString());
+
+      const allowance = await this.chain.read<bigint>({
+        address: this.chain.token,
+        abi: ERC20_ABI,
+        functionName: "allowance",
+        params: [buyer.walletAddress as Address, this.chain.escrow],
+      });
+      if (allowance < amount) {
+        await this.chain.write("buyer", {
+          address: this.chain.token,
+          abi: ERC20_ABI,
+          functionName: "approve",
+          params: [this.chain.escrow, amount * 10n],
+        });
+      }
+
+      const { hash } = await this.chain.write("buyer", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "fund",
+        params: [BigInt(e.onchainId)],
+      });
+
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.FUNDED, fundTx: hash },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("fund");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.FUNDED, fundTx: tx },
     });
-    await this.log(id, "Funded", tx);
+    await this.log(id, e.onchainId, "Funded", tx);
     return updated;
   }
 
@@ -99,12 +195,27 @@ export class EscrowService {
     this.assertState(e.status, EscrowStatus.FUNDED);
     this.assertActor(e.sellerId, actorId, "only the seller can ship");
 
+    if (this.chain.enabled) {
+      await this.chain.write("seller", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "markShipped",
+        params: [BigInt(e.onchainId)],
+      });
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.SHIPPED, shippedAt: new Date() },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("ship");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.SHIPPED, shippedAt: new Date() },
     });
-    await this.log(id, "Shipped", tx);
+    await this.log(id, e.onchainId, "Shipped", tx);
     return updated;
   }
 
@@ -113,12 +224,27 @@ export class EscrowService {
     this.assertState(e.status, EscrowStatus.SHIPPED);
     this.assertActor(e.buyerId, actorId, "only the buyer can confirm");
 
+    if (this.chain.enabled) {
+      const { hash } = await this.chain.write("buyer", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "confirmDelivery",
+        params: [BigInt(e.onchainId)],
+      });
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.RELEASED, releaseTx: hash },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("release");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.RELEASED, releaseTx: tx },
     });
-    await this.log(id, "Released", tx);
+    await this.log(id, e.onchainId, "Released", tx);
     return updated;
   }
 
@@ -130,12 +256,27 @@ export class EscrowService {
       throw new BadRequestException("the release deadline has already passed");
     }
 
+    if (this.chain.enabled) {
+      await this.chain.write("buyer", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "dispute",
+        params: [BigInt(e.onchainId)],
+      });
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.DISPUTED, disputedAt: new Date() },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("dispute");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.DISPUTED, disputedAt: new Date() },
     });
-    await this.log(id, "Disputed", tx);
+    await this.log(id, e.onchainId, "Disputed", tx);
     return updated;
   }
 
@@ -150,12 +291,27 @@ export class EscrowService {
     }
     this.assertArbiter(actorId);
 
+    if (this.chain.enabled) {
+      const { hash } = await this.chain.write("arbiter", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "refund",
+        params: [BigInt(e.onchainId)],
+      });
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.REFUNDED, refundTx: hash },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("refund");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.REFUNDED, refundTx: tx },
     });
-    await this.log(id, "Refunded", tx);
+    await this.log(id, e.onchainId, "Refunded", tx);
     return updated;
   }
 
@@ -164,12 +320,27 @@ export class EscrowService {
     this.assertState(e.status, EscrowStatus.DISPUTED);
     this.assertArbiter(actorId);
 
+    if (this.chain.enabled) {
+      const { hash } = await this.chain.write("arbiter", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "releaseToSeller",
+        params: [BigInt(e.onchainId)],
+      });
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.RELEASED, releaseTx: hash },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("arbiter-release");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.RELEASED, releaseTx: tx },
     });
-    await this.log(id, "Released", tx);
+    await this.log(id, e.onchainId, "Released", tx);
     return updated;
   }
 
@@ -181,26 +352,43 @@ export class EscrowService {
       throw new BadRequestException("the 14-day release window has not elapsed");
     }
 
+    if (this.chain.enabled) {
+      const { hash } = await this.chain.write("arbiter", {
+        address: this.chain.escrow,
+        abi: ESCROW_ABI,
+        functionName: "releaseByTimeout",
+        params: [BigInt(e.onchainId)],
+      });
+      const updated = await this.prisma.escrow.update({
+        where: { id },
+        data: { status: EscrowStatus.RELEASED, releaseTx: hash },
+      });
+      await this.indexer.sync();
+      return updated;
+    }
+
     const tx = fakeTxHash("timeout-release");
     const updated = await this.prisma.escrow.update({
       where: { id },
       data: { status: EscrowStatus.RELEASED, releaseTx: tx },
     });
-    await this.log(id, "Released", tx);
+    await this.log(id, e.onchainId, "Released", tx);
     return updated;
   }
 
-  /** Demo affordance: moves the shipment timestamp back 14 days. */
+  /** Advances chain time by 14 days so the timeout path can be demonstrated. */
   async simulateTimeout(id: string) {
     const e = await this.load(id);
     this.assertState(e.status, EscrowStatus.SHIPPED);
+
     const backdated = new Date(Date.now() - RELEASE_TIMEOUT_MS - 1000);
-    const updated = await this.prisma.escrow.update({
+    if (this.chain.enabled) {
+      await this.chain.increaseTime(14 * 24 * 60 * 60 + 60);
+    }
+    return this.prisma.escrow.update({
       where: { id },
       data: { shippedAt: backdated },
     });
-    await this.log(id, "TimeoutSimulated", fakeTxHash("simulate"));
-    return updated;
   }
 
   // -------------------------------------------------------------- helpers
@@ -227,7 +415,12 @@ export class EscrowService {
     }
   }
 
-  private async log(escrowId: string, eventName: string, txHash: string): Promise<void> {
+  private async log(
+    escrowId: string,
+    onchainId: string,
+    eventName: string,
+    txHash: string,
+  ): Promise<void> {
     await this.prisma.chainEvent.create({
       data: {
         txHash,
@@ -236,7 +429,7 @@ export class EscrowService {
           8_000_000 + Math.floor((Date.now() - 1_760_000_000_000) / 12_000) + this.eventSeq++,
         ),
         eventName,
-        payload: { escrowId, simulated: true },
+        payload: { escrowId: onchainId, simulated: true },
       },
     });
   }

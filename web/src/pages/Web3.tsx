@@ -94,11 +94,13 @@ uint64 public constant RELEASE_TIMEOUT = 14 days;`}</Code>
         </p>
       </Card>
 
-      <Callout tone="amber" title="Deployment status">
-        The contract is written, tested and mirrored in the repository, but it is <strong>not
-        deployed</strong>. The API simulates the transitions and records events with the same
-        shape a real deployment would produce. Swapping simulation for a real chain changes one
-        service, not the product.
+      <Callout tone="emerald" title="Deployment status">
+        <strong>Deployed and live on a local anvil EVM</strong> at{" "}
+        <span className="font-mono text-[11px]">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</span>,
+        with test USDC at{" "}
+        <span className="font-mono text-[11px]">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</span>.
+        Every escrow action is a signed transaction waiting for a receipt, and the API reads its
+        events back from logs. Sepolia deployment is a configuration change, not a rewrite.
       </Callout>
     </Page>
   );

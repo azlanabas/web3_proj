@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 
-const DEMO_BUYER = "0x00000000000000000000000000000000000000bb";
-const DEMO_SELLER = "0x00000000000000000000000000000000000000aa";
+const DEMO_BUYER = (process.env.DEMO_BUYER ?? "0x00000000000000000000000000000000000000bb").toLowerCase();
+const DEMO_SELLER = (process.env.DEMO_SELLER ?? "0x00000000000000000000000000000000000000aa").toLowerCase();
 
 const SEED_LISTINGS = [
   { title: "2019 Toyota Hilux", make: "Toyota", model: "Hilux", year: 2019, vin: "MROHR1234567890", mileage: 64000, priceUsdc: "18500.000000" },

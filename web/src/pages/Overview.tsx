@@ -76,11 +76,12 @@ export function Overview() {
         ]}
       />
 
-      <Callout tone="amber" title="What is real and what is simulated">
-        Real: the state machine, role rules, PostgreSQL persistence, audit trail, TLS, DNS and
-        deployment. The Solidity contract is written and tested but <strong>not deployed</strong>,
-        so escrow transitions are recorded in the database with the same event shape a live chain
-        would emit.
+      <Callout tone="emerald" title="What is real">
+        Everything. The escrow contract is <strong>deployed and executing</strong> on a local EVM
+        (anvil): funding, shipping, confirmation, disputes and refunds are signed transactions,
+        and the event log you see is read back from chain logs. The database mirrors the chain
+        rather than being its source. The only thing not real is the money — the test USDC is a
+        6-decimal ERC-20 minted for the demo, not Circle's token.
       </Callout>
 
       <Card title="How to read this site" tag="navigation">

@@ -14,8 +14,9 @@ authored on the target host, not here.
 
 **Status: LIVE MVP.** `https://web3.heurist.online` is a navigable system walkthrough with
 12 sections — overview, requirement map, web/API/data/web3 component pages, escrow lifecycle,
-live demo, API explorer, security, operations and roadmap. Contract is written and tested but
-**not deployed**; settlement is simulated in the API and recorded as chain events.
+live demo, API explorer, security, operations and roadmap. The smart contract is **deployed and executing** on a
+local anvil EVM: escrow actions are signed transactions and the event log is read back from
+chain logs. Test USDC only — not real money.
 
 The API describes itself at `GET /api/meta` (23 endpoints + runtime), and the UI renders that
 response rather than hardcoding a route list.

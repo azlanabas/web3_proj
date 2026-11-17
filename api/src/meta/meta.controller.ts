@@ -44,16 +44,20 @@ export class MetaController {
         auth: "SIWE (EIP-4361) + HMAC session cookie",
       },
       web3: {
-        chain: "Ethereum Sepolia",
-        chainId: 11155111,
+        chain: process.env.CHAIN_MODE === "local" ? "Anvil (local EVM)" : "Ethereum Sepolia",
+        chainId: Number(process.env.CHAIN_ID ?? 11155111),
         token: "USDC",
-        tokenAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+        tokenAddress: process.env.TOKEN_ADDRESS ?? "",
         tokenDecimals: 6,
-        escrowContract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        escrowContract: process.env.CONTRACT_ADDRESS ?? "",
         solidity: "0.8.28",
         openzeppelin: "5.7.0",
-        settlement: "simulated",
-        note: "Contract is written and tested (23/23) but not deployed; transitions are recorded, not mined.",
+        chainMode: process.env.CHAIN_MODE ?? "simulated",
+        settlement: process.env.CHAIN_MODE === "local" ? "on-chain" : "simulated",
+        note:
+          process.env.CHAIN_MODE === "local"
+            ? "Real transactions on a local anvil chain. Every state change is a mined transaction and every event is read back from logs."
+            : "Contract is written and tested (23/23) but not deployed; transitions are recorded, not mined.",
       },
       escrow: {
         states: ["CREATED", "FUNDED", "SHIPPED", "DISPUTED", "RELEASED", "REFUNDED", "CANCELLED"],

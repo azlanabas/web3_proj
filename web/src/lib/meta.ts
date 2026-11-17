@@ -19,6 +19,7 @@ export interface Meta {
     escrowContract: string;
     solidity: string;
     openzeppelin: string;
+    chainMode: "local" | "simulated" | string;
     settlement: string;
     note: string;
   };

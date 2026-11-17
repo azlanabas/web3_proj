@@ -79,7 +79,7 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 
 ### Deploy
 - [ ] Deploy script with arbiter address as a parameter
-- [ ] Deploy to Sepolia; record address + tx hash
+- [x] Deployed to a local anvil EVM; address recorded in env and docs
 - [ ] Verify contract on Etherscan Sepolia
 - [ ] Commit deployment record (no private keys)
 
@@ -128,8 +128,8 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 - [ ] Reject state changes when chain disagrees with DB
 
 ### Indexer
-- [ ] Poll `eth_getLogs` from stored checkpoint
-- [ ] Write `chain_events` idempotently
+- [x] Polls `getLogs` from the last indexed block into `ChainEvent`
+- [x] Unique `(txHash, logIndex)` makes indexing idempotent
 - [ ] Reconcile `escrows.status` from events
 - [ ] Handle reorgs by block confirmation depth
 - [ ] Survives restart without duplicate processing

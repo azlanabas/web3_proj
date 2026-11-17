@@ -58,7 +58,13 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200">
       <div className="lg:flex">
-        <Sidebar route={route} onNavigate={navigate} open={navOpen} onClose={() => setNavOpen(false)} />
+        <Sidebar
+          route={route}
+          onNavigate={navigate}
+          open={navOpen}
+          onClose={() => setNavOpen(false)}
+          mode={meta?.web3.chainMode ?? "simulated"}
+        />
 
         <div className="min-w-0 flex-1">
           <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-slate-800/60 bg-slate-950/85 px-4 py-3 backdrop-blur lg:px-8">
@@ -82,6 +88,15 @@ export default function App() {
                 <span className={`h-1.5 w-1.5 rounded-full ${online ? "bg-emerald-400" : "bg-rose-500"}`} />
                 <span className="text-slate-500">{online ? "api online" : "api offline"}</span>
               </div>
+              <span
+                className={`hidden rounded-full border px-2.5 py-1 font-mono text-[10px] sm:inline ${
+                  meta?.web3.chainMode === "local"
+                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                    : "border-amber-500/40 bg-amber-500/10 text-amber-300"
+                }`}
+              >
+                {meta?.web3.chainMode === "local" ? "on-chain" : "simulated"}
+              </span>
               <span className="rounded-full border border-slate-700 px-2.5 py-1 font-mono text-[10px] text-slate-400">
                 v{meta?.version ?? "0.1.0"}
               </span>
