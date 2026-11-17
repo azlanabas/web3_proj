@@ -152,7 +152,7 @@ export default function App() {
               <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-6 py-2.5">
                 <p className="font-mono text-[11px] text-muted">
                   <span className="text-warn">local chain</span> · this deployment settles on anvil.
-                  Sepolia is one signature away.
+                  Sepolia is one signed deployment away.
                 </p>
                 <a
                   href="/deploy.html"

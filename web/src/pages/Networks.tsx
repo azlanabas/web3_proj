@@ -58,9 +58,10 @@ export function Networks({ meta }: { meta: Meta | null }) {
               "11155111",
               <Badge tone={tone("Ready") as "amber"}>Ready</Badge>,
               <span>
-                Deployer <code className="font-mono text-[10px]">0x8f45…63a3</code> generated and
-                funded path scripted; Circle USDC address verified on-chain; Alchemy RPC verified.
-                A one-click deploy page is ready if you would rather sign from your own wallet.
+                Deployer <code className="font-mono text-[10px]">0x8f45…63a3</code> generated; the
+                deploy script is written and refuses to run unfunded. Circle&rsquo;s USDC address and
+                the Alchemy RPC were both verified on-chain. Either fund that address with 0.01 test
+                ETH, or open the deploy page and sign the six transactions from your own wallet.
               </span>,
               <span>
                 <a href="/deploy.html" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">
