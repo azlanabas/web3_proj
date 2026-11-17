@@ -95,20 +95,76 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
         title="Live walkthrough"
         lede="The escrow lifecycle executed against the live API. Each action produces a transaction and a corresponding chain event."
       >
-        <Card title="Two paths worth running" tag="script">
-          <List
-            items={[
-              "Happy path: open escrow → fund → ship → confirm. The seller is paid and the escrow settles.",
-              "Failure path: open escrow → fund → ship → dispute → arbiter refund. The buyer is made whole.",
-              "Timeout path: the 14-day window must actually elapse on a public network, so those controls are disabled here.",
-            ]}
-          />
-          <p className="text-xs text-muted">
-            A single session may act as buyer, seller and arbiter, the way an operator would.
-          </p>
-        </Card>
+      {(() => {
+        const status = selected?.status ?? null;
+        const stages = ["Open", "Fund", "Ship", "Confirm", "Settled"];
+        const idx = !status ? 0
+          : status === "CREATED" ? 1
+          : status === "FUNDED" ? 2
+          : status === "SHIPPED" || status === "DISPUTED" ? 3
+          : 4;
+        const next =
+          !selected
+            ? {
+                title: "Open an escrow",
+                body: "Choose a vehicle below. This fixes the price in USDC and creates an on-chain escrow. No funds move yet.",
+                label: null as string | null,
+              }
+            : status === "CREATED"
+            ? viewAs === "buyer"
+              ? { title: "Fund the escrow", body: "Deposit the USDC into the contract. The seller can then ship knowing the money is locked.", label: "fund" }
+              : { title: "Waiting for the buyer", body: "The seller can ship once the escrow is funded.", label: null }
+            : status === "FUNDED"
+            ? viewAs === "seller"
+              ? { title: "Mark the vehicle shipped", body: "The money is already locked, so dispatch is safe. This starts the 14-day timer.", label: "ship" }
+              : { title: "Waiting for the seller", body: "The seller marks shipped once they dispatch the vehicle.", label: null }
+            : status === "SHIPPED"
+            ? viewAs === "buyer"
+              ? { title: "Confirm delivery", body: "This releases the funds to the seller and closes the escrow. Raise a dispute instead if the vehicle is wrong.", label: "confirm" }
+              : { title: "Waiting for the buyer", body: "The buyer confirms delivery, or the 14-day timer releases the funds.", label: null }
+            : status === "DISPUTED"
+            ? viewAs === "arbiter"
+              ? { title: "Resolve the dispute", body: "Pay the seller or refund the buyer. The contract permits both, and only from this state.", label: "release" }
+              : { title: "Dispute raised", body: "The arbiter decides. Switch the view to arbiter to act.", label: null }
+            : { title: "Escrow settled", body: `Final state: ${status}. Move to another vehicle to run the flow again.`, label: null };
+
+        return (
+          <div className="rounded-lg border border-line">
+            <div className="flex flex-wrap items-center gap-1 border-b border-line px-4 py-3">
+              {stages.map((s, i) => (
+                <span key={s} className="flex items-center gap-1">
+                  <span
+                    className={
+                      "rounded px-2 py-1 font-mono text-[10px] uppercase tracking-wider " +
+                      (i === idx ? "bg-accent/15 text-accent" : i < idx ? "text-good" : "text-faint")
+                    }
+                  >
+                    {i < idx ? "✓ " : ""}{s}
+                  </span>
+                  {i < stages.length - 1 && <span className="text-faint">→</span>}
+                </span>
+              ))}
+            </div>
+            <div className="px-4 py-4">
+              <p className="text-sm font-semibold text-ink">{next.title}</p>
+              <p className="mt-1 text-[12px] leading-relaxed text-muted">{next.body}</p>
+              {next.label && (
+                <button
+                  onClick={() => act(next.label!)}
+                  disabled={busy}
+                  className="mt-3 rounded-md bg-accent px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-paper transition hover:opacity-90 disabled:opacity-50"
+                >
+                  {busy ? "submitting…" : next.title}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })()}
       </Page>
-      <div className="-mt-10">
+
+
+      <div className="mt-4">
         <EscrowPanel
           listings={listings}
           escrows={escrows}
@@ -123,6 +179,7 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
           onReset={reset}
           canTimeTravel={meta?.chain.supportsTimeTravel ?? false}
           viewAs={viewAs}
+          hideActions
         />
       </div>
       {error && (

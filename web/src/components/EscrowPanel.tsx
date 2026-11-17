@@ -68,6 +68,7 @@ interface Props {
   onReset: () => void;
   canTimeTravel?: boolean;
   viewAs?: "buyer" | "seller" | "arbiter";
+  hideActions?: boolean;
 }
 
 export function EscrowPanel(props: Props) {
@@ -187,7 +188,7 @@ export function EscrowPanel(props: Props) {
                   <div className="cluster-ticks mt-2" aria-hidden="true" />
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-2">
+                <div className={props.hideActions ? "hidden" : "mt-5 grid grid-cols-2 gap-2"}>
                   {viewAs === "buyer" && (
                     <>
                       <Action label="Fund escrow" onClick={() => props.onAct("fund")} enabled={canFund} busy={busy} />
