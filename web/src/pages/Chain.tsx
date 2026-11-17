@@ -40,6 +40,36 @@ export function Chain() {
         </p>
       </Card>
 
+
+      <Card title="Anvil today, Sepolia next: what actually changes" tag="be precise">
+        <Table
+          head={["Property", "anvil (today)", "Sepolia", "mainnet"]}
+          rows={[
+            ["Consensus", "None — a block timer", "Proof of Stake, real validators", "Proof of Stake, real money"],
+            ["Block time", "1 second", "~12 seconds", "~12 seconds"],
+            ["Finality", "Immediate", "~12.8 minutes", "~12.8 minutes"],
+            ["Reorg risk", "Zero", "Real until finality", "Real until finality"],
+            ["Cost to run", "Free", "Free test ETH, real gas mechanics", "Real ETH"],
+            ["Who can verify", "Anyone with access to this host", "Anyone — public explorer", "Anyone"],
+            ["Contract verification", "Not possible", "Etherscan source verification", "Etherscan source verification"],
+            ["Data availability", "One process, in memory", "Replicated across nodes", "Replicated across nodes"],
+          ]}
+        />
+        <p>
+          The application code is identical in all three. What changes is four environment values
+          (<code className="font-mono text-[11px]">RPC_URL</code>,{" "}
+          <code className="font-mono text-[11px]">CHAIN_ID</code>,{" "}
+          <code className="font-mono text-[11px]">CONTRACT_ADDRESS</code>,{" "}
+          <code className="font-mono text-[11px]">TOKEN_ADDRESS</code>) and the presence of a funded
+          key. The deployment script in <code className="font-mono text-[11px]">scripts/deploy-sepolia.sh</code>{" "}
+          does exactly that swap.
+        </p>
+        <p className="text-xs">
+          Mainnet is the same switch again, but it requires an independent audit first — that is the
+          gating item, not the configuration.
+        </p>
+      </Card>
+
       <Card title="Why start on a local chain" tag="deliberate">
         <List
           items={[

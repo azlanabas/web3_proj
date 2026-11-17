@@ -13,7 +13,7 @@ export function Sidebar({
   onClose: () => void;
   mode: string;
 }) {
-  const onChain = mode === "local";
+  const onChain = mode !== "simulated";
   return (
     <>
       {open && (
@@ -108,7 +108,7 @@ export function Sidebar({
             {onChain ? "on-chain" : "simulated"}
           </p>
           <p className="mt-1 text-[10px] leading-snug text-faint">
-            {onChain ? "Anvil local EVM · real transactions" : "Contract tested, not deployed."}
+            {onChain ? "Real transactions · public network" : "Contract tested, not deployed."}
           </p>
         </div>
       </aside>

@@ -123,12 +123,12 @@ export default function App() {
               </div>
               <span
                 className={`hidden rounded-full border px-2.5 py-1 font-mono text-[10px] sm:inline ${
-                  meta?.web3.chainMode === "local"
-                    ? "border-accent/40 bg-accent-soft text-accent"
+                  meta?.web3.chainMode !== "simulated"
+                    ? "border-good/40 bg-good-soft text-good"
                     : "border-warn/40 bg-warn-soft text-warn"
                 }`}
               >
-                {meta?.web3.chainMode === "local" ? "on-chain" : "simulated"}
+                {meta?.web3.chainMode === "sepolia" ? "sepolia" : meta?.web3.chainMode === "local" ? "anvil" : "simulated"}
               </span>
               <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[10px] text-muted">
                 v{meta?.version ?? "0.1.0"}

@@ -477,3 +477,23 @@ contains. Prev/next at the foot of every page names the act when it crosses a bo
 
 Architecture stopped listing file counts. A count in prose is a number that goes stale; the
 sidebar already knows, so the page points at it instead.
+
+---
+
+## D-28 — The chain layer is network-agnostic; Sepolia is funded, not built
+
+**Status:** LOCKED (2026-11-18)
+
+`CHAIN_MODE` now accepts `simulated`, `local` or `sepolia`. The chain service derives its network
+from `RPC_URL` and `CHAIN_ID` rather than assuming anvil, and time travel is gated behind
+`supportsTimeTravel` so a public chain never receives an anvil cheat code.
+
+`scripts/deploy-sepolia.sh` performs the whole move in one run: checks the deployer balance, funds
+the buyer and seller with gas, deploys a real ERC-20 and the escrow contract on Sepolia, mints test
+USDC, rewrites the env and restarts the API. It refuses to run unfunded.
+
+**Blocker:** the deployer `0x8f452CdCF182466001e3B6649B79Dc2b2A1263a3` holds no Sepolia ETH. The
+owner's MetaMask address holds 0.05 Sepolia ETH; a 0.01 transfer unblocks the deployment.
+
+**Why not mainnet:** it is the same switch, but real money requires an independent audit and a
+funded key. That is a decision, not a technical limitation.
