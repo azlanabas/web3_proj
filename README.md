@@ -2,78 +2,134 @@
 title: web3_proj — README
 folder: PROJECTS/web3_proj
 type: readme
-status: planning
-updated: 2026-11-17
+status: live
+updated: 2026-11-18
 ---
 
-# web3_proj — what this folder is
+# web3_proj — vehicle marketplace with on-chain escrow
 
-Planning corpus for an **MVP Web3 vehicle marketplace with non-custodial USDC escrow**.
-This folder holds documents only — no application source. Per workspace rule 4, code is
-authored on the target host, not here.
+A working marketplace where the buyer's USDC is held by a smart contract, not by the platform.
+The seller ships once the money is locked; the buyer releases it by confirming delivery. If the
+buyer goes silent, a 14-day timeout releases the funds to the seller. If the vehicle is wrong, a
+dispute freezes the timer for an arbiter.
 
-**Status: LIVE MVP.** `https://web3.heurist.online` is a navigable system walkthrough with
-16 sections — overview, **architecture (every component and how it is built)**, requirement map, web/API/data tiers, eleven Web3 pages (ethereum basics, where things live, chain, blockchain & ledger, hashing & auth, token, contract, transactions, lifecycle, external references, tooling map), escrow lifecycle,
-live demo, API explorer, security, operations and roadmap. The smart contract is **deployed and executing** on a
-local anvil EVM: escrow actions are signed transactions and the event log is read back from
-chain logs. Test USDC only — not real money.
+**Live:** https://web3.heurist.online
+**Settling on:** Ethereum Sepolia (chain id 11155111)
 
-A standalone printable blueprint lives at `/system.html`. The API describes itself at `GET /api/meta` (23 endpoints + runtime), and the UI renders that
-response rather than hardcoding a route list.
-Facts below were measured **2026-11-17 23:35 GMT+8**.
+## Deployment
 
-## Reading order
-
-| File | What it answers |
+| | |
 |---|---|
-| [`architecture.md`](architecture.md) | The whole system: stack, data model, contract, API, deployment, trust |
-| [`plan.md`](plan.md) · [`todo.md`](todo.md) | Order of work, and the concrete checklist |
-| [`docs/01-mvp-scope.md`](docs/01-mvp-scope.md) | What we are building, and explicitly what we are not |
-| [`docs/02-architecture.md`](docs/02-architecture.md) | Stack, schema, API, contract interface, AWS topology |
-| [`docs/03-decisions.md`](docs/03-decisions.md) | Every decision made so far, with rationale and reversal trigger |
-| [`docs/04-gap-register.md`](docs/04-gap-register.md) | What is still unknown, split into blockers vs. launch items |
-| [`docs/05-deploy-runbook.md`](docs/05-deploy-runbook.md) | Deployment procedure — **not yet executable** (see blockers) |
+| Escrow contract | [`0x4e8DFBd676AeEB10D57727DdFF2450B175913e0E`](https://sepolia.etherscan.io/address/0x4e8DFBd676AeEB10D57727DdFF2450B175913e0E) |
+| Test USDC (6 dp) | [`0xBA24365396f6f92BDA5C0087d8806B7C545eb8e3`](https://sepolia.etherscan.io/address/0xBA24365396f6f92BDA5C0087d8806B7C545eb8e3) |
+| Deploy block | 12,155,958 |
+| Release timeout | 1,209,600 s (14 days) |
+| Arbiter | `0x3fBEb93D2bcD2b5A727CFD9a61348a0EB745f452` |
 
-Link up: [[PROJECTS/PROJECTS|PROJECTS hub]] · Rules: [[CLAUDE|CLAUDE.md]] · [[WORKSPACE|WORKSPACE.md]]
+Verified end to end: escrow #1 funded with 21,750 USDC, shipped, confirmed and released — seller
+holds the funds, contract balance zero, events indexed at blocks 12,155,961–12,155,965.
 
-## Origin
+```bash
+cast chain-id --rpc-url $RPC                                   # 11155111
+cast call $ESCROW "RELEASE_TIMEOUT()(uint64)" --rpc-url $RPC    # 1209600
+cast call $ESCROW "getEscrow(uint256)(address,address,uint256,uint64,uint64,uint8)" 1
+```
 
-Derived from an inbound LinkedIn message (screenshot on file, sender name withheld)
-describing a long-term Web3 vehicle marketplace with crypto escrow
-and smart contracts. That message is **inspiration only** — this is our own product, and the
-requirements here were reconstructed rather than inherited.
+## Architecture
 
-## Current state — measured, not assumed
+```
+Browser (React SPA) ──HTTPS/JSON──▶ API (NestJS) ──SQL──▶ PostgreSQL
+                                        │
+                                        └──viem──▶ VehicleEscrow.sol on Sepolia
+                                                        │
+                                            logs ──▶ indexer ──▶ ChainEvent
+```
 
-| Thing | State on 2026-11-17 |
+- **Contract** — Solidity 0.8.28, non-upgradeable, single immutable arbiter, reentrancy guards,
+  no proxy and no `delegatecall`. 23 Foundry tests including a live reentrancy attack and the
+  exact timeout boundary.
+- **API** — NestJS 12, Prisma 6, Zod validation, SIWE authentication, rate limiting, and a
+  self-describing surface at `GET /api/meta` (29 endpoints, reflected from the router).
+- **Indexer** — reads `getLogs` from the deploy block, writes append-only `ChainEvent` rows with
+  a unique `(txHash, logIndex)`, so the database can be rebuilt from the chain.
+- **Web** — React 19 + Vite + Tailwind 4, hash routing, 15 sections in four acts.
+
+## Repository layout
+
+```
+contracts/   Foundry project — VehicleEscrow.sol, MockUSDC.sol, tests
+api/         NestJS service — auth, listings, escrows, chain, indexer, meta
+web/         React SPA — 15 sections, printable blueprint in public/system.html
+scripts/     deploy-sepolia.sh, deploy-local.sh, backup-db.sh, audit.py
+docs/        scope, architecture, decisions, gap register, runbook
+.github/     CI — Foundry tests, API typecheck, web build
+```
+
+## Site structure
+
+| Act | Sections |
 |---|---|
-| `PROJECTS/web3_proj/` | Was empty (0 files) at 23:21; this corpus is the first content |
-| AWS account | `<AWS_ACCOUNT_ID>`, region `ap-southeast-1` |
-| AWS session | 🔴 **EXPIRED** — `aws sts get-caller-identity` fails; no instance facts could be read |
-| EC2 instance | ⚠️ **UNVERIFIED** — owner states one exists and should be reused |
-| `web3.heurist.online` | 🔴 **No DNS record exists.** No wildcard on `heurist.online` |
-| `heurist.online` apex | ⚠️ No A record (pre-existing breakage, not ours to fix) |
-| kerry | Healthy, but **out of scope** by decision D-06 |
+| Start | Overview · Transactions · Run an escrow |
+| 1 · Scope | Requirements · Escrow |
+| 2 · Build | Architecture · Chain · Hashing & auth · Token |
+| 3 · Operate | API explorer · Security · Operations · Status · References |
+| Reference | System blueprint (`/system.html`) |
 
-## Blocker summary
+## Running it
 
-1. AWS session expired — owner must run `aws login`.
-2. EC2 instance identity unknown — needs (1) first.
-3. Domain A record must point at the EC2 Elastic IP — needs (1) and (2) first.
+Development happens on the host; the database and chain configuration live in `api/.env`
+(mode 600, never committed).
 
-Nothing in this folder is deployable until those clear. See `docs/04-gap-register.md`.
+```bash
+# contract
+cd contracts && forge test
 
-## Controls in place
+# api
+cd api && npm run build && sudo systemctl restart web3proj-api
 
-- Global API rate limit 120/min, auth routes 10/min.
-- Runtime DB role `web3app_runtime` holds DML only; migrations use `web3app`.
+# web
+cd web && npm run build          # served by nginx from web/dist
+
+# deploy to Sepolia (refuses to run unfunded)
+./scripts/deploy-sepolia.sh
+```
+
+## Testing and CI
+
+- `forge test` — 23/23 passing, including reentrancy and boundary cases.
+- `tsc --noEmit` — clean on both API and web.
+- GitHub Actions runs all three on every push.
+- `scripts/audit.py` — 633 assertions across routes, wording, facts, contract reads, headers,
+  operations, links and build output.
+
+## Operations
+
+- systemd supervises the API; nginx serves the SPA and proxies `/api`.
+- Let's Encrypt TLS with automatic renewal; HTTP redirects to HTTPS.
 - Nightly `pg_dump` at 03:00 GMT+8 with seven-day rotation.
-- Journald capped at 200 MB; nginx logs rotated by logrotate.
-- GitHub Actions CI: Foundry tests, API typecheck, web build on every push.
-- systemd supervises the API and the local chain.
+- Runtime DB role holds DML only; migrations run as the owner role.
+- Global API rate limit 120/min, auth routes 10/min.
+- Journald capped at 200 MB.
+
+## Scope
+
+Built: contract, deployment, escrow lifecycle, indexer, API, site, CI, backups, monitoring of
+disk and service health.
+
+Next milestones, in order: independent contract audit, Etherscan source verification, wallet
+signing so each party submits their own transactions, image storage, and formal arbitration
+evidence handling. Mainnet follows the audit.
 
 ## Sign-in
 
-The demo is gated by a sign-in card (credentials shared privately, not committed). The check is
-a SHA-256 digest in the bundle plus a `sessionStorage` flag — **presentation only, not access
-control**. `/system.html` enforces the same flag.
+The site is gated by a sign-in card; the check is a SHA-256 digest plus a `sessionStorage` flag —
+a presentation gate, not access control. `/system.html` enforces the same flag.
+
+## Further reading
+
+| File | Contents |
+|---|---|
+| [`architecture.md`](architecture.md) | Full system description |
+| [`docs/03-decisions.md`](docs/03-decisions.md) | Decisions with rationale and reversal triggers |
+| [`docs/01-mvp-scope.md`](docs/01-mvp-scope.md) | What is in scope and what is not |
+| [`docs/05-deploy-runbook.md`](docs/05-deploy-runbook.md) | Deployment procedure |
