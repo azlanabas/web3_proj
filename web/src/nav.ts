@@ -3,6 +3,8 @@ export interface Section {
   label: string;
   group: string;
   blurb: string;
+  /** Set for a standalone document rather than an in-app route. */
+  href?: string;
 }
 
 export const SECTIONS: Section[] = [
@@ -31,6 +33,7 @@ export const SECTIONS: Section[] = [
   { id: "security",     group: "Practice",   label: "Security model",    blurb: "Trust boundaries and threats" },
   { id: "operations",   group: "Practice",   label: "Operations",        blurb: "Hosting, TLS, deployment" },
   { id: "roadmap",      group: "Practice",   label: "Status & roadmap",  blurb: "Built, deferred, next" },
+  { id: "blueprint",    group: "Practice",   label: "System blueprint",  blurb: "Printable one-page map", href: "/system.html" },
 ];
 
 export const GROUPS = ["Start", "Components", "Web3", "Practice"];

@@ -43,6 +43,24 @@ export function Sidebar({
               <ul className="space-y-0.5">
                 {SECTIONS.filter((s) => s.group === group).map((s) => {
                   const active = route === s.id;
+                  if (s.href) {
+                    return (
+                      <li key={s.id}>
+                        <a
+                          href={s.href}
+                          className="flex w-full items-start justify-between gap-2 rounded-lg px-3 py-2 text-left text-muted transition hover:bg-surface hover:text-ink"
+                        >
+                          <span>
+                            <span className="block text-[13px] font-medium">{s.label}</span>
+                            <span className="mt-0.5 block text-[10px] leading-snug text-faint">
+                              {s.blurb}
+                            </span>
+                          </span>
+                          <span className="mt-0.5 font-mono text-[10px] text-faint">↗</span>
+                        </a>
+                      </li>
+                    );
+                  }
                   return (
                     <li key={s.id}>
                       <button
@@ -82,16 +100,7 @@ export function Sidebar({
           </p>
         </a>
 
-        <a
-          href="/system.html"
-          className="mt-2 block rounded-xl border border-line p-3 transition hover:border-accent/60"
-        >
-          <p className="font-mono text-[10px] uppercase tracking-wider text-faint">Blueprint</p>
-          <p className="mt-1 text-[12px] font-medium text-ink">Full system map →</p>
-          <p className="mt-1 text-[10px] leading-snug text-faint">
-            Every component on one printable page
-          </p>
-        </a>
+
 
         <div className="mt-4 rounded-xl border border-line p-3">
           <p className="font-mono text-[10px] uppercase tracking-wider text-faint">Settlement</p>
