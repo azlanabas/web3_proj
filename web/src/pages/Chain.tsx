@@ -25,6 +25,11 @@ export function Chain() {
             ["Ethereum mainnet", "1", <code className="font-mono text-[10px]">—</code>, "Not used", "Real money; requires an audit first"],
           ]}
         />
+        <p className="flex flex-wrap gap-3">
+          <a href="https://sepolia.etherscan.io" target="_blank" rel="noreferrer" className="font-mono text-[11px] text-accent underline-offset-4 hover:underline">sepolia.etherscan.io ↗</a>
+          <a href="https://etherscan.io" target="_blank" rel="noreferrer" className="font-mono text-[11px] text-accent underline-offset-4 hover:underline">etherscan.io ↗</a>
+          <a href="https://book.getfoundry.sh/anvil/" target="_blank" rel="noreferrer" className="font-mono text-[11px] text-accent underline-offset-4 hover:underline">anvil docs ↗</a>
+        </p>
         <p>
           The application code does not know which one it is talking to. Switching networks is
           four environment values: <code className="font-mono text-[11px]">RPC_URL</code>,{" "}

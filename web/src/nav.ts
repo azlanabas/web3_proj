@@ -21,6 +21,7 @@ export const SECTIONS: Section[] = [
   { id: "contract",     group: "Web3",       label: "Escrow contract",    blurb: "Solidity, invariants, gas" },
   { id: "transactions", group: "Web3",       label: "Transactions",       blurb: "Sign, mine, receipt, index" },
   { id: "lifecycle",    group: "Web3",       label: "Escrow lifecycle",   blurb: "Every state and its guards" },
+  { id: "references",   group: "Web3",       label: "External references", blurb: "Explorers, standards, tooling" },
 
   { id: "demo",         group: "Practice",   label: "Live walkthrough",  blurb: "Drive a real escrow" },
   { id: "explorer",     group: "Practice",   label: "API explorer",      blurb: "Call the live endpoints" },

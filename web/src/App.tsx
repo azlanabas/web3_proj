@@ -20,6 +20,7 @@ import { Web } from "./pages/Web";
 import { Chain } from "./pages/Chain";
 import { Fundamentals } from "./pages/Fundamentals";
 import { SourceMap } from "./pages/SourceMap";
+import { References } from "./pages/References";
 import { Token } from "./pages/Token";
 import { Contract } from "./pages/Contract";
 import { Transactions } from "./pages/Transactions";
@@ -155,6 +156,7 @@ export default function App() {
             {route === "contract" && <Contract />}
             {route === "transactions" && <Transactions />}
             {route === "lifecycle" && <Lifecycle />}
+            {route === "references" && <References />}
             {route === "demo" && <Demo />}
             {route === "explorer" && <Explorer meta={meta} />}
             {route === "security" && <Security />}
