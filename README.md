@@ -62,3 +62,12 @@ requirements here were reconstructed rather than inherited.
 3. Domain A record must point at the EC2 Elastic IP — needs (1) and (2) first.
 
 Nothing in this folder is deployable until those clear. See `docs/04-gap-register.md`.
+
+## Controls in place
+
+- Global API rate limit 120/min, auth routes 10/min.
+- Runtime DB role `web3app_runtime` holds DML only; migrations use `web3app`.
+- Nightly `pg_dump` at 03:00 GMT+8 with seven-day rotation.
+- Journald capped at 200 MB; nginx logs rotated by logrotate.
+- GitHub Actions CI: Foundry tests, API typecheck, web build on every push.
+- systemd supervises the API and the local chain.

@@ -340,3 +340,22 @@ lines to update.
 
 **Not done:** deployment to Sepolia. That needs a funded key and is a configuration change:
 `RPC_URL`, `CHAIN_ID`, `CONTRACT_ADDRESS`, real USDC.
+
+---
+
+## D-21 — MVP hardening: rate limits, least privilege, backups, CI
+
+**Status:** LOCKED (2026-11-17)
+
+Closed the operational gaps that were previously listed as missing:
+
+| Control | Implementation |
+|---|---|
+| Rate limiting | `@nestjs/throttler`: 120/min global, 10/min on `/api/auth/*` |
+| DB least privilege | app connects as `web3app_runtime` (DML only, DDL denied); migrations as `web3app` |
+| Backups | `scripts/backup-db.sh`, cron 19:00 UTC (03:00 GMT+8), `pg_dump -Fc`, 7-day rotation |
+| Log rotation | journald `SystemMaxUse=200M`; logrotate for nginx |
+| CI | `.github/workflows/ci.yml` — Foundry tests, API typecheck, web build |
+
+**Still post-MVP, and not claimed as done:** public testnet deployment, contract audit,
+KMS-held arbiter key, WAF, read replica.

@@ -51,16 +51,21 @@ export function Operations() {
         />
       </Card>
 
-      <Card title="Operational gaps" tag="honest">
-        <p className="flex flex-wrap gap-2">
-          <Badge tone="rose">no automated backups</Badge>
-          <Badge tone="rose">no log rotation</Badge>
-          <Badge tone="rose">no CI/CD pipeline</Badge>
-          <Badge tone="rose">no uptime alerting</Badge>
-        </p>
-        <p className="text-xs text-slate-500">
-          Acceptable for a demo on a shared host, unacceptable before real traffic. A nightly
-          pg_dump with a seven-day rotation is the first item on the roadmap.
+      <Card title="Operational controls" tag="implemented">
+        <List
+          items={[
+            "Nightly pg_dump at 03:00 GMT+8 (19:00 UTC), compressed, seven-day rotation.",
+            "Journald capped at 200 MB; nginx logs handled by logrotate.",
+            "GitHub Actions CI on every push: Foundry tests, API typecheck, web build.",
+            "systemd supervises both the API and the chain, restarting on failure.",
+            "TLS renewal verified with a certbot dry run for both certificates.",
+          ]}
+        />
+        <p className="flex flex-wrap gap-2 pt-1">
+          <Badge>Backups</Badge>
+          <Badge>Log rotation</Badge>
+          <Badge>CI</Badge>
+          <Badge>Auto-restart</Badge>
         </p>
       </Card>
     </Page>

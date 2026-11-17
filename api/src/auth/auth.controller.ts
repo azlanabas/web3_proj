@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Throttle } from "@nestjs/throttler";
 import type { Response } from "express";
 import { z } from "zod";
 import { ZodPipe } from "../common/zod.pipe";
@@ -14,6 +15,7 @@ const VerifySchema = z.object({
 type VerifyBody = z.infer<typeof VerifySchema>;
 
 @Controller("auth")
+@Throttle({ default: { limit: 10, ttl: 60_000 } })
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 

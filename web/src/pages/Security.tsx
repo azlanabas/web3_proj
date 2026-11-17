@@ -15,7 +15,7 @@ export function Security() {
             ["Arbiter key", "Yes, refund + dispute release", "Refund-only outside disputes; never pays itself"],
             ["RPC provider", "Partly — could lie about logs", "Two providers configured; verify before terminal states"],
             ["Chain reorgs", "No", "Confirmation depth before terminal state (planned)"],
-            ["PostgreSQL", "No", "Rebuildable read model; events are the record"],
+            ["PostgreSQL", "No", "Rebuildable read model; the chain holds the funds"],
             ["Browser session", "No", "HMAC-signed HttpOnly cookie, 2h expiry"],
           ]}
         />
@@ -55,17 +55,29 @@ export function Security() {
         </p>
       </Callout>
 
-      <Card title="Not yet hardened" tag="honest">
+      <Card title="Controls in place" tag="implemented">
+        <List
+          items={[
+            "Global rate limit of 120 requests per minute, with 10 per minute on auth routes.",
+            "The runtime database role holds DML only — a compromised app cannot alter the schema.",
+            "Nightly compressed database backups with seven-day rotation.",
+            "Journald capped at 200 MB and nginx logs rotated by logrotate.",
+            "GitHub Actions runs contract tests and both builds on every push.",
+            "systemd restarts the API on failure; the chain is a separate supervised unit.",
+          ]}
+        />
+      </Card>
+
+      <Card title="Post-MVP scope" tag="deliberately deferred">
         <p className="flex flex-wrap gap-2">
-          <Badge tone="rose">no rate limiting on auth</Badge>
-          <Badge tone="rose">no WAF</Badge>
-          <Badge tone="rose">no contract audit</Badge>
-          <Badge tone="rose">arbiter key not in KMS</Badge>
-          <Badge tone="rose">runtime DB role over-privileged</Badge>
+          <Badge tone="slate">WAF</Badge>
+          <Badge tone="slate">contract audit</Badge>
+          <Badge tone="slate">KMS-held arbiter key</Badge>
+          <Badge tone="slate">Sepolia / mainnet</Badge>
         </p>
         <p className="text-xs text-slate-500">
-          Each of these is a known, recorded gap rather than an oversight. The contract is not
-          deployed, so an audit is a launch blocker rather than a current defect.
+          These are scoped out of the MVP rather than incomplete. A public-network launch requires
+          all four, and the audit is the gating item.
         </p>
       </Card>
     </Page>

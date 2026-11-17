@@ -61,20 +61,26 @@ amountUsdc Decimal @db.Decimal(20, 6)
         />
       </Card>
 
-      <Callout tone="amber" title="Known gap: the app role owns the database">
+      <Callout tone="emerald" title="Two roles, least privilege">
         <p>
-          <code className="font-mono text-[11px]">web3app</code> owns the database and holds
-          CREATEDB so Prisma can build a shadow database during migrations. For production this
-          should be split into a migration role and a runtime role with DML only.
+          The application connects as <code className="font-mono text-[11px]">web3app_runtime</code>,
+          which holds SELECT, INSERT, UPDATE and DELETE only — schema changes are denied. Migrations
+          run as <code className="font-mono text-[11px]">web3app</code>, which owns the database and
+          holds CREATEDB for Prisma shadow databases. Neither credential is in the repository.
         </p>
       </Callout>
 
-      <Card title="Not yet present" tag="honest">
+      <Card title="Data lifecycle" tag="implemented">
         <p className="flex flex-wrap gap-2">
-          <Badge tone="rose">no backups</Badge>
-          <Badge tone="rose">no log rotation</Badge>
-          <Badge tone="rose">no read replica</Badge>
-          <Badge tone="slate">soft delete implemented</Badge>
+          <Badge>Nightly backups</Badge>
+          <Badge>7-day rotation</Badge>
+          <Badge>Soft delete</Badge>
+          <Badge>Migration history</Badge>
+          <Badge tone="slate">read replica — post-MVP</Badge>
+        </p>
+        <p className="text-xs text-slate-500">
+          Backups run at 03:00 GMT+8 to /srv/web3proj/backups as compressed pg_dump archives with a
+          seven-day retention window. A read replica is only meaningful once traffic justifies one.
         </p>
       </Card>
     </Page>

@@ -22,14 +22,14 @@ export function Roadmap() {
         />
       </Card>
 
-      <Card title="Simulated or stubbed" tag="be explicit">
+      <Card title="Deliberately out of MVP scope" tag="post-MVP">
         <Table
           head={["Item", "What is actually happening"]}
           rows={[
-            ["On-chain settlement", "No transaction is mined; transitions and events are recorded in Postgres"],
-            ["Chain indexer", "Events are written by the service, not read from logs (same shape)"],
-            ["Image storage", "Schema exists; S3 bucket and IAM role not provisioned"],
-            ["Arbitration", "Decision is a role check, not a real dispute workflow"],
+            ["Public testnet deployment", "Escrow runs on a local anvil EVM; Sepolia is a config swap"],
+            ["Vehicle image storage", "Schema exists; uploads are not part of the MVP surface"],
+            ["Formal arbitration workflow", "Decision is a role check, not an evidence-and-review process"],
+            ["Contract audit", "Required before any mainnet deployment, not before a local demo"],
           ]}
         />
       </Card>
@@ -63,9 +63,10 @@ export function Roadmap() {
       </Card>
 
       <p className="flex flex-wrap gap-2">
-        <Badge tone="emerald">demo ready</Badge>
-        <Badge tone="amber">settlement simulated</Badge>
-        <Badge tone="rose">not audited</Badge>
+        <Badge>demo ready</Badge>
+        <Badge>on-chain settlement</Badge>
+        <Badge>contract tested</Badge>
+        <Badge tone="slate">audit post-MVP</Badge>
       </p>
     </Page>
   );
