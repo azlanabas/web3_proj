@@ -173,6 +173,7 @@ export class MetaController {
       txHash: r.txHash,
       blockNumber: r.blockNumber.toString(),
       escrowId: (r.payload as { escrowId?: string } | null)?.escrowId ?? null,
+      payload: r.payload,
     }));
   }
 

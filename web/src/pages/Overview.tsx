@@ -8,7 +8,21 @@ interface Tx {
   txHash: string;
   blockNumber: string;
   escrowId: string | null;
+  payload?: { amount?: string } | null;
 }
+
+const EVENT_COPY: Record<string, { title: string; detail: string }> = {
+  EscrowCreated: { title: "Escrow opened", detail: "The buyer committed to the purchase. No funds have moved yet." },
+  Funded: { title: "Funds deposited", detail: "USDC moved from the buyer into the contract, not to the platform." },
+  Shipped: { title: "Shipment recorded", detail: "The seller dispatched the vehicle and the 14-day release timer started." },
+  Disputed: { title: "Dispute raised", detail: "The buyer froze the timer and referred delivery to the arbiter." },
+  Released: { title: "Payment released", detail: "The buyer confirmed delivery; the contract paid the seller and closed." },
+  Refunded: { title: "Funds refunded", detail: "The arbiter returned the funds to the buyer." },
+  Cancelled: { title: "Escrow cancelled", detail: "Cancelled before funding. No funds moved." },
+};
+
+const usdc = (base?: string) =>
+  base ? `${(Number(base) / 1_000_000).toLocaleString("en-US")} USDC` : null;
 
 const STEPS = [
   ["01", "Seller lists a vehicle", "Seller", "Make, model, year, VIN, mileage, price. Stored in PostgreSQL and shown publicly."],
@@ -25,7 +39,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
     const load = () =>
       fetch("/api/chain/events")
         .then((r) => r.json())
-        .then((rows: Tx[]) => setTxs(rows.slice(0, 6)))
+        .then((rows: Tx[]) => setTxs(rows.slice(0, 6).reverse()))
         .catch(() => undefined);
     load();
     const id = setInterval(load, 15000);
@@ -46,7 +60,10 @@ export function Overview({ meta }: { meta: Meta | null }) {
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-good" />
             {meta ? meta.chain.network : "live chain"}
           </p>
-          <p className="font-mono text-[11px] text-faint">transaction snapshot · updates every 15s</p>
+          <p className="font-mono text-[11px] text-faint">
+            contract {meta ? `${meta.chain.escrow.slice(0, 10)}…${meta.chain.escrow.slice(-4)}` : "…"} ·
+            refreshed every 15s
+          </p>
         </div>
 
         <div className="grid grid-cols-3 divide-x divide-line border-b border-line">
@@ -66,27 +83,33 @@ export function Overview({ meta }: { meta: Meta | null }) {
           {txs.length === 0 && (
             <p className="px-5 py-4 font-mono text-[12px] text-faint">Reading the chain…</p>
           )}
-          {txs.map((tx) => (
-            <div key={tx.txHash} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-3">
-              <span className="min-w-[8rem] font-mono text-[13px] uppercase tracking-wider text-accent">
-                {tx.eventName}
-              </span>
-              <span className="font-mono text-[11px] text-faint">escrow #{tx.escrowId ?? "—"}</span>
-              <span className="font-mono text-[11px] text-faint">block {tx.blockNumber}</span>
-              {explorer ? (
-                <a
-                  href={`${explorer}/tx/${tx.txHash}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-mono text-[13px] text-ink underline-offset-4 hover:text-accent hover:underline"
-                >
-                  {tx.txHash.slice(0, 20)}… ↗
-                </a>
-              ) : (
-                <span className="font-mono text-[13px] text-ink">{tx.txHash.slice(0, 20)}…</span>
-              )}
-            </div>
-          ))}
+          {txs.map((tx, i) => {
+            const copy = EVENT_COPY[tx.eventName] ?? { title: tx.eventName, detail: "" };
+            const amount = usdc(tx.payload?.amount);
+            return (
+              <div key={tx.txHash} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 px-5 py-3">
+                <span className="w-5 font-mono text-[11px] text-faint">{String(i + 1).padStart(2, "0")}</span>
+                <span className="min-w-[10rem] font-mono text-[12px] uppercase tracking-wider text-accent">
+                  {copy.title}
+                </span>
+                <span className="min-w-0 flex-1 text-[12px] text-muted">{copy.detail}</span>
+                {amount && <span className="font-mono text-[12px] text-ink">{amount}</span>}
+                <span className="font-mono text-[11px] text-faint">block {tx.blockNumber}</span>
+                {explorer ? (
+                  <a
+                    href={`${explorer}/tx/${tx.txHash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono text-[11px] text-muted underline-offset-4 hover:text-accent hover:underline"
+                  >
+                    {tx.txHash.slice(0, 12)}… ↗
+                  </a>
+                ) : (
+                  <span className="font-mono text-[11px] text-muted">{tx.txHash.slice(0, 12)}…</span>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
