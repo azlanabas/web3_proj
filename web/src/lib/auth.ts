@@ -1,5 +1,5 @@
 /**
- * Presentation-only gate for the demo.
+ * Presentation-only access gate.
  *
  * The credential is stored as a SHA-256 digest, not plaintext, but this is still NOT
  * security: the bundle is public and sessionStorage is editable. It exists so the walkthrough

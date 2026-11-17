@@ -117,7 +117,7 @@ contracts/ ──deployed to──▶ anvil ──address written to──▶ ap
       <Card title="Configuration surface" tag="no secrets in git">
         <Code>{`CHAIN_MODE      local | sepolia        settlement network
 RPC_URL         http://127.0.0.1:8545   chain endpoint
-CHAIN_ID        31337                  anvil
+CHAIN_ID        11155111               Sepolia
 CONTRACT_ADDRESS 0x4e8D…3e0E           escrow on Sepolia
 TOKEN_ADDRESS    0xBA24…b8e3           test USDC on Sepolia
 DATABASE_URL    …web3app_runtime       DML-only runtime role

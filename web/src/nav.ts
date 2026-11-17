@@ -112,6 +112,7 @@ export const HANDOFFS: Record<string, string> = {
   transactions: "You have followed one transaction end to end. These are the tools that made it possible, and the ones that did not.",
   tooling: "Every tool has a primary source. Here they are.",
   references: "The chain is explained. The next act is the evidence that it runs.",
+  live: "Those are the real transactions. Next, call the API yourself and see the same data.",
   explorer: "You can call the API. This is what protects it.",
   security: "Security is what was designed. Operations is what keeps it alive.",
   operations: "The system runs. This is what was built, what was deferred, and in what order it comes next.",

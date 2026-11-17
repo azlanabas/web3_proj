@@ -82,7 +82,7 @@ for each log:
 
       <Card title="Verify a transaction yourself" tag="cast">
         <Code>{`cast receipt <TX_HASH> --rpc-url http://127.0.0.1:8545
-cast logs --address 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 \\
+cast logs --address $ESCROW \\
   --from-block 1 --rpc-url http://127.0.0.1:8545`}</Code>
       </Card>
 

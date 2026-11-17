@@ -123,7 +123,7 @@
       A vehicle marketplace where a buyer&rsquo;s USDC is held by a smart contract until delivery is
       confirmed. Four layers, twenty-six endpoints, one escrow state machine, and a real EVM.
       This page is the complete map; the interactive version lives at
-      <a href="/">the main site</a> (sign in with the demo credentials).
+      <a href="/">the main site</a> (sign in to view the interactive version).
     </p>
     <div class="legend">
       <span class="pill">all in-scope systems operational</span>
@@ -183,7 +183,7 @@
       <tr><th>Concept</th><th>What it is</th><th>In this project</th></tr>
       <tr><td>ETH</td><td>Native currency, used only to pay gas</td><td>Testnet ETH for gas only; contract holds 0</td></tr>
       <tr><td>Gas</td><td>Units of computation, priced in ETH</td><td>real testnet gas; per-action cost measured in wei</td></tr>
-      <tr><td>Account / EOA</td><td>Address controlled by a private key</td><td>Three demo signers, server-held</td></tr>
+      <tr><td>Account / EOA</td><td>Address controlled by a private key</td><td>Three signer accounts, service-held</td></tr>
       <tr><td>Transaction</td><td>Signed instruction to change state</td><td>Every escrow action</td></tr>
       <tr><td>Receipt + logs</td><td>Proof of execution, and emitted events</td><td>Required before any database write</td></tr>
       <tr><td>Proof of Stake</td><td>Validators stake 32 ETH to propose and attest</td><td>Used on Sepolia (Proof of Stake)</td></tr>
@@ -265,8 +265,8 @@ CANCELLED         REFUNDED              DISPUTED ──arbiter──▶ REFUNDED
     <h3 style="margin-top:30px">API surface</h3>
     <pre>GET    /api/health                     GET    /api/listings
 GET    /api/meta                       GET    /api/listings/:id
-POST   /api/demo/session               POST   /api/listings
-POST   /api/demo/reset                 PATCH  /api/listings/:id
+POST   /api/session               POST   /api/listings
+POST   /api/session/reset                 PATCH  /api/listings/:id
 POST   /api/auth/siwe/nonce            GET    /api/escrows
 POST   /api/auth/siwe/verify           GET    /api/escrows/:id
 POST   /api/auth/logout                POST   /api/escrows

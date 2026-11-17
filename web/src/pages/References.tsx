@@ -92,8 +92,8 @@ export function References() {
 
       <Card title="What has no external link, and why" tag="honest">
         <p>
-          The escrow contract at <code className="font-mono text-[11px]">0xCf7E…0Fc9</code> and the
-          test USDC at <code className="font-mono text-[11px]">0x9fE4…a6e0</code> are deployed to a
+          The escrow contract at <code className="font-mono text-[11px]">0x4e8D…3e0E</code> and the
+          test USDC at <code className="font-mono text-[11px]">0xBA24…b8e3</code> are deployed to a
           private anvil chain on this host. There is no explorer to link to — they are only
           inspectable from that machine with <code className="font-mono text-[11px]">cast</code>.
         </p>

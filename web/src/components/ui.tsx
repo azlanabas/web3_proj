@@ -66,6 +66,27 @@ export function Page({
   );
 }
 
+/** Plain content block: a rule and a heading, no box. Boxes are reserved for links. */
+export function Section({
+  title,
+  tag,
+  children,
+}: {
+  title: string;
+  tag?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="border-t border-line pt-6">
+      <div className="mb-3 flex items-baseline justify-between gap-4">
+        <h2 className="text-base font-semibold text-ink">{title}</h2>
+        {tag && <span className="font-mono text-[10px] uppercase tracking-wider text-faint">{tag}</span>}
+      </div>
+      <div className="space-y-3 text-sm leading-relaxed text-muted">{children}</div>
+    </section>
+  );
+}
+
 export function Card({
   title,
   tag,

@@ -62,7 +62,7 @@ the vehicle price:     21,750 USDC — moved as a token, never as ETH`}</Code>
           head={["Field", "Meaning", "Example here"]}
           rows={[
             ["from", "Sender address, recovered from the signature", "buyer 0x3C44…93BC"],
-            ["to", "Contract being called", "escrow 0xCf7E…0Fc9"],
+            ["to", "Contract being called", "the escrow contract"],
             ["nonce", "Per-account counter preventing replay", "increments every write"],
             ["data", "Encoded function selector + arguments", "fund(uint256)"],
             ["gasLimit", "Maximum gas the sender will spend", "set by viem estimate"],

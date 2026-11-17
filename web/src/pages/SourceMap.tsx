@@ -67,8 +67,8 @@ web/src/                         no chain code at all`}</Code>
 
       <Card title="Verify any of it in one command" tag="cast">
         <Code>{`export RPC=http://127.0.0.1:8545
-export ESCROW=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
-export TOKEN=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+export ESCROW=$(grep CONTRACT_ADDRESS /srv/web3proj/api/.env | cut -d= -f2-)
+export TOKEN=$(grep TOKEN_ADDRESS /srv/web3proj/api/.env | cut -d= -f2-)
 
 cast chain-id --rpc-url $RPC                     # 31337
 cast code $ESCROW --rpc-url $RPC | head -c 20    # bytecode exists
@@ -81,7 +81,7 @@ cast logs --address $ESCROW --from-block 1 --rpc-url $RPC  # every event`}</Code
         <Table
           head={["If they ask", "Answer"]}
           rows={[
-            ["Where is the contract?", "contracts/src/VehicleEscrow.sol — deployed at 0xCf7E…0Fc9 on chain 31337"],
+            ["Where is the contract?", "contracts/src/VehicleEscrow.sol — deployed on Sepolia; the address is in api/.env"],
             ["Where is the ABI?", "Generated into contracts/out/, then hand-declared in api/src/chain/chain.service.ts"],
             ["Where are the private keys?", "In /srv/web3proj/api/.env at mode 600, never in the repository"],
             ["Where does indexing happen?", "Inside the API process: src/chain/indexer.service.ts on a 4-second timer"],

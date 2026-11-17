@@ -15,7 +15,7 @@ export function Contract() {
           ["Compiler", "Solidity 0.8.28, optimizer on, 200 runs"],
           ["Libraries", "OpenZeppelin 5.7.0 — SafeERC20, ReentrancyGuard"],
           ["Deployed", <code className="font-mono text-[10px] break-all">0x4e8DFBd676AeEB10D57727DdFF2450B175913e0E</code>],
-          ["Network", "Ethereum Sepolia (chain id 11155111)"],
+          ["Network", "Ethereum Sepolia testnet"],
           ["Pattern", "Single contract, many escrows keyed by id — not one contract per sale"],
           ["Upgradeability", "None. No proxy, no delegatecall, no selfdestruct."],
         ]}

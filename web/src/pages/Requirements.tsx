@@ -17,7 +17,7 @@ const rowsFor = (meta: Meta | null): [string, string, string][] => [
   ["AWS", "EC2 t4g.small in ap-southeast-1, Elastic IP, systemd and nginx", "Ops"],
   ["Git", "Public repository, conventional commits, GitHub Actions CI on every push", "Ops"],
   ["Solidity", "0.8.28 with OpenZeppelin 5.7.0 SafeERC20 and ReentrancyGuard", "Web3"],
-  ["Ethereum", "Deployed on Sepolia (11155111) with real transactions and gas", "Web3"],
+  ["Ethereum", "Deployed on the Sepolia testnet with real transactions and gas", "Web3"],
 ];
 
 export function Requirements({ meta }: { meta: Meta | null }) {

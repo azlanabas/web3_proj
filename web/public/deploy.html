@@ -58,7 +58,7 @@
     <p class="kicker">Fastest — one transaction</p>
     <p style="margin-top:8px">
       Send 0.01 Sepolia ETH to the deployment address. The operator then runs the deploy script,
-      which creates both contracts and funds every signer. One signature instead of six.
+      which creates both contracts and funds every signer. A single transfer instead of six signatures.
     </p>
     <p style="margin-top:12px">Deployment address<br><code id="depAddr">loading…</code></p>
     <div class="row">
@@ -74,14 +74,14 @@
     <ol class="plan">
     <li>Deploy a 6-decimal test USDC token</li>
     <li>Deploy the escrow, naming the API&rsquo;s arbiter key</li>
-    <li>Mint 1,000,000 USDC <strong>to the demo buyer</strong> &mdash; the API signs as that account, not as you</li>
-    <li>Send 0.003 ETH to the demo buyer for gas</li>
-    <li>Send 0.003 ETH to the demo seller for gas</li>
+    <li>Mint 1,000,000 USDC <strong>to the buyer account</strong> &mdash; the API signs as that account, not as you</li>
+    <li>Send 0.003 ETH to the buyer account for gas</li>
+    <li>Send 0.003 ETH to the seller account for gas</li>
     <li>Send 0.003 ETH to the arbiter for gas</li>
   </ol>
   <p class="note">
-    All three signers need gas: buyer funds and confirms, seller ships, arbiter refunds. The USDC goes
-    to the demo buyer for the same reason &mdash; the API signs as that account, not as you.
+    All three signer accounts need gas: buyer funds and confirms, seller ships, arbiter refunds. The USDC goes
+    to the buyer account for the same reason &mdash; the API signs as that account, not as you.
   </p>
 
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
@@ -96,9 +96,9 @@
     <ol id="steps">
       <li id="s1">1. Deploy the test USDC token</li>
       <li id="s2">2. Deploy the escrow contract</li>
-      <li id="s3">3. Mint 1,000,000 USDC to the demo buyer</li>
-      <li id="s4">4. Fund the demo buyer with 0.003 ETH</li>
-      <li id="s5">5. Fund the demo seller with 0.003 ETH</li>
+      <li id="s3">3. Mint 1,000,000 USDC to the buyer account</li>
+      <li id="s4">4. Fund the buyer account with 0.003 ETH</li>
+      <li id="s5">5. Fund the seller account with 0.003 ETH</li>
       <li id="s6">6. Fund the arbiter with 0.003 ETH</li>
     </ol>
     <p id="msg"></p>
@@ -252,7 +252,7 @@ el("deploy").onclick = async () => {
     setMsg("Step 3 of 6 — confirm the mint…");
     mark("s3", "active");
     await send(art.mintSelector + pad(accounts.buyer) + padNum(1000000000000n), tokenAddr);
-    mark("s3", "done", "3. Minted 1,000,000 USDC to the demo buyer");
+    mark("s3", "done", "3. Minted 1,000,000 USDC to the buyer account");
 
     const fundStep = async (id, label, addr, n) => {
       setMsg(`Step ${n} of 6 — funding ${label}…`);
@@ -263,8 +263,8 @@ el("deploy").onclick = async () => {
       });
       mark(id, "done", `${n}. ${label} funded: ${addr}`);
     };
-    await fundStep("s4", "the demo buyer", accounts.buyer, 4);
-    await fundStep("s5", "the demo seller", accounts.seller, 5);
+    await fundStep("s4", "the buyer account", accounts.buyer, 4);
+    await fundStep("s5", "the seller account", accounts.seller, 5);
     await fundStep("s6", "the arbiter", accounts.arbiter, 6);
 
     setMsg("All six steps confirmed. Hand the two addresses to the operator.");
