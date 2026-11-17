@@ -497,3 +497,29 @@ owner's MetaMask address holds 0.05 Sepolia ETH; a 0.01 transfer unblocks the de
 
 **Why not mainnet:** it is the same switch, but real money requires an independent audit and a
 funded key. That is a decision, not a technical limitation.
+
+---
+
+## D-29 — Deployed to Ethereum Sepolia (real testnet)
+
+**Status:** LOCKED (2026-11-18)
+
+The escrow now settles on Ethereum Sepolia, chain id 11155111.
+
+| Item | Value |
+|---|---|
+| Escrow | `0x4e8DFBd676AeEB10D57727DdFF2450B175913e0E` |
+| Test USDC (6 dp) | `0xBA24365396f6f92BDA5C0087d8806B7C545eb8e3` |
+| Deploy block | 12155957 |
+| Arbiter | `0x3fBEb93D2bcD2b5A727CFD9a61348a0EB745f452` |
+
+Verified end to end: escrow #1 funded 21,750 USDC, shipped, confirmed and released; the seller
+holds the funds, the contract holds zero, and four events indexed at blocks 12,155,961-965.
+
+**Anvil's default keys are unusable on a public chain.** All three well-known addresses
+(`0xf39F…`, `0x7099…`, `0x3C44…`) already have contract code on Sepolia — someone deployed sweepers
+there, because those private keys are published in every anvil tutorial. ETH sent to them was
+forwarded immediately. Three fresh keys were generated for buyer, seller and arbiter.
+
+Anvil remains available as `CHAIN_MODE=local` for offline work, but it is no longer the settlement
+network.
