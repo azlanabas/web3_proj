@@ -48,9 +48,9 @@ export function Security() {
         />
       </Card>
 
-      <Callout tone="slate" title="Demo mode weakens role enforcement">
+      <Callout tone="slate" title="Single-operator mode weakens role enforcement">
         <p>
-          <code className="font-mono text-[11px]">DEMO_MODE=true</code> lets a single session act
+          <code className="font-mono text-[11px]">OPERATOR_MODE=true</code> lets a single session act
           as buyer, seller and arbiter so the walkthrough works without three wallets. It bypasses
           role checks in the escrow service and must be set to false before any real use.
         </p>

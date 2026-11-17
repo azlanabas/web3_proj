@@ -12,7 +12,7 @@ export function Token() {
         <Table
           head={["Network", "USDC contract", "Decimals", "Used here"]}
           rows={[
-            ["Anvil (local)", <code className="font-mono text-[10px]">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code>, "6", "Yes — mock ERC-20 minted for the demo"],
+            ["Anvil (local)", <code className="font-mono text-[10px]">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code>, "6", "Yes — test ERC-20 minted for this deployment"],
             ["Sepolia", <a href="https://sepolia.etherscan.io/address/0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" target="_blank" rel="noreferrer" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238</a>, "6", "Configured, not yet deployed to"],
             ["Mainnet", <a href="https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" target="_blank" rel="noreferrer" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48</a>, "6", "No"],
           ]}

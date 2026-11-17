@@ -6,7 +6,7 @@ import { api } from "../lib/api";
 import type { ChainEvent, Escrow, Listing } from "../types";
 import type { Meta } from "../lib/meta";
 
-export function Demo({ meta }: { meta: Meta | null }) {
+export function Walkthrough({ meta }: { meta: Meta | null }) {
   const [signedIn, setSignedIn] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
   const [escrows, setEscrows] = useState<Escrow[]>([]);
@@ -53,7 +53,7 @@ export function Demo({ meta }: { meta: Meta | null }) {
 
   const login = () =>
     run(async () => {
-      await api.demoLogin();
+      await api.startSession();
       setSignedIn(true);
       await loadListings();
       await loadEscrows();
@@ -85,21 +85,20 @@ export function Demo({ meta }: { meta: Meta | null }) {
   return (
     <>
       <Page
-        kicker={kickerFor("demo")}
+        kicker={kickerFor("walkthrough")}
         title="Live walkthrough"
-        lede="This runs against the production API you are reading this page from. Start a demo session, open an escrow on a vehicle, then drive it through every state. Each action writes a chain event on the right."
+        lede="This runs against the production API you are reading this page from. Start a session, open an escrow on a vehicle, then drive it through every state. Each action writes a chain event on the right."
       >
-        <Card title="Two paths worth demonstrating" tag="script">
+        <Card title="Two paths worth running" tag="script">
           <List
             items={[
               "Happy path: open escrow → fund → ship → confirm. The seller is paid and the escrow settles.",
               "Failure path: open escrow → fund → ship → dispute → arbiter refund. The buyer is made whole.",
-              "Timeout path: only on the local chain. On Sepolia the 14-day window has to actually elapse, so the buttons are disabled.",
+              "Timeout path: the 14-day window must actually elapse on a public network, so those controls are disabled here.",
             ]}
           />
           <p className="text-xs text-muted">
-            In demo mode a single session may act as buyer, seller and arbiter, the way an operator
-            walking through the product would.
+            A single session may act as buyer, seller and arbiter, the way an operator would.
           </p>
         </Card>
       </Page>

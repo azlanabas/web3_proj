@@ -13,7 +13,7 @@ export function Chain({ meta }: { meta: Meta | null }) {
         items={[
           { value: "31337", label: "active chain id (local anvil)" },
           { value: "11155111", label: "Sepolia, the public target" },
-          { value: "1 s", label: "block time on the demo chain" },
+          { value: "~12 s", label: "block time on Sepolia" },
           { value: "23/23", label: "contract tests before deployment" },
         ]}
       />
@@ -75,7 +75,7 @@ export function Chain({ meta }: { meta: Meta | null }) {
         <List
           items={[
             "Sepolia requires testnet ETH for gas; every faucet needs a browser session or a mainnet balance.",
-            "A local chain gives deterministic accounts, so the demo works without a wallet extension.",
+            "A local chain gives deterministic accounts, so the flow runs without a wallet extension.",
             "Blocks are mined on demand, so the 14-day timeout can be exercised with evm_increaseTime instead of waiting.",
             "The transaction path is identical: real signing, real broadcast, real receipts, real logs.",
           ]}
@@ -86,7 +86,7 @@ export function Chain({ meta }: { meta: Meta | null }) {
         </p>
       </Card>
 
-      <Card title="Accounts on the demo chain" tag="roles">
+      <Card title="Accounts on the network" tag="roles">
         <Table
           head={["Role", "Address", "Holds key", "Power"]}
           rows={[

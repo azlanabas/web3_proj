@@ -7,7 +7,7 @@ const ROWS: [string, string, Use, string][] = [
   ["Alchemy", "RPC provider", "Dependency", "Sepolia endpoint; the key is verified and answers eth_chainId"],
   ["OpenZeppelin", "Contract library", "Dependency", "SafeERC20, ReentrancyGuard and the ERC20 base for the test token"],
   ["Etherscan", "Explorer", "Reference", "Linked for Sepolia USDC and the public explorer; no API integration"],
-  ["MetaMask", "Wallet", "Not used", "No wallet connect — the browser holds no keys; the server signs demo transactions"],
+  ["MetaMask", "Wallet", "Not used", "No wallet connect — the browser holds no keys; the service signs transactions"],
   ["Infura", "RPC provider", "Not used", "Alchemy is the configured provider; one RPC is enough for this scope"],
   ["Chainlink", "Oracles / data feeds", "Not used", "The escrow prices in USDC and needs no external price feed"],
   ["Chainlink faucet", "Faucet", "Not used", "No Sepolia deployment yet, so no testnet ETH is required"],

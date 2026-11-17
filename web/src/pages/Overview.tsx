@@ -150,9 +150,10 @@ export function Overview({ meta }: { meta: Meta | null }) {
                                   │ read model │◀─│   escrow   │ logs
                                   └────────────┘  └────────────┘`}</Code>
         <p>
-          The browser never touches the chain and holds no keys. The API signs with server-held demo
-          keys, waits for a receipt, and only then writes to the database, which is why the database
-          can always be rebuilt from the chain.
+          Every escrow action is a signed transaction. The service submits it, waits for the
+          receipt, and only then writes to the database — so the database is a projection of the
+          chain, never its source. Events are re-read from logs, which is why the history can be
+          rebuilt at any point.
         </p>
       </Card>
 
@@ -186,7 +187,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
             ["Escrow contract deployed and executing on Ethereum Sepolia", "No independent audit, and not mainnet"],
             ["Every action is a signed transaction with a receipt", "The USDC is a test token we minted"],
             ["Events indexed from chain logs", "No independent contract audit"],
-            ["TLS, DNS, systemd, backups, rate limits, CI", "No wallet connect, the server holds demo keys"],
+            ["TLS, DNS, systemd, backups, rate limits, CI", "No wallet connect yet — the service submits on the users&apos; behalf"],
           ]}
         />
         <Callout tone="slate" title="The sentence to remember">

@@ -8,7 +8,7 @@ import { api } from "./lib/api";
 import type { Meta } from "./lib/meta";
 import { Api } from "./pages/Api";
 import { Data } from "./pages/Data";
-import { Demo } from "./pages/Demo";
+import { Walkthrough } from "./pages/Walkthrough";
 import { Explorer } from "./pages/Explorer";
 import { LiveBuild } from "./pages/LiveBuild";
 import { Lifecycle } from "./pages/Lifecycle";
@@ -185,7 +185,7 @@ export default function App() {
             {route === "lifecycle" && <Lifecycle />}
             {route === "references" && <References />}
             {route === "tooling" && <ToolingMap />}
-            {route === "demo" && <Demo meta={meta} />}
+            {route === "walkthrough" && <Walkthrough meta={meta} />}
             {route === "live" && <LiveBuild meta={meta} />}
             {route === "explorer" && <Explorer meta={meta} />}
             {route === "security" && <Security />}

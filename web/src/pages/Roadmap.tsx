@@ -42,7 +42,7 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
           rows={[
             ["Independent contract audit", "The gating item before mainnet. 23 tests are not an audit."],
             ["Mainnet deployment", "Real money plus no audit is not a trade worth making."],
-            ["Wallet connect", "The server signs with demo keys so the walkthrough needs no extension. Real users would sign themselves."],
+            ["Wallet connect", "The service signs so the flow needs no wallet extension; users signing is the next milestone. Real users would sign themselves."],
             ["Vehicle image uploads", "Schema exists; object storage is not provisioned."],
             ["Formal arbitration workflow", "Dispute resolution is a role check, not an evidence-and-review process."],
             ["WAF, uptime alerting, read replica", "Operational maturity that traffic has not yet justified."],

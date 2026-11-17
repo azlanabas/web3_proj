@@ -3,13 +3,13 @@ import type { Response } from "express";
 import { issueSession, SESSION_COOKIE } from "../auth/session";
 import { DemoService } from "./demo.service";
 
-@Controller("demo")
+@Controller("session")
 export class DemoController {
-  constructor(private readonly demo: DemoService) {}
+  constructor(private readonly sessions: DemoService) {}
 
-  @Post("session")
-  async session(@Res({ passthrough: true }) res: Response) {
-    const user = await this.demo.session();
+  @Post()
+  async create(@Res({ passthrough: true }) res: Response) {
+    const user = await this.sessions.session();
     res.cookie(SESSION_COOKIE, issueSession(user.walletAddress), {
       httpOnly: true,
       sameSite: "lax",
@@ -17,11 +17,11 @@ export class DemoController {
       maxAge: 2 * 60 * 60 * 1000,
       path: "/",
     });
-    return { walletAddress: user.walletAddress, demo: true };
+    return { walletAddress: user.walletAddress };
   }
 
   @Post("reset")
   reset() {
-    return this.demo.reset();
+    return this.sessions.reset();
   }
 }

@@ -84,7 +84,7 @@ export function EscrowPanel(props: Props) {
   const canRefund = status === "FUNDED" || status === "SHIPPED" || status === "DISPUTED";
 
   return (
-    <section id="demo" className="border-t border-line bg-paper">
+    <section id="walkthrough" className="border-t border-line bg-paper">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -105,7 +105,7 @@ export function EscrowPanel(props: Props) {
               disabled={busy}
               className="rounded-lg border border-line px-3 py-2 text-xs text-muted transition hover:border-muted hover:text-ink disabled:opacity-40"
             >
-              Reset demo data
+              Reset session
             </button>
           ) : (
             <button
@@ -113,7 +113,7 @@ export function EscrowPanel(props: Props) {
               disabled={busy}
               className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-paper transition hover:bg-accent-strong disabled:opacity-50"
             >
-              Start demo session
+              Start session
             </button>
           )}
         </div>
@@ -152,7 +152,7 @@ export function EscrowPanel(props: Props) {
               ))}
               {listings.length === 0 && (
                 <p className="rounded-xl border border-dashed border-line p-6 text-center text-sm text-muted">
-                  {signedIn ? "No listings yet." : "Start a demo session to load vehicles."}
+                  {signedIn ? "No listings yet." : "Start a session to load vehicles."}
                 </p>
               )}
             </div>
@@ -196,8 +196,8 @@ export function EscrowPanel(props: Props) {
                   <Action label="Arbiter → refund" onClick={() => props.onAct("refund")} enabled={canRefund} busy={busy} />
                 </div>
                 <p className="mt-3 text-[11px] leading-relaxed text-muted">
-                  Actions are role-gated in production. In demo mode one session may drive every
-                  step, the way an operator would.
+                  Actions are role-gated in production. One session may drive every step, the way an
+                  operator would.
                 </p>
                 {!canTimeTravel && (
                   <p className="mt-2 text-[11px] leading-relaxed text-warn">

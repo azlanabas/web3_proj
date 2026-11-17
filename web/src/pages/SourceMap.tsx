@@ -58,10 +58,10 @@ web/src/                         no chain code at all`}</Code>
 
       <Callout tone="slate" title="The browser never touches the chain">
         <p>
-          There is no wallet connection, no injected provider and no RPC URL in the frontend
-          bundle. Every transaction is signed server-side with a demo key and submitted by the API.
-          That is a deliberate simplification for a walkthrough — a production build would sign in
-          the user&rsquo;s wallet instead, and the server would never hold buyer or seller keys.
+          Signing happens in the service, not the browser: the frontend bundle contains no private
+          key, no injected provider and no RPC URL. That keeps the interface simple and the keys off
+          the client — and it is the piece the roadmap replaces next, so that users sign their own
+          escrow actions.
         </p>
       </Callout>
 
@@ -98,7 +98,7 @@ cast logs --address $ESCROW --from-block 1 --rpc-url $RPC  # every event`}</Code
           <Badge tone="slate">no gas UX</Badge>
         </p>
         <p className="text-xs">
-          Each is a real product gap, not an oversight: the demo prioritises showing the escrow
+          Each is a real product gap, not an oversight: this build prioritises showing the escrow
           mechanics over wallet plumbing, and the server-side signing is what makes a one-click
           walkthrough possible without installing an extension.
         </p>

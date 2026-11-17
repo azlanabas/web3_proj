@@ -94,7 +94,7 @@ export function References() {
         <p>
           The escrow contract at <code className="font-mono text-[11px]">0xCf7E…0Fc9</code> and the
           test USDC at <code className="font-mono text-[11px]">0x9fE4…a6e0</code> are deployed to a
-          private anvil chain on the demo host. There is no explorer to link to — they are only
+          private anvil chain on this host. There is no explorer to link to — they are only
           inspectable from that machine with <code className="font-mono text-[11px]">cast</code>.
         </p>
         <p className="text-xs">

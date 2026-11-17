@@ -21,7 +21,7 @@ const API: [string, string][] = [
   ["escrow/escrow.service.ts", "State machine + viem writes against the configured chain"],
   ["chain/chain.service.ts", "viem clients, ABIs, role keys, write/read helpers, evm_increaseTime"],
   ["chain/indexer.service.ts", "getLogs from checkpoint → ChainEvent rows → status reconciliation"],
-  ["demo/*", "Seeded vehicles and one-click session for the walkthrough"],
+  ["session/*", "Seeded vehicles and a one-click session"],
   ["meta/meta.controller.ts", "Self-description consumed by the API explorer"],
   ["common/*", "Zod pipe (400 on invalid) and throttler guard extension"],
 ];
@@ -30,7 +30,7 @@ const WEB: [string, string][] = [
   ["App.tsx", "Auth gate, hash routing, header controls, back-to-top"],
   ["nav.ts", "Section registry — 16 entries in 4 groups, single source of navigation"],
   ["lib/api.ts", "Typed fetch wrapper, same-origin credentials"],
-  ["lib/auth.ts", "SHA-256 demo gate, 12h sessionStorage flag"],
+  ["lib/auth.ts", "SHA-256 access gate, 12h sessionStorage flag"],
   ["lib/meta.ts", "Types for /api/meta"],
   ["components/Sidebar.tsx", "Persistent navigation, blueprint link, chain-mode badge"],
   ["components/ui.tsx", "Page, Card, Table, Badge, Code, Stats, List, Callout"],
@@ -123,7 +123,7 @@ TOKEN_ADDRESS    0xBA24…b8e3           test USDC on Sepolia
 DATABASE_URL    …web3app_runtime       DML-only runtime role
 MIGRATE_DATABASE_URL …web3app          owner, migrations only
 SESSION_SECRET  32 bytes               HMAC for session cookies
-*_PRIVATE_KEY   anvil accounts         demo signers
+*_PRIVATE_KEY   signer accounts        buyer, seller, arbiter
 SIWE_DOMAIN     web3.heurist.online    EIP-4361 domain check`}</Code>
         <p className="text-xs">
           Stored in <code className="font-mono text-[11px]">/srv/web3proj/api/.env</code> at mode 600.

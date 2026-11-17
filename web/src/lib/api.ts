@@ -15,7 +15,7 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   health: () => req<{ status: string }>("/health"),
-  demoLogin: () => req<{ walletAddress: string }>("/demo/session", { method: "POST" }),
+  startSession: () => req<{ walletAddress: string }>("/session", { method: "POST" }),
   listings: () => req<{ items: Listing[]; total: number }>("/listings"),
   escrows: () => req<Escrow[]>("/escrows"),
   detail: (id: string) => req<{ escrow: Escrow; events: ChainEvent[] }>(`/escrows/${id}`),
@@ -23,7 +23,7 @@ export const api = {
     req<Escrow>("/escrows", { method: "POST", body: JSON.stringify({ listingId }) }),
   act: (id: string, action: string) =>
     req<Escrow>(`/escrows/${id}/${action}`, { method: "POST" }),
-  reset: () => req<{ ok: boolean }>("/demo/reset", { method: "POST" }),
+  reset: () => req<{ ok: boolean }>("/session/reset", { method: "POST" }),
 };
 
 export const short = (hash?: string | null, n = 10): string =>

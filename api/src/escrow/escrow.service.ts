@@ -33,8 +33,8 @@ export class EscrowService {
     private readonly indexer: IndexerService,
   ) {}
 
-  private get demoMode(): boolean {
-    return process.env.DEMO_MODE === "true";
+  private get operatorMode(): boolean {
+    return process.env.OPERATOR_MODE === "true";
   }
 
   private usdcUnits(amount: string): bigint {
@@ -411,11 +411,11 @@ export class EscrowService {
   }
 
   private assertActor(expected: string, actorId: string, message: string): void {
-    if (!this.demoMode && expected !== actorId) throw new ForbiddenException(message);
+    if (!this.operatorMode && expected !== actorId) throw new ForbiddenException(message);
   }
 
   private assertArbiter(actorId: string): void {
-    if (!this.demoMode) {
+    if (!this.operatorMode) {
       throw new ForbiddenException("only the arbiter can arbitrate");
     }
   }

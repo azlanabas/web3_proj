@@ -7,7 +7,7 @@ const MODULES: [string, string][] = [
   ["AuthModule", "SIWE nonce, signature verification, session guard"],
   ["ListingsModule", "Vehicle CRUD with ownership checks"],
   ["EscrowModule", "State machine, transitions, chain-event log"],
-  ["DemoModule", "Seeded vehicles and one-click session"],
+  ["SessionModule", "Seeded vehicles and a one-click session"],
   ["MetaModule", "This self-description, consumed by the explorer"],
   ["HealthController", "Liveness probe used by ops"],
 ];

@@ -75,7 +75,7 @@ for each log:
             ["Transaction reverts", "Receipt status is reverted; API returns 400, database untouched"],
             ["Insufficient allowance", "Service sends approve first, then retries the action"],
             ["Process restart", "Indexer resumes from its checkpoint; no duplicate events"],
-            ["Chain unreachable", "Requests fail fast; CHAIN_MODE=simulated keeps the demo alive"],
+            ["Chain unreachable", "Requests fail fast; CHAIN_MODE=simulated keeps the interface usable"],
           ]}
         />
       </Card>

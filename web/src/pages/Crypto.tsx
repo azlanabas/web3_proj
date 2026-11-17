@@ -6,7 +6,7 @@ export function Crypto() {
     <Page
       kicker={kickerFor("crypto")}
       title="Hashing and authentication"
-      lede="Where each hash is actually used — keccak on-chain, SHA-256 for the demo gate, HMAC for the session — and the two completely separate authentication systems in this app."
+      lede="Where each hash is actually used — keccak on-chain, SHA-256 for the access gate, HMAC for the session — and the two completely separate authentication systems in this app."
     >
       <Card title="Every hash in the system" tag="one table, no hand-waving">
         <Table
@@ -19,7 +19,7 @@ export function Crypto() {
             ["Event topic0", "keccak-256", "Identifies the event type in a log", "0xc4c14883… = Funded(uint256)"],
             ["listingId", "keccak-256", "UUID string → bytes32 for the contract", "escrow.service.ts"],
             ["Session cookie", "HMAC-SHA256", "Signs the session payload", "auth/session.ts"],
-            ["Demo password", "SHA-256", "Comparing the demo credential", "web/src/lib/auth.ts"],
+            ["Access password", "SHA-256", "Comparing the entry credential", "web/src/lib/auth.ts"],
           ]}
         />
         <p className="text-xs">
@@ -68,7 +68,7 @@ cast keccak "<listing-uuid>"      → 0x088271b7…     bytes32 passed to create
         />
       </Card>
 
-      <Card title="Authentication system 2 — the demo gate" tag="not SIWE">
+      <Card title="Authentication system 2 — the access gate" tag="not SIWE">
         <p>
           The sign-in card at the entrance is a <strong>separate, much weaker</strong> mechanism:
           SHA-256 of <code className="font-mono text-[11px]">&quot;user:password&quot;</code> compared
@@ -83,7 +83,7 @@ cast keccak "<listing-uuid>"      → 0x088271b7…     bytes32 passed to create
         />
         <Callout tone="slate" title="Why keep it at all?">
           <p>
-            Presentation. A demo that opens straight into a dashboard looks unfinished; one that
+            Presentation. An entry screen makes the product feel finished; a dashboard with no door
             asks for credentials looks like a product. The honest framing is that the page says so,
             and the real authentication path — SIWE — is implemented and working underneath.
           </p>
@@ -119,7 +119,7 @@ on each request:
         <Code>{`cast sig "fund(uint256)"
 cast keccak "Funded(uint256)"
 cast wallet address --private-key $BUYER_PRIVATE_KEY   # key → address
-printf 'pattinson:bond' | shasum -a 256                # demo gate digest`}</Code>
+printf 'pattinson:bond' | shasum -a 256                # access gate digest`}</Code>
       </Card>
     </Page>
   );

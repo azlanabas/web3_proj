@@ -94,7 +94,7 @@ block N+1 header.parentHash = hash(N)`}</Code>
             the state is verified by validators.
           </p>
           <p className="mt-2">
-            What anvil demonstrated was the <em>structure</em>: hash-linked blocks, signed
+            What anvil showed was the <em>structure</em>: hash-linked blocks, signed
             transactions, receipts, logs, and a state machine that cannot be argued with. Sepolia adds
             replication and independent verification on top of exactly that structure.
           </p>

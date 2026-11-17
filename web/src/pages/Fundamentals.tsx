@@ -20,7 +20,7 @@ export function Fundamentals() {
       <Card title="Where the ETH is" tag="the question that always comes first">
         <p>
           ETH is Ethereum&apos;s native currency and it exists here only to pay for computation.
-          On Sepolia the demo signers were funded with a fraction of testnet ETH each, which is
+          On Sepolia the three signers were funded with a fraction of testnet ETH each, which is
           enough for thousands of transactions at current gas prices. The escrow contract holds{" "}
           <strong>0 ETH</strong> — because it holds USDC, not ETH.
         </p>
@@ -38,7 +38,7 @@ the vehicle price:     21,750 USDC — moved as a token, never as ETH`}</Code>
           rows={[
             ["EVM", "The virtual machine that executes contract bytecode", <span className="text-good">Used</span>],
             ["Account", "An address holding a balance; either a key-holder or a contract", <span className="text-good">Used</span>],
-            ["EOA", "Externally owned account — controlled by a private key", <span className="text-good">Used (3 demo signers)</span>],
+            ["EOA", "Externally owned account — controlled by a private key", <span className="text-good">Used (3 signer accounts)</span>],
             ["Transaction", "A signed instruction to change state", <span className="text-good">Used</span>],
             ["Gas", "Units of computation, paid in ETH", <span className="text-good">Used</span>],
             ["Mempool", "Holding area for unconfirmed transactions", <span className="text-good">Used (anvil)</span>],
@@ -67,7 +67,7 @@ the vehicle price:     21,750 USDC — moved as a token, never as ETH`}</Code>
             ["data", "Encoded function selector + arguments", "fund(uint256)"],
             ["gasLimit", "Maximum gas the sender will spend", "set by viem estimate"],
             ["maxFeePerGas", "Price ceiling per gas unit", "1 gwei on this chain"],
-            ["signature", "secp256k1 signature over the payload", "made by the server-held demo key"],
+            ["signature", "secp256k1 signature over the payload", "made by the service-held key"],
           ]}
         />
       </Card>
@@ -119,7 +119,7 @@ the vehicle price:     21,750 USDC — moved as a token, never as ETH`}</Code>
         <p>
           Here, <strong>anvil is the sequencer</strong> — one process, one machine, 1-second blocks.
           That is the honest description: this chain has a single trusted operator, which is fine
-          for a demo and would be unacceptable for real money.
+          for a development chain and would be unacceptable for real money.
         </p>
         <List
           items={[
@@ -140,7 +140,7 @@ the vehicle price:     21,750 USDC — moved as a token, never as ETH`}</Code>
             ["eth_sendRawTransaction", "Submit a signed escrow action"],
             ["eth_getTransactionReceipt", "Wait for success and read logs"],
             ["eth_getLogs", "Index events since the last checkpoint"],
-            ["evm_increaseTime / evm_mine", "Demo only: fast-forward 14 days"],
+            ["evm_increaseTime / evm_mine", "Local chain only: fast-forward 14 days"],
           ]}
         />
         <p className="flex flex-wrap gap-2 pt-1">

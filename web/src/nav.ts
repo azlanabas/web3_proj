@@ -16,7 +16,7 @@ export const SECTIONS: Section[] = [
 
   { id: "requirements", group: "1 · The product", label: "Requirement map", blurb: "Every line of the brief, traced" },
   { id: "lifecycle",    group: "1 · The product", label: "Escrow lifecycle", blurb: "Every state and its guards" },
-  { id: "demo",         group: "1 · The product", label: "Live walkthrough", blurb: "Drive a real escrow" },
+  { id: "walkthrough",  group: "1 · The product", label: "Live walkthrough", blurb: "Drive a real escrow" },
 
   { id: "architecture", group: "2 · How it is built", label: "Architecture", blurb: "Every component and how it is built" },
   { id: "web",          group: "2 · How it is built", label: "Web tier", blurb: "React, Vite, Tailwind, nginx" },
@@ -96,7 +96,7 @@ export const HANDOFFS: Record<string, string> = {
   overview: "You have the shape of it. The next page takes the brief that started this project and traces every line to where it actually lives.",
   requirements: "The brief asked for secure transactions. The next page is what secure means here: seven states, and who is allowed to move between them.",
   lifecycle: "The rules are clear. Now drive them: open an escrow and push it through every state yourself.",
-  demo: "You have watched the product work. The next act opens the machine: every file, every module, and the order it was built.",
+  walkthrough: "You have watched the product work. The next act opens the machine: every file, every module, and the order it was built.",
   architecture: "The inventory is the map. Now the layers, starting at the surface.",
   web: "The browser sends JSON and nothing else. Here is what receives it.",
   api: "Every request ends in a transaction. Here is where the state lives.",
