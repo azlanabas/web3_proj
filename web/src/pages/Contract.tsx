@@ -1,9 +1,10 @@
 import { Callout, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Contract() {
   return (
     <Page
-      kicker="3 · The chain · 6 of 9"
+      kicker={kickerFor("contract")}
       title="The escrow contract"
       lede="Two hundred and fourteen lines of Solidity that hold other people's money. Immutable, non-upgradeable, and designed so the platform can never pay itself."
     >

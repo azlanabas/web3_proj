@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { kickerFor } from "../nav";
 import { Badge, Card, Page, Table } from "../components/ui";
 import type { Endpoint, Meta } from "../lib/meta";
 
@@ -43,7 +44,7 @@ export function Explorer({ meta }: { meta: Meta | null }) {
 
   return (
     <Page
-      kicker="4 · The evidence · 1 of 5"
+      kicker={kickerFor("explorer")}
       title="API explorer"
       lede="The endpoint list on this page is fetched from /api/meta at runtime, so it always matches what the service actually exposes. Read-only routes can be called live from here; mutating routes are shown but disabled."
     >

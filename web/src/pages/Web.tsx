@@ -1,4 +1,5 @@
 import { Badge, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 const COMPONENTS: [string, string][] = [
   ["App.tsx", "Layout, routing between sections, data fetching orchestration"],
@@ -18,7 +19,7 @@ const COMPONENTS: [string, string][] = [
 export function Web() {
   return (
     <Page
-      kicker="2 · How it is built · 2 of 5"
+      kicker={kickerFor("web")}
       title="Web tier"
       lede="A single-page React application, statically built and served by nginx. It holds no secrets, makes no direct blockchain calls, and talks only to the JSON API behind the same origin."
     >

@@ -1,9 +1,10 @@
 import { Callout, Card, Code, List, Page, Stats, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Chain() {
   return (
     <Page
-      kicker="3 · The chain · 2 of 9"
+      kicker={kickerFor("chain")}
       title="Chain and networks"
       lede="Ethereum is a state machine: accounts hold balances, transactions mutate state, and every mutation produces a receipt with logs. This escrow uses that machine for exactly one thing — deciding when money moves."
     >

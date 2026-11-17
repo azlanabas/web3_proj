@@ -1,4 +1,5 @@
 import { Badge, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 import type { Meta } from "../lib/meta";
 
 const MODULES: [string, string][] = [
@@ -24,7 +25,7 @@ export function Api({ meta }: { meta: Meta | null }) {
   const endpoints = meta?.endpoints ?? [];
   return (
     <Page
-      kicker="2 · How it is built · 3 of 5"
+      kicker={kickerFor("api")}
       title="API tier"
       lede="A NestJS REST service that owns authentication, validation, the escrow state machine and the audit trail. Thin controllers, fat services, and every request validated before it reaches business logic."
     >

@@ -48,3 +48,40 @@ export const GROUPS = [
   "3 · The chain",
   "4 · The evidence",
 ];
+
+export interface Act {
+  group: string;
+  number: number;
+  label: string;
+  blurb: string;
+}
+
+export const ACTS: Act[] = [
+  { group: "1 · The product", number: 1, label: "The product", blurb: "What a buyer and a seller actually do, step by step" },
+  { group: "2 · How it is built", number: 2, label: "How it is built", blurb: "Every component, and the order it was assembled" },
+  { group: "3 · The chain", number: 3, label: "The chain", blurb: "Ethereum, the ledger, hashing, the escrow contract" },
+  { group: "4 · The evidence", number: 4, label: "The evidence", blurb: "Proof it runs, and exactly what is deferred" },
+];
+
+export function sectionsOf(group: string): Section[] {
+  return SECTIONS.filter((s) => s.group === group);
+}
+
+export function actOf(group: string): Act | undefined {
+  return ACTS.find((a) => a.group === group);
+}
+
+export function firstOfAct(group: string): Section | undefined {
+  return sectionsOf(group)[0];
+}
+
+/** Kicker derived from position in the nav — never hardcoded, so it cannot drift. */
+export function kickerFor(id: string): string {
+  const section = SECTIONS.find((s) => s.id === id);
+  if (!section) return "";
+  if (section.group === "Start") return "Start";
+  const act = actOf(section.group);
+  const list = sectionsOf(section.group);
+  const index = list.findIndex((s) => s.id === id) + 1;
+  return `${act?.number ?? 0} · ${act?.label ?? section.group} · ${index} of ${list.length}`;
+}

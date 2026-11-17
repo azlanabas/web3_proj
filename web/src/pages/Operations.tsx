@@ -1,9 +1,10 @@
 import { Badge, Card, Code, List, Page, Stats, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Operations() {
   return (
     <Page
-      kicker="4 · The evidence · 3 of 5"
+      kicker={kickerFor("operations")}
       title="Operations"
       lede="Where this actually runs, how it is deployed, and what it costs the host. The constraint that shaped it: a 2 GB instance that is already serving another application."
     >

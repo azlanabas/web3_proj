@@ -1,4 +1,5 @@
 import { Badge, Card, Code, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 const TRANSITIONS: [string, string, string, string][] = [
   ["CREATED", "FUNDED", "buyer", "Deposits USDC; records fundTx"],
@@ -15,7 +16,7 @@ const TRANSITIONS: [string, string, string, string][] = [
 export function Lifecycle() {
   return (
     <Page
-      kicker="1 · The product · 2 of 3"
+      kicker={kickerFor("lifecycle")}
       title="Escrow lifecycle"
       lede="Seven states, one terminal outcome per path, and no transition that can be skipped. This is the part a buyer has to trust, so it is also the part that is most tightly specified."
     >

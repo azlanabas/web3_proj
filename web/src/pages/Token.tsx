@@ -1,9 +1,10 @@
 import { Callout, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Token() {
   return (
     <Page
-      kicker="3 · The chain · 5 of 9"
+      kicker={kickerFor("token")}
       title="USDC and the ERC-20 transfer model"
       lede="Money is a token contract, not a column in a database. That single fact drives decimals handling, the two-step approval flow, and why escrow arithmetic is done in integers."
     >

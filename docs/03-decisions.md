@@ -460,3 +460,20 @@ handoffs (HTTPS/JSON, SQL, signed transaction, logs), then real-versus-not, then
 4. The evidence (explorer, security, operations, roadmap, blueprint)
 
 Every page kicker was realigned to its act so the numbering matches the order a reader meets them.
+
+---
+
+## D-27 — Nav is the single source of truth for structure
+
+**Status:** LOCKED (2026-11-18)
+
+Kickers were hardcoded per page, so they drifted every time a section moved — "4 of 10" next to
+"9 of 11". They are now derived: `kickerFor(id)` reads position from `SECTIONS` in `nav.ts`, so the
+label, act number and count cannot disagree with the sidebar again.
+
+The Overview opens with four act cards, each a doorway into the first page of that act
+(Requirement map, Architecture, Ethereum basics, API explorer) and each showing how many pages it
+contains. Prev/next at the foot of every page names the act when it crosses a boundary.
+
+Architecture stopped listing file counts. A count in prose is a number that goes stale; the
+sidebar already knows, so the page points at it instead.

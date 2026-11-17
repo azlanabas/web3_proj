@@ -1,4 +1,5 @@
 import { Badge, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 const ROWS: [string, string, string][] = [
   ["Long-term Web3 vehicle marketplace", "Listings with make, model, year, VIN and mileage; filtering and detail", "Web · API"],
@@ -21,7 +22,7 @@ const ROWS: [string, string, string][] = [
 export function Requirements() {
   return (
     <Page
-      kicker="1 · The product · 1 of 3"
+      kicker={kickerFor("requirements")}
       title="Every line of the brief, and where it actually lives"
       lede="The original brief was a recruitment message describing a vehicle marketplace with crypto escrow and smart contracts. This maps each stated requirement onto the component that implements it."
     >

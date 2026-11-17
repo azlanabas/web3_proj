@@ -173,16 +173,20 @@ export default function App() {
           <nav className="mx-auto flex max-w-4xl items-center justify-between gap-4 border-t border-line px-6 py-8">
             {prev ? (
               <button onClick={() => navigate(prev.id)} className="text-left">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-faint">Previous</p>
-                <p className="mt-1 text-sm text-ink hover:text-ink">{prev.label}</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-faint">
+                  {prev.group !== section.group ? `Previous act · ${prev.group}` : "Previous"}
+                </p>
+                <p className="mt-1 text-sm text-ink">{prev.label}</p>
               </button>
             ) : (
               <span />
             )}
             {next ? (
               <button onClick={() => navigate(next.id)} className="text-right">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-faint">Next</p>
-                <p className="mt-1 text-sm text-accent hover:text-accent">{next.label}</p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-faint">
+                  {next.group !== section.group ? `Next act · ${next.group}` : "Next"}
+                </p>
+                <p className="mt-1 text-sm text-accent">{next.label}</p>
               </button>
             ) : (
               <span />

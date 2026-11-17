@@ -1,4 +1,5 @@
 import { Badge, Callout, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 const TABLES: [string, string, string][] = [
   ["User", "id, walletAddress (unique), role, createdAt", "Wallet identity; role is BUYER, SELLER or OPERATOR"],
@@ -12,7 +13,7 @@ const TABLES: [string, string, string][] = [
 export function Data() {
   return (
     <Page
-      kicker="2 · How it is built · 4 of 5"
+      kicker={kickerFor("data")}
       title="Data tier"
       lede="PostgreSQL 16 with Prisma. The database is a read model and an audit log — the chain, not the database, is the source of truth for money, which is exactly why every transition also writes an event row."
     >

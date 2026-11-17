@@ -1,4 +1,5 @@
 import { Card, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 interface Row {
   name: string;
@@ -65,7 +66,7 @@ const SECTIONS: { title: string; tag: string; rows: Row[] }[] = [
 export function References() {
   return (
     <Page
-      kicker="3 · The chain · 9 of 9"
+      kicker={kickerFor("references")}
       title="External references"
       lede="Every third-party component this project depends on, with the primary source. Local contracts have no public explorer — they exist only on the anvil chain on this host — so those rows point at the standards and tools rather than an address page."
     >

@@ -1,9 +1,10 @@
 import { Callout, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Crypto() {
   return (
     <Page
-      kicker="3 · The chain · 4 of 9"
+      kicker={kickerFor("crypto")}
       title="Hashing and authentication"
       lede="Where each hash is actually used — keccak on-chain, SHA-256 for the demo gate, HMAC for the session — and the two completely separate authentication systems in this app."
     >

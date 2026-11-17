@@ -1,4 +1,5 @@
 import { Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 const CONTRACTS: [string, string][] = [
   ["VehicleEscrow.sol", "214 lines — escrow state machine, 9 functions, 7 events, immutable arbiter"],
@@ -34,7 +35,7 @@ const WEB: [string, string][] = [
   ["components/Sidebar.tsx", "Persistent navigation, blueprint link, chain-mode badge"],
   ["components/ui.tsx", "Page, Card, Table, Badge, Code, Stats, List, Callout"],
   ["components/EscrowPanel.tsx", "Vehicle picker, state bar, role actions, event log"],
-  ["pages/*.tsx", "16 pages: overview, architecture, requirements, web, api, data, 4 Web3 pages, demo, explorer, security, operations, roadmap"],
+  ["pages/*.tsx", "One file per section. The sidebar is the authoritative list — this page never duplicates the count"],
   ["public/system.html", "Standalone printable blueprint; guarded by the same session flag"],
 ];
 
@@ -51,7 +52,7 @@ const OPS: [string, string][] = [
 export function Architecture() {
   return (
     <Page
-      kicker="2 · How it is built · 1 of 5"
+      kicker={kickerFor("architecture")}
       title="Architecture: every component, and how it is built"
       lede="A complete inventory of what exists in this system, which tool produces each artefact, and the order the pieces were assembled in. If it is not on this page, it is not in the build."
     >
@@ -82,19 +83,19 @@ forge create                        systemd restart                 nginx serves
 contracts/ ──deployed to──▶ anvil ──address written to──▶ api/.env`}</Code>
       </Card>
 
-      <Card title="Contracts" tag="5 files">
+      <Card title="Contracts" tag="the on-chain code">
         <Table head={["Component", "Role"]} rows={CONTRACTS.map(([f, r]) => [<code className="font-mono text-[11px]">{f}</code>, r])} />
       </Card>
 
-      <Card title="API" tag="15 files">
+      <Card title="API" tag="the server">
         <Table head={["Component", "Role"]} rows={API.map(([f, r]) => [<code className="font-mono text-[11px]">{f}</code>, r])} />
       </Card>
 
-      <Card title="Web" tag="23 files">
+      <Card title="Web" tag="the browser">
         <Table head={["Component", "Role"]} rows={WEB.map(([f, r]) => [<code className="font-mono text-[11px]">{f}</code>, r])} />
       </Card>
 
-      <Card title="Operations" tag="7 files">
+      <Card title="Operations" tag="how it runs">
         <Table head={["Component", "Role"]} rows={OPS.map(([f, r]) => [<code className="font-mono text-[11px]">{f}</code>, r])} />
       </Card>
 

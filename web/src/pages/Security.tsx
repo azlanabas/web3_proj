@@ -1,9 +1,10 @@
 import { Badge, Callout, Card, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Security() {
   return (
     <Page
-      kicker="4 · The evidence · 2 of 5"
+      kicker={kickerFor("security")}
       title="Security model"
       lede="The interesting security question here is not whether the server is hardened — it is which party has to be trusted at each moment, and what the damage is when that trust is misplaced."
     >

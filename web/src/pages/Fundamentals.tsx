@@ -1,9 +1,10 @@
 import { Badge, Card, Code, List, Page, Stats, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Fundamentals() {
   return (
     <Page
-      kicker="3 · The chain · 1 of 9"
+      kicker={kickerFor("fundamentals")}
       title="Ethereum, explained through this app"
       lede="Every term in a Web3 conversation, placed somewhere real: what it is, whether this project uses it, and where you can see it on this chain. If a concept is not used here, it says so."
     >

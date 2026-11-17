@@ -1,4 +1,5 @@
 import { Badge, Callout, Card, Code, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 const ROWS: [string, string, string, string][] = [
   ["Escrow contract (source)", "contracts/src/VehicleEscrow.sol", "214 lines, Solidity 0.8.28", "cat contracts/src/VehicleEscrow.sol"],
@@ -22,7 +23,7 @@ const ROWS: [string, string, string, string][] = [
 export function SourceMap() {
   return (
     <Page
-      kicker="2 · How it is built · 5 of 5"
+      kicker={kickerFor("sourcemap")}
       title="Where every Web3 component lives"
       lede="Two locations matter for each component: the source in the repository, and the runtime location — an address on a chain, a port, or a unit. This is that map, with the command to verify each one."
     >

@@ -1,9 +1,10 @@
 import { Badge, Card, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Roadmap() {
   return (
     <Page
-      kicker="4 · The evidence · 4 of 5"
+      kicker={kickerFor("roadmap")}
       title="Status and roadmap"
       lede="What is genuinely finished, what is simulated, and what a production launch would still require. The distinction between the first two is the one that matters in a review."
     >

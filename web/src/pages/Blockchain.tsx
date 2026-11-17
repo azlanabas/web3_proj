@@ -1,9 +1,10 @@
 import { Callout, Card, Code, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 export function Blockchain() {
   return (
     <Page
-      kicker="3 · The chain · 3 of 9"
+      kicker={kickerFor("blockchain")}
       title="Blockchain and the ledger"
       lede="What a block actually contains here, how blocks are chained, what the ledger is made of, and the honest answer to 'where is the distributed part?'"
     >

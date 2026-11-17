@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { kickerFor } from "../nav";
 import { EscrowPanel } from "../components/EscrowPanel";
 import { Card, List, Page } from "../components/ui";
 import { api } from "../lib/api";
@@ -83,7 +84,7 @@ export function Demo() {
   return (
     <>
       <Page
-        kicker="1 · The product · 3 of 3"
+        kicker={kickerFor("demo")}
         title="Live walkthrough"
         lede="This runs against the production API you are reading this page from. Start a demo session, open an escrow on a vehicle, then drive it through every state. Each action writes a chain event on the right."
       >

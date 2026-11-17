@@ -1,4 +1,5 @@
 import { Badge, Card, List, Page, Table } from "../components/ui";
+import { kickerFor } from "../nav";
 
 type Use = "Dependency" | "Reference" | "Not used" | "Deprecated";
 
@@ -26,7 +27,7 @@ const tone = (use: Use) =>
 export function ToolingMap() {
   return (
     <Page
-      kicker="3 · The chain · 8 of 9"
+      kicker={kickerFor("tooling")}
       title="Tooling map: what is used, and what is not"
       lede="A typical Web3 bookmark bar has twenty tools. This build needs five. Here is every common one, whether it appears in this project, and the reason either way — including the one that no longer exists."
     >
