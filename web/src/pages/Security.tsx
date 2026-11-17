@@ -47,7 +47,7 @@ export function Security() {
         />
       </Card>
 
-      <Callout tone="amber" title="Demo mode weakens role enforcement">
+      <Callout tone="slate" title="Demo mode weakens role enforcement">
         <p>
           <code className="font-mono text-[11px]">DEMO_MODE=true</code> lets a single session act
           as buyer, seller and arbiter so the walkthrough works without three wallets. It bypasses

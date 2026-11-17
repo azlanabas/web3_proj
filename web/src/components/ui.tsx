@@ -116,11 +116,13 @@ export function List({ items, mono }: { items: ReactNode[]; mono?: boolean }) {
   );
 }
 
-export function Callout({ tone = "amber", title, children }: { tone?: "amber" | "emerald"; title: string; children: ReactNode }) {
+export function Callout({ tone = "emerald", title, children }: { tone?: "amber" | "emerald" | "slate"; title: string; children: ReactNode }) {
   const cls =
     tone === "amber"
       ? "border-amber-500/30 bg-amber-500/5 text-amber-200"
-      : "border-emerald-500/30 bg-emerald-500/5 text-emerald-200";
+      : tone === "slate"
+        ? "border-slate-700 bg-slate-900/50 text-slate-300"
+        : "border-emerald-500/30 bg-emerald-500/5 text-emerald-200";
   return (
     <div className={`rounded-xl border p-4 text-sm leading-relaxed ${cls}`}>
       <p className="mb-1 font-semibold">{title}</p>
