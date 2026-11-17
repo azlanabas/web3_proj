@@ -7,6 +7,12 @@ import type { ChainEvent, Escrow, Listing } from "../types";
 import type { Meta } from "../lib/meta";
 
 export function Walkthrough({ meta }: { meta: Meta | null }) {
+  const [viewAs, setViewAs] = useState<"buyer" | "seller" | "arbiter">("buyer");
+  const roleNote = {
+    buyer: "The buyer funds the escrow, confirms delivery, or raises a dispute.",
+    seller: "The seller marks the vehicle shipped once the escrow is funded.",
+    arbiter: "The arbiter resolves a dispute by paying the seller or refunding the buyer.",
+  }[viewAs];
   const [signedIn, setSignedIn] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
   const [escrows, setEscrows] = useState<Escrow[]>([]);
@@ -116,6 +122,7 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
           onAct={act}
           onReset={reset}
           canTimeTravel={meta?.chain.supportsTimeTravel ?? false}
+          viewAs={viewAs}
         />
       </div>
       {error && (

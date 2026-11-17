@@ -116,6 +116,26 @@ CANCELLED           REFUNDED              │
           measured gas · create→fund→ship→confirm 332,310 · refund 290,403 · timeout release 323,396
         </p>
       </Card>
+
+      <Card title="What each side can do" tag="by state">
+        <Table
+          head={["State", "Buyer", "Seller", "Arbiter", "Where the money is"]}
+          rows={[
+            ["CREATED", "fund, cancel", "cancel", "—", "still in the buyer's wallet"],
+            ["FUNDED", "confirm, dispute", "mark shipped", "—", "held by the contract"],
+            ["SHIPPED", "confirm, dispute", "—", "—", "held by the contract"],
+            ["DISPUTED", "—", "—", "release to seller, refund", "held by the contract, frozen"],
+            ["RELEASED", "—", "—", "—", "in the seller's wallet"],
+            ["REFUNDED", "—", "—", "—", "back in the buyer's wallet"],
+            ["CANCELLED", "—", "—", "—", "never left the buyer's wallet"],
+          ]}
+        />
+        <p>
+          The buyer never sees a &ldquo;release&rdquo; button: confirming delivery is the release. The
+          seller never sees a payment button: shipping is the only action available while the escrow
+          is funded. The arbiter appears only after a dispute.
+        </p>
+      </Card>
     </Page>
   );
 }

@@ -67,11 +67,13 @@ interface Props {
   onAct: (action: string) => void;
   onReset: () => void;
   canTimeTravel?: boolean;
+  viewAs?: "buyer" | "seller" | "arbiter";
 }
 
 export function EscrowPanel(props: Props) {
   const { listings, escrows, selected, events, busy, signedIn } = props;
   const canTimeTravel = props.canTimeTravel ?? false;
+  const viewAs = props.viewAs ?? "buyer";
   const status = selected?.status;
 
   const canFund = status === "CREATED";
@@ -186,12 +188,22 @@ export function EscrowPanel(props: Props) {
                 </div>
 
                 <div className="mt-5 grid grid-cols-2 gap-2">
-                  <Action label="Fund escrow" onClick={() => props.onAct("fund")} enabled={canFund} busy={busy} />
-                  <Action label="Mark shipped" onClick={() => props.onAct("ship")} enabled={canShip} busy={busy} />
-                  <Action label="Confirm delivery" onClick={() => props.onAct("confirm")} enabled={canConfirm} busy={busy} />
-                  <Action label="Raise dispute" onClick={() => props.onAct("dispute")} enabled={canDispute} busy={busy} />
-                  <Action label="Arbiter → seller" onClick={() => props.onAct("release")} enabled={canArbitrate} busy={busy} />
-                  <Action label="Arbiter → refund" onClick={() => props.onAct("refund")} enabled={canRefund} busy={busy} />
+                  {viewAs === "buyer" && (
+                    <>
+                      <Action label="Fund escrow" onClick={() => props.onAct("fund")} enabled={canFund} busy={busy} />
+                      <Action label="Confirm delivery" onClick={() => props.onAct("confirm")} enabled={canConfirm} busy={busy} />
+                      <Action label="Raise dispute" onClick={() => props.onAct("dispute")} enabled={canDispute} busy={busy} />
+                    </>
+                  )}
+                  {viewAs === "seller" && (
+                    <Action label="Mark shipped" onClick={() => props.onAct("ship")} enabled={canShip} busy={busy} />
+                  )}
+                  {viewAs === "arbiter" && (
+                    <>
+                      <Action label="Release to seller" onClick={() => props.onAct("release")} enabled={canArbitrate} busy={busy} />
+                      <Action label="Refund buyer" onClick={() => props.onAct("refund")} enabled={canRefund} busy={busy} />
+                    </>
+                  )}
                 </div>
                 <p className="mt-3 text-[11px] leading-relaxed text-muted">
                   Actions are role-gated in production. One session may drive every step, the way an
