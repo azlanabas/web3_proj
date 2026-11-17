@@ -20,6 +20,7 @@ import { Security } from "./pages/Security";
 import { Web } from "./pages/Web";
 import { Chain } from "./pages/Chain";
 import { Blockchain } from "./pages/Blockchain";
+import { Networks } from "./pages/Networks";
 import { Crypto } from "./pages/Crypto";
 import { Fundamentals } from "./pages/Fundamentals";
 import { SourceMap } from "./pages/SourceMap";
@@ -157,6 +158,7 @@ export default function App() {
             {route === "fundamentals" && <Fundamentals />}
             {route === "sourcemap" && <SourceMap />}
             {route === "chain" && <Chain />}
+            {route === "networks" && <Networks meta={meta} />}
             {route === "blockchain" && <Blockchain />}
             {route === "crypto" && <Crypto />}
             {route === "token" && <Token />}

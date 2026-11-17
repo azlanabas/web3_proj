@@ -26,6 +26,7 @@ export const SECTIONS: Section[] = [
 
   { id: "fundamentals", group: "3 · The chain", label: "Ethereum basics", blurb: "ETH, gas, staking, proofs, sequencer" },
   { id: "chain",        group: "3 · The chain", label: "Chain & networks", blurb: "Ethereum, EVM, Sepolia, RPC" },
+  { id: "networks",     group: "3 · The chain", label: "Networks & testnets", blurb: "Every network touched, and its status" },
   { id: "blockchain",   group: "3 · The chain", label: "Blockchain & ledger", blurb: "Blocks, chaining, what is distributed" },
   { id: "crypto",       group: "3 · The chain", label: "Hashing & auth", blurb: "keccak, SHA-256, HMAC, SIWE" },
   { id: "token",        group: "3 · The chain", label: "USDC & ERC-20", blurb: "Token, decimals, approvals" },
