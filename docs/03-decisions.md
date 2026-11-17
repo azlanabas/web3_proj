@@ -261,3 +261,26 @@ address, and can only pay the seller once a dispute exists.
 
 **Reverses if:** the escrow model changes to a licensed custodian, where a human arbiter
 resolves every case.
+
+---
+
+## D-18 — Hold back TypeScript 7 and Prisma 7 for the MVP
+
+**Status:** LOCKED (2026-11-17)
+
+`npm install` resolved **TypeScript 7.0.2** and **Prisma 8.0.0-rc.34**. Both were rejected:
+
+- **TypeScript 7** removed `moduleResolution: node10` and `baseUrl`, breaking Nest's standard
+  config outright (`TS5108`, `TS5011`, `TS5102`). Pinned **5.9.3**.
+- **Prisma 7** removed `url` from the datasource, requiring a `prisma.config.ts`, a driver
+  adapter (`@prisma/adapter-pg`) and a changed generator. The CLI had also resolved to an
+  **8.0.0 release candidate** against a 7.10.1 client. Pinned **6.19.3** for both CLI and
+  client, which keeps `url = env("DATABASE_URL")`.
+
+**Rationale:** an MVP should not absorb two brand-new breaking majors. Both are one install
+away from being revisited.
+
+**Recorded pins:** Node 24.21.0 · NestJS 12.5.1 · TypeScript 5.9.3 · Prisma 6.19.3 ·
+Zod 4.6.7 · siwe 3.0.0 · Solidity 0.8.28 · Foundry 1.9.0 · OpenZeppelin 5.7.0.
+
+**Reverses when:** Prisma 7's adapter setup has settled and TypeScript 7 is the Nest default.

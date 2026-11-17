@@ -84,13 +84,13 @@ scaffold time and recording it — never guessed.
 
 | Layer | Choice | Version |
 |---|---|---|
-| Backend | NestJS, REST | pin |
-| Language | TypeScript `strict` | pin |
+| Backend | NestJS **12.5.1**, REST | pinned |
+| Language | TypeScript **5.9.3** `strict` (not 7 — see D-18) | pinned |
 | Frontend | Vite + React + Tailwind | pin |
 | Database | PostgreSQL | 16.15 |
-| ORM | Prisma | pin |
-| Validation | Zod at every request boundary | pin |
-| Auth | SIWE (EIP-4361) → httpOnly cookie | pin |
+| ORM | Prisma **6.19.3** (not 7 — see D-18) | pinned |
+| Validation | Zod **4.6.7** at every request boundary | pinned |
+| Auth | SIWE `siwe` **3.0.0** → httpOnly cookie | pinned |
 | Tests | Vitest, Playwright | pin |
 | Logs | pino → journald | pin |
 
