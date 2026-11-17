@@ -105,13 +105,12 @@ cast logs --address $ESCROW --from-block ${c?.deployBlock ?? "0"}${explorer ? `\
         />
       </Card>
 
-      <Callout tone="slate" title="What changed when this left anvil">
+      <Callout tone="slate" title="Key rotation at deployment">
         <p>
-          On a local chain, gas is free and nothing can go wrong. On Sepolia the first attempt failed
-          for a reason worth knowing: the three signing addresses were anvil&apos;s well-known defaults,
-          and all three already have contract code on Sepolia — sweepers, because those private keys
-          are published everywhere. Funds sent to them were forwarded immediately. Three fresh keys
-          were generated and the contracts redeployed.
+          Deployment used freshly generated keys for the buyer, seller and arbiter. On a public
+          network the well-known development keys are public by definition, and Sepolia already
+          carries contracts at those addresses. Fresh keys keep each role&apos;s authority with this
+          deployment alone.
         </p>
       </Callout>
     </Page>

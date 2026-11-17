@@ -9,7 +9,7 @@ const TRANSITIONS: [string, string, string, string][] = [
   ["SHIPPED", "RELEASED", "anyone", "After 14 days with no dispute"],
   ["DISPUTED", "REFUNDED", "arbiter", "Returns funds to the buyer"],
   ["DISPUTED", "RELEASED", "arbiter", "Pays the seller"],
-  ["FUNDED", "REFUNDED", "arbiter", "Seller never shipped"],
+  ["FUNDED", "REFUNDED", "arbiter", "Shipment not recorded"],
   ["CREATED", "CANCELLED", "buyer or seller", "Before funding only"],
 ];
 
@@ -105,9 +105,9 @@ CANCELLED           REFUNDED              │
         />
         <List
           items={[
-            "Funds move only to the recorded buyer or seller — never an arbitrary address.",
-            "The arbiter can pay the seller only inside a raised dispute, and can never pay itself.",
-            "Terminal states are terminal: a released escrow cannot be refunded.",
+            "Funds move only to the recorded buyer or seller.",
+            "The arbiter directs funds only inside a raised dispute, and only to the buyer or seller.",
+            "Terminal states are final.",
             "Every value-moving path is behind a reentrancy guard.",
             "No proxy, no delegatecall, no selfdestruct — the bytecode is immutable.",
           ]}
@@ -127,13 +127,12 @@ CANCELLED           REFUNDED              │
             ["DISPUTED", "—", "—", "release to seller, refund", "held by the contract, frozen"],
             ["RELEASED", "—", "—", "—", "in the seller's wallet"],
             ["REFUNDED", "—", "—", "—", "back in the buyer's wallet"],
-            ["CANCELLED", "—", "—", "—", "never left the buyer's wallet"],
+            ["CANCELLED", "—", "—", "—", "still in the buyer's wallet"],
           ]}
         />
         <p>
-          The buyer never sees a &ldquo;release&rdquo; button: confirming delivery is the release. The
-          seller never sees a payment button: shipping is the only action available while the escrow
-          is funded. The arbiter appears only after a dispute.
+          The buyer releases by confirming delivery. The seller ships while the escrow is funded. The
+          arbiter acts once a dispute is raised.
         </p>
       </Card>
     </Page>

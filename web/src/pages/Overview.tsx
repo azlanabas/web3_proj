@@ -60,7 +60,7 @@ export function Overview({ meta }: { meta: Meta | null }) {
     <Page
       kicker={kickerFor("overview")}
       title="A vehicle marketplace where the money waits in a contract"
-      lede="A buyer will not pay before delivery; a seller will not hand over the keys before payment. This closes that gap with an escrow contract instead of a bank account, so the platform never holds anyone else's money."
+      lede="A buyer needs delivery before payment; a seller needs payment before handover. An escrow contract satisfies both at once, with the money held by code rather than by the platform."
     >
       {/* Centerpiece: the live chain. */}
       <div className="rounded-lg border border-line">
@@ -154,15 +154,15 @@ export function Overview({ meta }: { meta: Meta | null }) {
         })}
       </div>
 
-      <Section title="The problem">
+      <Section title="Why escrow">
         <p>
-          Private vehicle sales run on trust neither side can verify. The alternatives cost
-          something: a dealer takes margin, an escrow company takes a fee and several days.
+          Private vehicle sales require each party to trust the other. A dealer charges margin; an
+          escrow service charges a fee and takes several days.
         </p>
         <p>
-          The obvious fix — a platform that holds the money — is the expensive one, because custody
-          is money transmission and brings licensing with it. So the money goes into a contract that
-          neither party can move alone.
+          Escrow removes that dependency: the funds sit in a contract and move only on the terms
+          both parties agreed to. The platform carries neither the money nor the licensing
+          obligations that come with custody.
         </p>
       </Section>
 

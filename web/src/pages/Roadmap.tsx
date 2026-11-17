@@ -36,16 +36,16 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
         </p>
       </Card>
 
-      <Card title="Deliberately deferred" tag="and why">
+      <Card title="Next milestones" tag="sequence">
         <Table
-          head={["Item", "Why it is not done"]}
+          head={["Milestone", "Scope"]}
           rows={[
-            ["Independent contract audit", "The gating item before mainnet. 23 tests are not an audit."],
-            ["Mainnet deployment", "Real money plus no audit is not a trade worth making."],
-            ["Wallet connect", "The service signs so the flow needs no wallet extension; users signing is the next milestone. Real users would sign themselves."],
-            ["Vehicle image uploads", "Schema exists; object storage is not provisioned."],
-            ["Formal arbitration workflow", "Dispute resolution is a role check, not an evidence-and-review process."],
-            ["WAF, uptime alerting, read replica", "Operational maturity that traffic has not yet justified."],
+            ["Independent contract audit", "The gate before mainnet, following the 23-test suite."],
+            ["Mainnet deployment", "Follows the audit and a period on testnet."],
+            ["Wallet signing", "Each party signs their own escrow actions from their own wallet."],
+            ["Vehicle image uploads", "The schema is ready; object storage is the next piece."],
+            ["Formal arbitration workflow", "Extends dispute resolution with evidence and review."],
+            ["WAF, uptime alerting, read replica", "Operational additions timed with traffic growth."],
           ]}
         />
       </Card>
@@ -54,9 +54,9 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
         <Table
           head={["Step", "Why first"]}
           rows={[
-            ["Contract audit", "Nothing else on this list matters if the escrow can be drained."],
-            ["Source verification on Etherscan", "Turns the deployed address into readable, checkable code."],
-            ["Wallet connect", "Removes the server-held buyer and seller keys."],
+            ["Contract audit", "The foundation for every later step."],
+            ["Source verification on Etherscan", "Publishes the deployed bytecode as readable code."],
+            ["Wallet signing", "Moves buyer and seller keys into their own wallets."],
             ["Image storage + CDN", "The last missing piece of a usable listing."],
             ["Alerting and a read replica", "Only once real traffic exists."],
           ]}

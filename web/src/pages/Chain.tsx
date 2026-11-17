@@ -115,7 +115,7 @@ cast call $ESCROW \\
       <Callout tone="slate" title="EVM concepts this project actually relies on">
         <p>
           Externally owned accounts sign transactions with a private key; contracts hold code and
-          storage and cannot initiate. A transaction has a nonce, consumes gas, and returns a
+          storage and stays passive. A transaction has a nonce, consumes gas, and returns a
           receipt containing logs. Logs are how the indexer learns what happened without polling
           contract state — which is why the database can be rebuilt from them.
         </p>
@@ -125,7 +125,7 @@ cast call $ESCROW \\
         <Table
           head={["Concept", "Status on this deployment"]}
           rows={[
-            ["ETH", "Used for gas only; the escrow holds USDC, never ETH"],
+            ["ETH", "Used for gas only; the escrow holds USDC"],
             ["Gas", "Real testnet gas, paid in worthless Sepolia ETH"],
             ["Accounts / EOA", "Three signer accounts, keys held by the service"],
             ["Transactions and receipts", "Every action is signed; the API waits for the receipt"],

@@ -102,7 +102,7 @@ contracts/ ──deployed to──▶ anvil ──address written to──▶ ap
       <Card title="How it was built, in order" tag="sequence">
         <List
           items={[
-            "Requirements reconstructed from a brief that specified none of the edge cases — captured as a gap register before any code.",
+            "Requirements reconstructed from a brief that specified none of the edge cases — captured as a decision register before any code.",
             "Escrow contract first, because the API's shape is dictated by the contract's events, not the reverse.",
             "Twenty-three Foundry tests before deployment, including a reentrancy attack.",
             "PostgreSQL schema and migrations, then SIWE auth, then listings, then the escrow service.",

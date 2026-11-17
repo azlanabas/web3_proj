@@ -70,7 +70,7 @@ cast keccak "<listing-uuid>"      → 0x088271b7…     bytes32 passed to create
 
       <Card title="Authentication system 2 — the access gate" tag="not SIWE">
         <p>
-          The sign-in card at the entrance is a <strong>separate, much weaker</strong> mechanism:
+          The sign-in card at the entrance is a <strong>separate</strong> mechanism:
           SHA-256 of <code className="font-mono text-[11px]">&quot;user:password&quot;</code> compared
           against a constant in the bundle, plus a flag in <code className="font-mono text-[11px]">sessionStorage</code>.
         </p>
@@ -98,7 +98,7 @@ on each request:
   recompute HMAC → timingSafeEqual(…) → parse payload → check exp`}</Code>
         <p>
           HMAC proves the payload was issued by the server; it does not hide it. Anyone can read the
-          wallet address in the cookie — they just cannot alter it without the secret. The secret is
+          wallet address in the cookie, which is signed with a server secret. The secret is
           32 random bytes in the server env file, never in the repository.
         </p>
       </Card>
