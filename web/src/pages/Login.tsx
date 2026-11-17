@@ -28,7 +28,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
       <div className="pointer-events-none absolute inset-0 bg-paper" />
       <div className="relative w-full max-w-sm">
         <div className="mb-8 text-center">
-          <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-accent font-mono text-lg font-bold text-white">
+          <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-accent font-mono text-lg font-bold text-paper">
             ◈
           </span>
           <h1 className="mt-5 font-mono text-lg tracking-tight text-ink">web3_proj</h1>
@@ -75,7 +75,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="submit"
             disabled={busy || !username || !password}
-            className="mt-5 w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-5 w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-paper transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-40"
           >
             {busy ? "Checking…" : "Enter"}
           </button>

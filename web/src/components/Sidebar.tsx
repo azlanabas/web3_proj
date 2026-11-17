@@ -25,7 +25,7 @@ export function Sidebar({
         }`}
       >
         <div className="flex items-center gap-2.5">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-accent font-mono text-sm font-bold text-white">
+          <span className="grid h-7 w-7 place-items-center rounded-md bg-accent font-mono text-sm font-bold text-paper">
             ◈
           </span>
           <div>

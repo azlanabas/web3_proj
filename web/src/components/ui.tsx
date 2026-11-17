@@ -95,8 +95,9 @@ export function Stats({ items }: { items: { value: string; label: string }[] }) 
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
       {items.map((s) => (
         <div key={s.label} className="rounded-xl border border-line bg-surface p-4">
-          <p className="font-mono text-xl text-ink">{s.value}</p>
-          <p className="mt-1 text-[11px] leading-snug text-muted">{s.label}</p>
+          <p className="font-mono text-xl tracking-tight text-ink">{s.value}</p>
+          <div className="cluster-ticks mb-2 mt-2" aria-hidden="true" />
+          <p className="text-[11px] leading-snug text-muted">{s.label}</p>
         </div>
       ))}
     </div>

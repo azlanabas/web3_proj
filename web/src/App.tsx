@@ -139,6 +139,7 @@ export default function App() {
               </button>
             </div>
           </header>
+          <div className="cluster-ticks" aria-hidden="true" />
 
           <main className="pb-4">
             {route === "overview" && <Overview />}

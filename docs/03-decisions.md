@@ -411,3 +411,30 @@ Ethereum itself.
   wallet and no RPC access; all signing is server-side.
 
 The blueprint page gained the same concept table.
+
+---
+
+## D-25 — Design concept: the instrument cluster (supersedes D-23 palette)
+
+**Status:** LOCKED (2026-11-17)
+
+D-23's paper-and-navy palette was wrong: it replaced one genre default (crypto dark) with another
+(generic documentation light). The `concept-first-design` method was applied properly this time —
+find the literal object the subject already has, then derive every layer from it.
+
+**Concept: the vehicle instrument cluster.** A car dashboard is dark by nature, with backlit
+numerals, a single amber reading colour, red warnings, tick marks and hairline rules.
+
+| Layer | Derivation |
+|---|---|
+| Panel | `#0c0d0e` bitumen, not slate blue |
+| LCD text | `#ece7dd` warm backlight, not pure white |
+| Accent | `#d98b3a` gauge amber — the only accent |
+| Warning | `#c4553f` brake-light red |
+| Nominal | `#7fa87a` desaturated indicator green |
+| Radii | 3–10px, machined — no soft 16px cards |
+| Device | `cluster-ticks` hairline tick strips |
+| Type | tabular numerals everywhere |
+
+**Genre clichés explicitly rejected:** emerald/violet crypto glow, radial gradient hero, glowing
+nodes, rounded "AI card" geometry, drop shadows, light-mode documentation styling.

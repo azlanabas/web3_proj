@@ -109,7 +109,7 @@ export function EscrowPanel(props: Props) {
             <button
               onClick={props.onLogin}
               disabled={busy}
-              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-strong disabled:opacity-50"
+              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-paper transition hover:bg-accent-strong disabled:opacity-50"
             >
               Start demo session
             </button>
@@ -180,6 +180,7 @@ export function EscrowPanel(props: Props) {
 
                 <div className="mt-6">
                   <StepBar status={selected.status} />
+                  <div className="cluster-ticks mt-2" aria-hidden="true" />
                 </div>
 
                 <div className="mt-5 grid grid-cols-2 gap-2">
@@ -264,7 +265,7 @@ function Action({
       className={`rounded-lg px-3 py-2 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-25 ${
         muted
           ? "border border-line text-ink hover:border-muted"
-          : "bg-accent text-white hover:bg-accent-strong"
+          : "bg-accent text-paper hover:bg-accent-strong"
       }`}
     >
       {label}
