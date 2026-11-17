@@ -4,6 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>web3_proj — system blueprint</title>
+<script>
+  /* Same presentation-only gate as the app: no session, go sign in. */
+  (function () {
+    try {
+      var raw = sessionStorage.getItem("w3_auth");
+      if (!raw) { location.replace("/"); return; }
+      var exp = JSON.parse(raw).exp;
+      if (typeof exp !== "number" || exp < Date.now()) {
+        sessionStorage.removeItem("w3_auth");
+        location.replace("/");
+      }
+    } catch (e) { location.replace("/"); }
+  })();
+</script>
+
 <style>
   :root{
     --bg:#020617; --panel:#0f172a; --line:#1e293b; --text:#e2e8f0;
@@ -78,7 +93,7 @@
       A vehicle marketplace where a buyer&rsquo;s USDC is held by a smart contract until delivery is
       confirmed. Four layers, twenty-three endpoints, one escrow state machine, and a real EVM.
       This page is the complete map; the interactive version lives at
-      <a href="/">the main site</a>.
+      <a href="/">the main site</a> (sign in with the demo credentials).
     </p>
     <div class="legend">
       <span class="pill">all in-scope systems operational</span>

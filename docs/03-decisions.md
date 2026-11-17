@@ -359,3 +359,20 @@ Closed the operational gaps that were previously listed as missing:
 
 **Still post-MVP, and not claimed as done:** public testnet deployment, contract audit,
 KMS-held arbiter key, WAF, read replica.
+
+---
+
+## D-22 — Sign-in gate is presentation-only
+
+**Status:** LOCKED (2026-11-17)
+
+The demo opens on a sign-in card. The credential is checked against a SHA-256 digest held in the
+bundle, and a 12-hour session flag is kept in `sessionStorage`. `/system.html` checks the same
+flag and redirects to the sign-in page when absent.
+
+**This is not access control.** The bundle is public, `sessionStorage` is editable, and anyone
+who reads the JavaScript can bypass the check. It exists so the walkthrough opens on a door
+rather than a dashboard.
+
+**If real protection is ever needed:** HTTP Basic Auth at nginx (protects static files and the
+API together), or move authentication into the API session model that already exists for SIWE.

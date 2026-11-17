@@ -71,3 +71,9 @@ Nothing in this folder is deployable until those clear. See `docs/04-gap-registe
 - Journald capped at 200 MB; nginx logs rotated by logrotate.
 - GitHub Actions CI: Foundry tests, API typecheck, web build on every push.
 - systemd supervises the API and the local chain.
+
+## Sign-in
+
+The demo is gated by a sign-in card (credentials shared privately, not committed). The check is
+a SHA-256 digest in the bundle plus a `sessionStorage` flag — **presentation only, not access
+control**. `/system.html` enforces the same flag.

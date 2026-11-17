@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { isAuthenticated, signOut } from "./lib/auth";
+import { Login } from "./pages/Login";
 import { Sidebar } from "./components/Sidebar";
 import { SECTIONS } from "./nav";
 import { api } from "./lib/api";
@@ -25,6 +27,7 @@ function currentRoute(): string {
 }
 
 export default function App() {
+  const [authenticated, setAuthenticated] = useState<boolean>(() => isAuthenticated());
   const [route, setRoute] = useState<string>(currentRoute);
   const [meta, setMeta] = useState<Meta | null>(null);
   const [online, setOnline] = useState(false);
@@ -51,6 +54,10 @@ export default function App() {
     window.location.hash = `#/${id}`;
     setRoute(id);
     window.scrollTo({ top: 0 });
+  }
+
+  if (!authenticated) {
+    return <Login onSuccess={() => setAuthenticated(true)} />;
   }
 
   const index = SECTIONS.findIndex((s) => s.id === route);
@@ -103,6 +110,15 @@ export default function App() {
               <span className="rounded-full border border-slate-700 px-2.5 py-1 font-mono text-[10px] text-slate-400">
                 v{meta?.version ?? "0.1.0"}
               </span>
+              <button
+                onClick={() => {
+                  signOut();
+                  setAuthenticated(false);
+                }}
+                className="rounded-full border border-slate-700 px-2.5 py-1 font-mono text-[10px] text-slate-500 transition hover:border-slate-500 hover:text-slate-300"
+              >
+                sign out
+              </button>
             </div>
           </header>
 
