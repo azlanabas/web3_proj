@@ -101,7 +101,7 @@ scaffold time and recording it — never guessed.
 | Chain | Ethereum **Sepolia** (11155111) | verified live |
 | Token | USDC `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238` | `symbol()`/`name()` = "USDC", `decimals()` = 6, 1,798 bytes — read on-chain 2026-11-17 |
 | RPC | Alchemy (key verified) + `publicnode` fallback | |
-| Contracts | Solidity 0.8.x, **Foundry** | pin |
+| Contracts | Solidity **0.8.28**, **Foundry 1.9.0** | installed |
 | Libraries | OpenZeppelin v5 `SafeERC20`, `ReentrancyGuard`, `Ownable2Step` | |
 | Client | **viem** | |
 | Wallet | **wagmi v2 + RainbowKit** | |
@@ -207,16 +207,21 @@ automatic path never consults it.
 ## 7. Contract — `VehicleEscrow.sol`
 
 ```solidity
-enum State { NONE, CREATED, FUNDED, SHIPPED, RELEASED, REFUNDED, CANCELLED }
+enum State { NONE, CREATED, FUNDED, SHIPPED, DISPUTED, RELEASED, REFUNDED, CANCELLED }
 
 struct Escrow {
     address buyer;
     address seller;
-    address arbiter;
     uint256 amount;
+    uint64  shippedAt;
+    uint64  disputedAt;
     State   state;
 }
 ```
+
+The arbiter is **one immutable address set at deployment**, not a per-escrow parameter.
+Per-escrow arbiters would let the buyer nominate themselves and seize the funds — the
+interface was changed for that reason.
 
 Functions: `createEscrow`, `fund`, `markShipped`, `confirmDelivery`, `dispute`,
 `releaseByTimeout`, `refund`, `releaseToSeller`, `cancel`.
@@ -307,6 +312,16 @@ Ports: API **8310** (must confirm free), Postgres 5432 localhost only, `seoads` 
 
 No KYC, fiat, fractional tokens, multi-chain, dispute evidence upload, DMV/lien integration,
 auctions, email, mobile app, mainnet, upgradeable contracts, or indexing service.
+
+## 12a. Implementation status (2026-11-17)
+
+`/srv/web3proj/contracts` — Foundry 1.9.0, OpenZeppelin **5.7.0**, solc **0.8.28**.
+`VehicleEscrow.sol` is 214 lines and **23/23 tests pass** (`forge test`).
+
+Measured gas: full happy path ≈ 332k, refund ≈ 290k, timeout release ≈ 324k, reentrancy
+guard path ≈ 2.37M (test-only artefact of the malicious token).
+
+The host `seoads` app was re-checked immediately after the build and still returns 200.
 
 ## 13. Known risks
 

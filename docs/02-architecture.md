@@ -115,10 +115,13 @@ chain is the source of truth; the database is a read model.
 ## Contract interface — `VehicleEscrow.sol`
 
 ```solidity
-createEscrow(bytes32 listingId, address seller, uint256 amount, address arbiter)
+createEscrow(bytes32 listingId, address seller, uint256 amount)
 fund(uint256 escrowId)                      // buyer deposits USDC
 markShipped(uint256 escrowId)               // seller
 confirmDelivery(uint256 escrowId)           // buyer → releases to seller
+dispute(uint256 escrowId)                   // buyer, before the 14-day deadline
+releaseByTimeout(uint256 escrowId)          // permissionless, after 14 days
+releaseToSeller(uint256 escrowId)           // arbiter, only inside a dispute
 refund(uint256 escrowId)                    // arbiter only → returns to buyer
 cancel(uint256 escrowId)                    // before funding
 
