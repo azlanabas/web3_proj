@@ -17,6 +17,8 @@ export const SECTIONS: Section[] = [
   { id: "fundamentals", group: "Web3",       label: "Ethereum basics",    blurb: "ETH, gas, staking, proofs, sequencer" },
   { id: "sourcemap",    group: "Web3",       label: "Where things live",  blurb: "Source path and runtime address" },
   { id: "chain",        group: "Web3",       label: "Chain & networks",   blurb: "Ethereum, EVM, Sepolia, RPC" },
+  { id: "blockchain",   group: "Web3",       label: "Blockchain & ledger", blurb: "Blocks, chaining, what is really distributed" },
+  { id: "crypto",       group: "Web3",       label: "Hashing & auth",     blurb: "keccak, SHA-256, HMAC, SIWE" },
   { id: "token",        group: "Web3",       label: "USDC & ERC-20",      blurb: "Token, decimals, approvals" },
   { id: "contract",     group: "Web3",       label: "Escrow contract",    blurb: "Solidity, invariants, gas" },
   { id: "transactions", group: "Web3",       label: "Transactions",       blurb: "Sign, mine, receipt, index" },

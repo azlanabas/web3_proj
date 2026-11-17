@@ -18,6 +18,8 @@ import { Roadmap } from "./pages/Roadmap";
 import { Security } from "./pages/Security";
 import { Web } from "./pages/Web";
 import { Chain } from "./pages/Chain";
+import { Blockchain } from "./pages/Blockchain";
+import { Crypto } from "./pages/Crypto";
 import { Fundamentals } from "./pages/Fundamentals";
 import { SourceMap } from "./pages/SourceMap";
 import { References } from "./pages/References";
@@ -152,6 +154,8 @@ export default function App() {
             {route === "fundamentals" && <Fundamentals />}
             {route === "sourcemap" && <SourceMap />}
             {route === "chain" && <Chain />}
+            {route === "blockchain" && <Blockchain />}
+            {route === "crypto" && <Crypto />}
             {route === "token" && <Token />}
             {route === "contract" && <Contract />}
             {route === "transactions" && <Transactions />}
