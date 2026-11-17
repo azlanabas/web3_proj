@@ -60,11 +60,17 @@ export function Networks({ meta }: { meta: Meta | null }) {
               <span>
                 Deployer <code className="font-mono text-[10px]">0x8f45…63a3</code> generated and
                 funded path scripted; Circle USDC address verified on-chain; Alchemy RPC verified.
-                Awaiting 0.01 test ETH.
+                A one-click deploy page is ready if you would rather sign from your own wallet.
               </span>,
-              <a href="https://sepolia.etherscan.io" target="_blank" rel="noreferrer" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">
-                sepolia.etherscan.io ↗
-              </a>,
+              <span>
+                <a href="/deploy.html" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">
+                  deploy now ↗
+                </a>
+                <br />
+                <a href="https://sepolia.etherscan.io" target="_blank" rel="noreferrer" className="font-mono text-[10px] text-faint underline-offset-4 hover:underline">
+                  sepolia.etherscan.io ↗
+                </a>
+              </span>,
             ],
             [
               "Ethereum mainnet",
