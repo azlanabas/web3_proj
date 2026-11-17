@@ -85,7 +85,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
         <p className="mt-6 text-center font-mono text-[10px] leading-relaxed text-faint">
           Demo gate only — not access control.
           <br />
-          Settlement simulated on a local EVM with test USDC.
+          Settlement on Ethereum Sepolia with test USDC.
         </p>
       </div>
     </div>

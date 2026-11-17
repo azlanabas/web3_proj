@@ -18,7 +18,7 @@ const API: [string, string][] = [
   ["auth/auth.guard.ts", "HMAC cookie → user lookup, attaches req.user"],
   ["auth/session.ts", "Signed session payload, 2h expiry, timing-safe compare"],
   ["listings/*", "Paginated list, detail, create, owner-only update, Zod schemas"],
-  ["escrow/escrow.service.ts", "State machine + viem writes; simulated fallback when CHAIN_MODE != local"],
+  ["escrow/escrow.service.ts", "State machine + viem writes against the configured chain"],
   ["chain/chain.service.ts", "viem clients, ABIs, role keys, write/read helpers, evm_increaseTime"],
   ["chain/indexer.service.ts", "getLogs from checkpoint → ChainEvent rows → status reconciliation"],
   ["demo/*", "Seeded vehicles and one-click session for the walkthrough"],
@@ -115,11 +115,11 @@ contracts/ ──deployed to──▶ anvil ──address written to──▶ ap
       </Card>
 
       <Card title="Configuration surface" tag="no secrets in git">
-        <Code>{`CHAIN_MODE      local | simulated      fallback switch
+        <Code>{`CHAIN_MODE      local | sepolia        settlement network
 RPC_URL         http://127.0.0.1:8545   chain endpoint
 CHAIN_ID        31337                  anvil
-CONTRACT_ADDRESS 0xCf7E…0Fc9           escrow
-TOKEN_ADDRESS    0x9fE4…a6e0           test USDC
+CONTRACT_ADDRESS 0x4e8D…3e0E           escrow on Sepolia
+TOKEN_ADDRESS    0xBA24…b8e3           test USDC on Sepolia
 DATABASE_URL    …web3app_runtime       DML-only runtime role
 MIGRATE_DATABASE_URL …web3app          owner, migrations only
 SESSION_SECRET  32 bytes               HMAC for session cookies

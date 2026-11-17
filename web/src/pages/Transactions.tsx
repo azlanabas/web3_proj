@@ -21,7 +21,7 @@ viem     walletClient.writeContract({ functionName: "fund" })
    │      4. sign locally with the buyer key
    │      5. eth_sendRawTransaction
    ▼
-anvil    mempool → block (1s) → execution
+chain    mempool → block (~12s) → execution
    │      6. state mutated, logs emitted
    ▼
 viem     waitForTransactionReceipt(hash)

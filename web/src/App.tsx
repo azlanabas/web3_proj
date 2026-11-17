@@ -169,7 +169,7 @@ export default function App() {
             <RouteContext.Provider value={route}>
             {route === "overview" && <Overview meta={meta} />}
             {route === "architecture" && <Architecture />}
-            {route === "requirements" && <Requirements />}
+            {route === "requirements" && <Requirements meta={meta} />}
             {route === "web" && <Web />}
             {route === "api" && <Api meta={meta} />}
             {route === "data" && <Data />}
@@ -190,7 +190,7 @@ export default function App() {
             {route === "explorer" && <Explorer meta={meta} />}
             {route === "security" && <Security />}
             {route === "operations" && <Operations />}
-            {route === "roadmap" && <Roadmap />}
+            {route === "roadmap" && <Roadmap meta={meta} />}
             </RouteContext.Provider>
           </main>
 

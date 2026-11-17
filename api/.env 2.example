@@ -1,0 +1,11 @@
+# Copy to .env on the host. Never commit the real file.
+DATABASE_URL=postgresql://USER:PASSWORD@127.0.0.1:5432/web3proj
+PORT=8310
+NODE_ENV=development
+RPC_URL=https://eth-sepolia.g.alchemy.com/v2/KEY
+CHAIN_ID=11155111
+CONTRACT_ADDRESS=
+ARBITER_PRIVATE_KEY=
+SIWE_DOMAIN=localhost:8311
+SIWE_ORIGIN=http://localhost:8311
+SESSION_SECRET=

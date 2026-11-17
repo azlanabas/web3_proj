@@ -94,7 +94,7 @@ export function Demo({ meta }: { meta: Meta | null }) {
             items={[
               "Happy path: open escrow → fund → ship → confirm. The seller is paid and the escrow settles.",
               "Failure path: open escrow → fund → ship → dispute → arbiter refund. The buyer is made whole.",
-              "Timeout path: open escrow → fund → ship → simulate 14 days → release by timeout. Protects a seller from a silent buyer.",
+              "Timeout path: only on the local chain. On Sepolia the 14-day window has to actually elapse, so the buttons are disabled.",
             ]}
           />
           <p className="text-xs text-muted">

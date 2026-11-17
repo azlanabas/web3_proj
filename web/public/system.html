@@ -121,7 +121,7 @@
     <h1>Every component of the MVP, on one page.</h1>
     <p class="lede">
       A vehicle marketplace where a buyer&rsquo;s USDC is held by a smart contract until delivery is
-      confirmed. Four layers, twenty-three endpoints, one escrow state machine, and a real EVM.
+      confirmed. Four layers, twenty-six endpoints, one escrow state machine, and a real EVM.
       This page is the complete map; the interactive version lives at
       <a href="/">the main site</a> (sign in with the demo credentials).
     </p>
@@ -168,10 +168,10 @@
     <h2>Chain, token and contract</h2>
     <table>
       <tr><th>Component</th><th>Value</th><th>Notes</th></tr>
-      <tr><td>Network (active)</td><td class="mono">anvil · chain 31337</td><td>1s blocks, deterministic accounts</td></tr>
+      <tr><td>Network (active)</td><td class="mono">Ethereum Sepolia · 11155111</td><td>real consensus, ~12s blocks</td></tr>
       <tr><td>Network (target)</td><td class="mono">Ethereum Sepolia · 11155111</td><td>Same code path; needs a funded key</td></tr>
-      <tr><td>Escrow contract</td><td class="mono">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</td><td>VehicleEscrow.sol, 214 lines</td></tr>
-      <tr><td>Settlement token</td><td class="mono">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</td><td>6-decimal test USDC (local)</td></tr>
+      <tr><td>Escrow contract</td><td class="mono">0x4e8DFBd676AeEB10D57727DdFF2450B175913e0E</td><td>VehicleEscrow.sol, 214 lines</td></tr>
+      <tr><td>Settlement token</td><td class="mono">0xBA24365396f6f92BDA5C0087d8806B7C545eb8e3</td><td>6-decimal test USDC (local)</td></tr>
       <tr><td>Sepolia USDC (reference)</td><td class="mono">0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238</td><td>Verified symbol/decimals on-chain</td></tr>
       <tr><td>Compiler</td><td class="mono">Solidity 0.8.28</td><td>OpenZeppelin 5.7.0</td></tr>
       <tr><td>Tests</td><td class="mono">23 / 23 passing</td><td>Foundry, incl. reentrancy attack</td></tr>
@@ -181,17 +181,17 @@
     <h3 style="margin-top:30px">Ethereum concepts, and whether they apply here</h3>
     <table>
       <tr><th>Concept</th><th>What it is</th><th>In this project</th></tr>
-      <tr><td>ETH</td><td>Native currency, used only to pay gas</td><td>Test ETH; contract holds 0 ETH</td></tr>
-      <tr><td>Gas</td><td>Units of computation, priced in ETH</td><td>1 gwei; ~48,851 gas per escrow action</td></tr>
+      <tr><td>ETH</td><td>Native currency, used only to pay gas</td><td>Testnet ETH for gas only; contract holds 0</td></tr>
+      <tr><td>Gas</td><td>Units of computation, priced in ETH</td><td>real testnet gas; per-action cost measured in wei</td></tr>
       <tr><td>Account / EOA</td><td>Address controlled by a private key</td><td>Three demo signers, server-held</td></tr>
       <tr><td>Transaction</td><td>Signed instruction to change state</td><td>Every escrow action</td></tr>
       <tr><td>Receipt + logs</td><td>Proof of execution, and emitted events</td><td>Required before any database write</td></tr>
-      <tr><td>Proof of Stake</td><td>Validators stake 32 ETH to propose and attest</td><td>Not used — local chain has no consensus</td></tr>
+      <tr><td>Proof of Stake</td><td>Validators stake 32 ETH to propose and attest</td><td>Used on Sepolia (Proof of Stake)</td></tr>
       <tr><td>Staking / slashing</td><td>Bonded ETH securing consensus; loss for misbehaviour</td><td>Not used</td></tr>
-      <tr><td>Finality</td><td>~12.8 minutes after two epochs on mainnet</td><td>Not modelled; local chain is instant</td></tr>
+      <tr><td>Finality</td><td>~12.8 minutes after two epochs on mainnet</td><td>~12.8 minutes after two epochs</td></tr>
       <tr><td>Proofs (ZK / fraud)</td><td>Evidence of correct execution on rollups</td><td>Not used — not a rollup</td></tr>
-      <tr><td>Sequencer</td><td>Whoever orders transactions into blocks</td><td>anvil, a single sequencer</td></tr>
-      <tr><td>L1 / L2</td><td>Ethereum mainnet, and rollups that settle to it</td><td>Local L1-style chain only</td></tr>
+      <tr><td>Sequencer</td><td>Whoever orders transactions into blocks</td><td>Ethereum validators</td></tr>
+      <tr><td>L1 / L2</td><td>Ethereum mainnet, and rollups that settle to it</td><td>L1 testnet (Sepolia)</td></tr>
     </table>
 
     <p style="margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--dim)">
@@ -237,7 +237,7 @@ CANCELLED         REFUNDED              DISPUTED ──arbiter──▶ REFUNDED
       <div class="card">
         <div class="tag">Web</div>
         <p class="mono">React 19.3.1 · Vite 8.3.8 · Tailwind 4.3.5</p>
-        <p>317 kB raw / 99 kB gzipped. Served by nginx as static files.</p>
+        <p>360 kB raw / 111 kB gzipped. Served by nginx as static files.</p>
       </div>
       <div class="card">
         <div class="tag">API</div>
@@ -294,8 +294,8 @@ GET    /api/auth/me                    POST   /api/escrows/:id/{fund|ship|confir
     </table>
 
     <div class="grid g4" style="margin-top:26px">
-      <div class="card"><div class="stat">70 MB</div><div class="statl">API resident memory</div></div>
-      <div class="card"><div class="stat">23</div><div class="statl">REST endpoints</div></div>
+      <div class="card"><div class="stat">135 MB</div><div class="statl">API resident memory</div></div>
+      <div class="card"><div class="stat">26</div><div class="statl">REST endpoints</div></div>
       <div class="card"><div class="stat">7</div><div class="statl">escrow states</div></div>
       <div class="card"><div class="stat">23/23</div><div class="statl">contract tests</div></div>
     </div>

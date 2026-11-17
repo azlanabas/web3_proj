@@ -10,9 +10,9 @@ export function Fundamentals() {
     >
       <Stats
         items={[
-          { value: "10,000", label: "test ETH per account (gas only)" },
-          { value: "1 gwei", label: "gas price on this chain" },
-          { value: "48,851", label: "gas for one escrow transaction" },
+          { value: "Sepolia", label: "live public testnet" },
+          { value: "testnet", label: "gas, paid in worthless ETH" },
+          { value: "~50k", label: "gas for one escrow action" },
           { value: "0 ETH", label: "held by the escrow contract" },
         ]}
       />
@@ -20,12 +20,11 @@ export function Fundamentals() {
       <Card title="Where the ETH is" tag="the question that always comes first">
         <p>
           ETH is Ethereum&apos;s native currency and it exists here only to pay for computation.
-          Every anvil account starts with 10,000 ETH. Measured right now: the arbiter holds{" "}
-          <code className="font-mono text-[11px]">9,999.9997</code>, the buyer{" "}
-          <code className="font-mono text-[11px]">9,999.9988</code>, and the escrow contract holds{" "}
+          On Sepolia the demo signers were funded with a fraction of testnet ETH each, which is
+          enough for thousands of transactions at current gas prices. The escrow contract holds{" "}
           <strong>0 ETH</strong> — because it holds USDC, not ETH.
         </p>
-        <Code>{`one escrow transaction: 48,851 gas × 1 gwei = 0.0000488 ETH burned as fees
+        <Code>{`one escrow action: ~50,000 gas × testnet gas price, paid in worthless testnet ETH
 the vehicle price:     21,750 USDC — moved as a token, never as ETH`}</Code>
         <p className="text-xs">
           This separation matters. ETH is the fuel; USDC is the money. The escrow contract has no
