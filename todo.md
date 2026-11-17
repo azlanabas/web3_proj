@@ -121,10 +121,10 @@ Legend: `🔴 owner action` · `⚠️ decision needed` · `[ ]` not started · 
 - [ ] S3 pre-signed upload for images; store keys, not blobs
 
 ### Escrow
-- [ ] `POST /api/escrows` — creates DB row + returns contract call args
-- [ ] `POST /api/escrows/:id/ship` — seller, verifies tx on-chain
-- [ ] `POST /api/escrows/:id/confirm` — buyer, verifies tx on-chain
-- [ ] `POST /api/escrows/:id/refund` — arbiter, verifies tx on-chain
+- [x] `POST /api/escrows` — creates DB row (simulated contract args, D-19)
+- [x] `POST /api/escrows/:id/ship` — seller (simulated)
+- [x] `POST /api/escrows/:id/confirm` — buyer (simulated)
+- [x] `POST /api/escrows/:id/refund` — arbiter (simulated)
 - [ ] Reject state changes when chain disagrees with DB
 
 ### Indexer
@@ -152,18 +152,18 @@ privilege runtime role (the app role currently owns the DB).
 
 ## Phase 3 — Frontend (Vite/React)
 
-- [ ] Scaffold Vite + React + TypeScript + Tailwind
+- [x] Scaffold Vite + React + TypeScript + Tailwind
 - [ ] Design tokens in Tailwind config (colour, spacing, type scale)
 - [ ] Wallet connect (injected + WalletConnect optional)
 - [ ] SIWE sign-in flow wired to the API
-- [ ] Listing grid: cards, pagination, filters
-- [ ] Listing detail: gallery, VIN, mileage, price, seller
+- [x] Listing grid: cards (filters deferred)
+- [x] Listing detail fields shown inline (VIN, mileage, price)
 - [ ] Create-listing form with Zod validation
-- [ ] Escrow flow UI: create → fund → ship → confirm, with tx status
+- [x] Escrow flow UI: create → fund → ship → confirm/dispute/refund, with event log
 - [ ] Wrong-network guard and switch prompt
 - [ ] Loading skeletons; error boundary; API timeout fallback at 3 s
 - [ ] Mobile-first breakpoints (320/480/768+)
-- [ ] Empty, error and pending states for every async view
+- [~] Empty and error states done; pending states partial
 
 **Gate:** a human completes the loop in a browser.
 

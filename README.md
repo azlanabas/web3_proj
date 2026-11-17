@@ -12,8 +12,9 @@ Planning corpus for an **MVP Web3 vehicle marketplace with non-custodial USDC es
 This folder holds documents only — no application source. Per workspace rule 4, code is
 authored on the target host, not here.
 
-**Status: LIVE (API only).** `https://web3.heurist.online` serves the API with valid TLS.
-The smart contract, the frontend and the escrow endpoints are **not** built yet.
+**Status: LIVE MVP.** `https://web3.heurist.online` serves a full walkthrough — React UI,
+NestJS API, PostgreSQL, and a simulated on-chain escrow. Contract is written and tested but
+**not deployed**; settlement is simulated in the API and recorded as chain events.
 Facts below were measured **2026-11-17 23:35 GMT+8**.
 
 ## Reading order

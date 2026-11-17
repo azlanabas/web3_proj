@@ -284,3 +284,27 @@ away from being revisited.
 Zod 4.6.7 · siwe 3.0.0 · Solidity 0.8.28 · Foundry 1.9.0 · OpenZeppelin 5.7.0.
 
 **Reverses when:** Prisma 7's adapter setup has settled and TypeScript 7 is the Nest default.
+
+---
+
+## D-19 — Escrow settlement is simulated for the MVP demo
+
+**Status:** LOCKED (2026-11-17)
+
+The API records escrow transitions and writes `ChainEvent` rows with deterministic-format tx
+hashes and incrementing block numbers, but **does not submit transactions to a chain**. The
+Solidity contract exists and passes 23/23 tests; it is simply not deployed.
+
+**Rationale:** deployment needs a funded Sepolia key, and the MVP had to be demonstrable
+immediately. Simulation exercises the same state machine, the same persistence and the same
+audit trail as a live deployment, so swapping in a real contract changes one service, not the
+product.
+
+**Demo affordances:** `DEMO_MODE=true` lets one session drive every role, and
+`POST /api/escrows/:id/simulate-timeout` backdates shipment so the 14-day rule can be shown
+without waiting.
+
+**Risk accepted:** `DEMO_MODE` bypasses role checks. It must be `false` before any real use.
+
+**Reverses when:** a funded Sepolia deployer key is available — replace the simulation calls in
+`escrow.service.ts` with viem contract writes and point the indexer at the real address.

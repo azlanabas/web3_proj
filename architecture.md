@@ -323,6 +323,13 @@ guard path ≈ 2.37M (test-only artefact of the malicious token).
 
 The host `seoads` app was re-checked immediately after the build and still returns 200.
 
+**API and UI (2026-11-17):** NestJS 12.5.1 with SIWE auth, listings CRUD, a simulated escrow
+engine (7 states, role-gated, event-logged) and a demo session. React 19 + Vite 8 + Tailwind 4
+single-page walkthrough. Live at `https://web3.heurist.online`, systemd-managed, 72 MB RSS.
+
+Settlement is **simulated** (D-19): no chain transaction is sent. The contract is written and
+tested but undeployed.
+
 ## 13. Known risks
 
 | Risk | Impact | Mitigation |
