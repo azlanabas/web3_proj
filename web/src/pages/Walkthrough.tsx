@@ -8,6 +8,7 @@ import type { Meta } from "../lib/meta";
 
 export function Walkthrough({ meta }: { meta: Meta | null }) {
   const [viewAs, setViewAs] = useState<"buyer" | "seller" | "arbiter">("buyer");
+  const [sellerReviewed, setSellerReviewed] = useState(false);
   const roleNote = {
     buyer: "The buyer funds the escrow, confirms delivery, or raises a dispute.",
     seller: "The seller marks the vehicle shipped once the escrow is funded.",
@@ -97,64 +98,60 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
       >
       {(() => {
         const status = selected?.status ?? null;
-        const stages = ["Open", "Fund", "Ship", "Confirm", "Settled"];
-        const idx = !status ? 0
-          : status === "CREATED" ? 1
-          : status === "FUNDED" ? 2
-          : status === "SHIPPED" || status === "DISPUTED" ? 3
-          : 4;
-        const next =
-          !selected
-            ? {
-                title: "Open an escrow",
-                body: "Choose a vehicle below. This fixes the price in USDC and creates an on-chain escrow. No funds move yet.",
-                label: null as string | null,
-              }
-            : status === "CREATED"
-            ? viewAs === "buyer"
-              ? { title: "Fund the escrow", body: "Deposit the USDC into the contract. The seller can then ship knowing the money is locked.", label: "fund" }
-              : { title: "Waiting for the buyer", body: "The seller can ship once the escrow is funded.", label: null }
-            : status === "FUNDED"
-            ? viewAs === "seller"
-              ? { title: "Mark the vehicle shipped", body: "The money is already locked, so dispatch is safe. This starts the 14-day timer.", label: "ship" }
-              : { title: "Waiting for the seller", body: "The seller marks shipped once they dispatch the vehicle.", label: null }
-            : status === "SHIPPED"
-            ? viewAs === "buyer"
-              ? { title: "Confirm delivery", body: "This releases the funds to the seller and closes the escrow. Raise a dispute instead if the vehicle is wrong.", label: "confirm" }
-              : { title: "Waiting for the buyer", body: "The buyer confirms delivery, or the 14-day timer releases the funds.", label: null }
-            : status === "DISPUTED"
-            ? viewAs === "arbiter"
-              ? { title: "Resolve the dispute", body: "Pay the seller or refund the buyer. The contract permits both, and only from this state.", label: "release" }
-              : { title: "Dispute raised", body: "The arbiter decides. Switch the view to arbiter to act.", label: null }
-            : { title: "Escrow settled", body: `Final state: ${status}. Move to another vehicle to run the flow again.`, label: null };
+        const listing = listings[0];
+        const vehicle = listing ? `${listing.year} ${listing.make} ${listing.model}` : "the vehicle";
 
+        type Turn = { n: number; role: "seller" | "buyer"; title: string; body: string; label: string | null };
+        const turns: Turn[] = [];
+        if (!selected) {
+          turns.push(
+            sellerReviewed
+              ? { n: 2, role: "buyer", title: "Buyer opens the escrow", body: "The buyer selects the vehicle and opens an escrow. This fixes the price on-chain and creates escrow #N.", label: "buyer opens the escrow" }
+              : { n: 1, role: "seller", title: "Seller publishes the vehicle", body: `${vehicle} is listed with its price in USDC. Publishing commits nothing and moves no money.`, label: "seller reviewed the listing" },
+          );
+        } else if (status === "CREATED") {
+          turns.push({ n: 2, role: "buyer", title: "Buyer funds the escrow", body: `${vehicle} is held in escrow #${selected.onchainId}. The buyer deposits the USDC into the contract, not to the seller.`, label: "buyer funds the escrow" });
+        } else if (status === "FUNDED") {
+          turns.push({ n: 3, role: "seller", title: "Seller marks the vehicle shipped", body: "The money is locked in the contract, so dispatch is safe. This starts the 14-day timer.", label: "seller marks it shipped" });
+        } else if (status === "SHIPPED") {
+          turns.push({ n: 4, role: "buyer", title: "Buyer confirms delivery", body: "Confirmation releases the funds to the seller and closes the escrow. A dispute would send it to the arbiter instead.", label: "buyer confirms delivery" });
+        } else if (status === "DISPUTED") {
+          turns.push({ n: 5, role: "seller", title: "Arbiter resolves the dispute", body: "The arbiter pays the seller or refunds the buyer. Switch the view to arbiter to act.", label: null });
+        } else {
+          turns.push({ n: 5, role: "buyer", title: "Escrow complete", body: `Final state ${status}. The seller holds the funds and the contract balance is zero.`, label: null });
+        }
+
+        const turn = turns[0];
+        const total = 5;
         return (
           <div className="rounded-lg border border-line">
-            <div className="flex flex-wrap items-center gap-1 border-b border-line px-4 py-3">
-              {stages.map((s, i) => (
-                <span key={s} className="flex items-center gap-1">
-                  <span
-                    className={
-                      "rounded px-2 py-1 font-mono text-[10px] uppercase tracking-wider " +
-                      (i === idx ? "bg-accent/15 text-accent" : i < idx ? "text-good" : "text-faint")
-                    }
-                  >
-                    {i < idx ? "✓ " : ""}{s}
-                  </span>
-                  {i < stages.length - 1 && <span className="text-faint">→</span>}
-                </span>
-              ))}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+                turn {turn.n} of {total}
+              </p>
+              <p className="font-mono text-[11px] text-faint">
+                acting as <span className="text-ink">{turn.role}</span>
+              </p>
             </div>
             <div className="px-4 py-4">
-              <p className="text-sm font-semibold text-ink">{next.title}</p>
-              <p className="mt-1 text-[12px] leading-relaxed text-muted">{next.body}</p>
-              {next.label && (
+              <p className="text-sm font-semibold text-ink">{turn.title}</p>
+              <p className="mt-1 text-[12px] leading-relaxed text-muted">{turn.body}</p>
+              {turn.label && (
                 <button
-                  onClick={() => act(next.label!)}
+                  onClick={() => {
+                    setViewAs(turn.role);
+                    if (turn.n === 1) {
+                      setSellerReviewed(true);
+                    } else if (turn.label === "buyer opens the escrow") {
+                      if (listing) openEscrow(listing.id);
+                    } else if (turn.n === 2) act("fund");
+                    else if (turn.n === 3) act("ship");
+                    else if (turn.n === 4) act("confirm");
+                  }}
                   disabled={busy}
                   className="mt-3 rounded-md bg-accent px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-paper transition hover:opacity-90 disabled:opacity-50"
                 >
-                  {busy ? "submitting…" : next.title}
+                  {busy ? "submitting…" : turn.label}
                 </button>
               )}
             </div>
