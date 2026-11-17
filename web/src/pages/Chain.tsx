@@ -22,7 +22,6 @@ export function Chain({ meta }: { meta: Meta | null }) {
         <Table
           head={["Network", "Chain id", "RPC", "Status", "Purpose"]}
           rows={[
-            ["Anvil (local EVM)", "31337", <code className="font-mono text-[10px]">127.0.0.1:8545</code>, "Offline", "Used during the build; kept as CHAIN_MODE=local for offline work"],
             ["Ethereum Sepolia", "11155111", <code className="font-mono text-[10px]">public RPC</code>, "Active", "Live settlement network; real transactions and gas"],
             ["Ethereum mainnet", "1", <code className="font-mono text-[10px]">—</code>, "Not used", "Real money; requires an audit first"],
           ]}

@@ -1,6 +1,14 @@
+import { useEffect, useState } from "react";
 import { Code, Page, Section, Table } from "../components/ui";
 import { ACTS, firstOfAct, kickerFor, sectionsOf } from "../nav";
 import type { Meta } from "../lib/meta";
+
+interface Tx {
+  eventName: string;
+  txHash: string;
+  blockNumber: string;
+  escrowId: string | null;
+}
 
 const STEPS = [
   ["01", "Seller lists a vehicle", "Seller", "Make, model, year, VIN, mileage, price. Stored in PostgreSQL and shown publicly."],
@@ -12,12 +20,62 @@ const STEPS = [
 ];
 
 export function Overview({ meta }: { meta: Meta | null }) {
+  const [txs, setTxs] = useState<Tx[]>([]);
+  useEffect(() => {
+    const load = () =>
+      fetch("/api/chain/events")
+        .then((r) => r.json())
+        .then((rows: Tx[]) => setTxs(rows.slice(0, 6)))
+        .catch(() => undefined);
+    load();
+    const id = setInterval(load, 15000);
+    return () => clearInterval(id);
+  }, []);
+
+  const explorer = meta?.chain.mode === "sepolia" ? "https://sepolia.etherscan.io" : null;
   return (
     <Page
       kicker={kickerFor("overview")}
       title="A vehicle marketplace where the money waits in a contract"
       lede="A buyer will not pay before delivery; a seller will not hand over the keys before payment. This closes that gap with an escrow contract instead of a bank account, so the platform never holds anyone else's money."
     >
+      {/* The live chain comes first. */}
+      <div className="rounded-lg border border-line">
+        <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line px-4 py-3">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+            {meta ? `Live on ${meta.chain.network}` : "Live on chain"}
+          </p>
+          <p className="font-mono text-[11px] text-faint">
+            block {meta?.chain.blockNumber ?? "…"} · {meta?.counts.escrows ?? "…"} escrow
+            {(meta?.counts.escrows ?? 0) === 1 ? "" : "s"} · {meta?.counts.events ?? "…"} events
+          </p>
+        </div>
+        <div className="divide-y divide-line">
+          {txs.length === 0 && (
+            <p className="px-4 py-3 font-mono text-[12px] text-faint">Reading the chain…</p>
+          )}
+          {txs.map((tx) => (
+            <div key={tx.txHash} className="flex flex-wrap items-baseline justify-between gap-3 px-4 py-2.5">
+              <span className="font-mono text-[12px] text-accent">{tx.eventName}</span>
+              <span className="font-mono text-[11px] text-faint">escrow #{tx.escrowId ?? "—"}</span>
+              <span className="font-mono text-[11px] text-muted">block {tx.blockNumber}</span>
+              {explorer ? (
+                <a
+                  href={`${explorer}/tx/${tx.txHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-[12px] text-ink underline-offset-4 hover:text-accent hover:underline"
+                >
+                  {tx.txHash.slice(0, 18)}… ↗
+                </a>
+              ) : (
+                <span className="font-mono text-[12px] text-ink">{tx.txHash.slice(0, 18)}…</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Links. These are the only boxes on the page. */}
       <div className="border-t border-line">
         {ACTS.map((act) => {
