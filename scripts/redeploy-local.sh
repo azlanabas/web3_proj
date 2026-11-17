@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 # Redeploys the demo contracts to the local anvil chain and prints the env lines.
 # Use this if anvil restarts (its state is in-memory) and the app loses its contract.
+# Credentials are read from the API env file; nothing is hardcoded here.
 set -euo pipefail
 export PATH="$HOME/.foundry/bin:$PATH"
 cd /srv/web3proj/contracts
 
-RPC=http://127.0.0.1:8545
-ARBITER_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-ARBITER=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-BUYER=0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+ENV_FILE="${ENV_FILE:-/srv/web3proj/api/.env}"
+# shellcheck disable=SC1090
+set -a; . "$ENV_FILE"; set +a
+
+RPC="${RPC_URL:?RPC_URL missing from $ENV_FILE}"
+ARBITER_KEY="${ARBITER_PRIVATE_KEY:?ARBITER_PRIVATE_KEY missing from $ENV_FILE}"
+BUYER="${DEMO_BUYER:?DEMO_BUYER missing from $ENV_FILE}"
+ARBITER=$(cast wallet address --private-key "$ARBITER_KEY")
 
 curl -sf -X POST "$RPC" -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}' > /dev/null \
@@ -28,7 +33,7 @@ cast send "$USDC" "mint(address,uint256)" "$BUYER" 1000000000000 \
 
 BLOCK=$(cast block-number --rpc-url "$RPC")
 
-echo "Update /srv/web3proj/api/.env with:"
+echo "Update $ENV_FILE with:"
 echo "CONTRACT_ADDRESS=$ESCROW"
 echo "TOKEN_ADDRESS=$USDC"
 echo "CONTRACT_DEPLOY_BLOCK=$BLOCK"
