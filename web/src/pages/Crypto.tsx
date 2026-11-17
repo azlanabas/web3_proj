@@ -12,7 +12,7 @@ export function Crypto() {
         <Table
           head={["Hash", "Algorithm", "Used for", "Where"]}
           rows={[
-            ["Block hash", "keccak-256", "Linking blocks via parentHash", "anvil"],
+            ["Block hash", "keccak-256", "Linking blocks via parentHash", "the chain"],
             ["Transaction hash", "keccak-256", "Identity of a signed transaction", "viem / chain"],
             ["Address derivation", "keccak-256", "Last 20 bytes of the public-key hash", "key → address"],
             ["Function selector", "keccak-256", "First 4 bytes of the signature", "0xca1d209d = fund(uint256)"],
@@ -84,7 +84,7 @@ cast keccak "<listing-uuid>"      → 0x088271b7…     bytes32 passed to create
         <Callout tone="slate" title="Why keep it at all?">
           <p>
             Presentation. An entry screen makes the product feel finished; a dashboard with no door
-            asks for credentials looks like a product. The honest framing is that the page says so,
+            asks for credentials looks like a product. The page states that it is a gate, and theays so,
             and the real authentication path — SIWE — is implemented and working underneath.
           </p>
         </Callout>

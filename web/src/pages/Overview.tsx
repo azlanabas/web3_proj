@@ -39,37 +39,51 @@ export function Overview({ meta }: { meta: Meta | null }) {
       title="A vehicle marketplace where the money waits in a contract"
       lede="A buyer will not pay before delivery; a seller will not hand over the keys before payment. This closes that gap with an escrow contract instead of a bank account, so the platform never holds anyone else's money."
     >
-      {/* The live chain comes first. */}
+      {/* Centerpiece: the live chain. */}
       <div className="rounded-lg border border-line">
-        <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line px-4 py-3">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-            {meta ? `Live on ${meta.chain.network}` : "Live on chain"}
+        <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line px-5 py-4">
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-good" />
+            {meta ? meta.chain.network : "live chain"}
           </p>
-          <p className="font-mono text-[11px] text-faint">
-            block {meta?.chain.blockNumber ?? "…"} · {meta?.counts.escrows ?? "…"} escrow
-            {(meta?.counts.escrows ?? 0) === 1 ? "" : "s"} · {meta?.counts.events ?? "…"} events
-          </p>
+          <p className="font-mono text-[11px] text-faint">transaction snapshot · updates every 15s</p>
         </div>
+
+        <div className="grid grid-cols-3 divide-x divide-line border-b border-line">
+          {[
+            ["block", meta?.chain.blockNumber ?? "—"],
+            ["escrows", meta ? String(meta.counts.escrows) : "—"],
+            ["events", meta ? String(meta.counts.events) : "—"],
+          ].map(([label, value]) => (
+            <div key={label} className="px-5 py-4">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-faint">{label}</p>
+              <p className="mt-1 font-mono text-lg text-ink">{value}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="divide-y divide-line">
           {txs.length === 0 && (
-            <p className="px-4 py-3 font-mono text-[12px] text-faint">Reading the chain…</p>
+            <p className="px-5 py-4 font-mono text-[12px] text-faint">Reading the chain…</p>
           )}
           {txs.map((tx) => (
-            <div key={tx.txHash} className="flex flex-wrap items-baseline justify-between gap-3 px-4 py-2.5">
-              <span className="font-mono text-[12px] text-accent">{tx.eventName}</span>
+            <div key={tx.txHash} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-3">
+              <span className="min-w-[8rem] font-mono text-[13px] uppercase tracking-wider text-accent">
+                {tx.eventName}
+              </span>
               <span className="font-mono text-[11px] text-faint">escrow #{tx.escrowId ?? "—"}</span>
-              <span className="font-mono text-[11px] text-muted">block {tx.blockNumber}</span>
+              <span className="font-mono text-[11px] text-faint">block {tx.blockNumber}</span>
               {explorer ? (
                 <a
                   href={`${explorer}/tx/${tx.txHash}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-mono text-[12px] text-ink underline-offset-4 hover:text-accent hover:underline"
+                  className="font-mono text-[13px] text-ink underline-offset-4 hover:text-accent hover:underline"
                 >
-                  {tx.txHash.slice(0, 18)}… ↗
+                  {tx.txHash.slice(0, 20)}… ↗
                 </a>
               ) : (
-                <span className="font-mono text-[12px] text-ink">{tx.txHash.slice(0, 18)}…</span>
+                <span className="font-mono text-[13px] text-ink">{tx.txHash.slice(0, 20)}…</span>
               )}
             </div>
           ))}

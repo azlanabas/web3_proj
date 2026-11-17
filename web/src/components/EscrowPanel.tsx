@@ -190,8 +190,6 @@ export function EscrowPanel(props: Props) {
                   <Action label="Mark shipped" onClick={() => props.onAct("ship")} enabled={canShip} busy={busy} />
                   <Action label="Confirm delivery" onClick={() => props.onAct("confirm")} enabled={canConfirm} busy={busy} />
                   <Action label="Raise dispute" onClick={() => props.onAct("dispute")} enabled={canDispute} busy={busy} />
-                  <Action label="Simulate 14 days" onClick={() => props.onAct("simulate-timeout")} enabled={showTimeTravel} busy={busy} muted />
-                  <Action label="Release by timeout" onClick={() => props.onAct("timeout-release")} enabled={canTimeoutRelease && canTimeTravel} busy={busy} muted />
                   <Action label="Arbiter → seller" onClick={() => props.onAct("release")} enabled={canArbitrate} busy={busy} />
                   <Action label="Arbiter → refund" onClick={() => props.onAct("refund")} enabled={canRefund} busy={busy} />
                 </div>

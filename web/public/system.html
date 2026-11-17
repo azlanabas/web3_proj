@@ -127,7 +127,7 @@
     </p>
     <div class="legend">
       <span class="pill">all in-scope systems operational</span>
-      <span class="pill neutral">local EVM · chain 31337</span>
+      <span class="pill neutral">Ethereum Sepolia · 11155111</span>
       <span class="pill neutral">test USDC only</span>
     </div>
   </div>
@@ -149,7 +149,7 @@
 
     <pre>Browser ──HTTPS──▶ nginx :443 ──/api/*──▶ NestJS :8310 ──▶ PostgreSQL :5432
                        │                        │
-                       └──/──▶ React build      └──viem──▶ anvil :8545
+                       └──/──▶ React build      └──viem──▶ Sepolia RPC
                                                             │
                                             indexer ◀── getLogs ──┘</pre>
 
@@ -305,7 +305,7 @@ GET    /api/auth/me                    POST   /api/escrows/:id/{fund|ship|confir
 <footer>
   <div class="wrap">
     web3_proj · system blueprint · generated from the running deployment ·
-    settlement on a local EVM with test USDC ·
+    settlement on Ethereum Sepolia with test USDC ·
     <a href="https://github.com/azlanabas/web3_proj" target="_blank" rel="noreferrer">source</a> ·
     <a href="/">open the interactive walkthrough →</a>
   </div>

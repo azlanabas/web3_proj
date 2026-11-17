@@ -120,6 +120,24 @@ cast call $ESCROW \\
           contract state — which is why the database can be rebuilt from them.
         </p>
       </Callout>
+
+      <Card title="Concepts that apply here" tag="and ones that do not">
+        <Table
+          head={["Concept", "Status on this deployment"]}
+          rows={[
+            ["ETH", "Used for gas only; the escrow holds USDC, never ETH"],
+            ["Gas", "Real testnet gas, paid in worthless Sepolia ETH"],
+            ["Accounts / EOA", "Three signer accounts, keys held by the service"],
+            ["Transactions and receipts", "Every action is signed; the API waits for the receipt"],
+            ["Event logs", "Read back by the indexer into an append-only table"],
+            ["Proof of Stake", "Secures Sepolia; validators stake and attest"],
+            ["Finality", "~12.8 minutes on Sepolia after two epochs"],
+            ["Sequencer", "Ethereum validators order transactions; no single operator"],
+            ["Rollups / L2", "Not used — this is an L1 testnet deployment"],
+            ["ZK / fraud proofs", "Not used — not a rollup"],
+          ]}
+        />
+      </Card>
     </Page>
   );
 }

@@ -1,4 +1,4 @@
-import { Badge, Card, Code, Page, Table } from "../components/ui";
+import { Badge, Card, Code, List, Page, Table } from "../components/ui";
 import { kickerFor } from "../nav";
 
 const TRANSITIONS: [string, string, string, string][] = [
@@ -86,6 +86,35 @@ CANCELLED           REFUNDED              │
             ["Release to seller", "no", "no", "yes, only if disputed"],
           ]}
         />
+      </Card>
+
+      <Card title="What the contract enforces" tag="Solidity 0.8.28">
+        <Table
+          head={["Function", "Caller", "Effect"]}
+          rows={[
+            ["createEscrow", "buyer", "Opens an escrow in CREATED"],
+            ["fund", "buyer", "Pulls USDC into the contract"],
+            ["markShipped", "seller", "Starts the 14-day timer"],
+            ["confirmDelivery", "buyer", "Pays the seller, RELEASED"],
+            ["dispute", "buyer", "Freezes the timer"],
+            ["releaseByTimeout", "anyone", "Pays the seller after 14 days undisputed"],
+            ["refund", "arbiter", "Returns funds to the buyer"],
+            ["releaseToSeller", "arbiter", "Pays the seller, only from DISPUTED"],
+            ["cancel", "buyer or seller", "Before funding only"],
+          ]}
+        />
+        <List
+          items={[
+            "Funds move only to the recorded buyer or seller — never an arbitrary address.",
+            "The arbiter can pay the seller only inside a raised dispute, and can never pay itself.",
+            "Terminal states are terminal: a released escrow cannot be refunded.",
+            "Every value-moving path is behind a reentrancy guard.",
+            "No proxy, no delegatecall, no selfdestruct — the bytecode is immutable.",
+          ]}
+        />
+        <p className="font-mono text-[11px] text-faint">
+          measured gas · create→fund→ship→confirm 332,310 · refund 290,403 · timeout release 323,396
+        </p>
       </Card>
     </Page>
   );

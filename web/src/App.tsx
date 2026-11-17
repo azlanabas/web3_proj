@@ -6,8 +6,6 @@ import { Sidebar } from "./components/Sidebar";
 import { SECTIONS } from "./nav";
 import { api } from "./lib/api";
 import type { Meta } from "./lib/meta";
-import { Api } from "./pages/Api";
-import { Data } from "./pages/Data";
 import { Walkthrough } from "./pages/Walkthrough";
 import { Explorer } from "./pages/Explorer";
 import { LiveBuild } from "./pages/LiveBuild";
@@ -18,18 +16,10 @@ import { Architecture } from "./pages/Architecture";
 import { Requirements } from "./pages/Requirements";
 import { Roadmap } from "./pages/Roadmap";
 import { Security } from "./pages/Security";
-import { Web } from "./pages/Web";
 import { Chain } from "./pages/Chain";
-import { Blockchain } from "./pages/Blockchain";
-import { Networks } from "./pages/Networks";
 import { Crypto } from "./pages/Crypto";
-import { Fundamentals } from "./pages/Fundamentals";
-import { SourceMap } from "./pages/SourceMap";
 import { References } from "./pages/References";
-import { ToolingMap } from "./pages/ToolingMap";
 import { Token } from "./pages/Token";
-import { Contract } from "./pages/Contract";
-import { Transactions } from "./pages/Transactions";
 
 function currentRoute(): string {
   const hash = window.location.hash.replace(/^#\/?/, "");
@@ -170,21 +160,11 @@ export default function App() {
             {route === "overview" && <Overview meta={meta} />}
             {route === "architecture" && <Architecture />}
             {route === "requirements" && <Requirements meta={meta} />}
-            {route === "web" && <Web />}
-            {route === "api" && <Api meta={meta} />}
-            {route === "data" && <Data />}
-            {route === "fundamentals" && <Fundamentals />}
-            {route === "sourcemap" && <SourceMap meta={meta} />}
             {route === "chain" && <Chain meta={meta} />}
-            {route === "networks" && <Networks meta={meta} />}
-            {route === "blockchain" && <Blockchain meta={meta} />}
             {route === "crypto" && <Crypto />}
             {route === "token" && <Token />}
-            {route === "contract" && <Contract />}
-            {route === "transactions" && <Transactions />}
             {route === "lifecycle" && <Lifecycle />}
             {route === "references" && <References />}
-            {route === "tooling" && <ToolingMap />}
             {route === "walkthrough" && <Walkthrough meta={meta} />}
             {route === "live" && <LiveBuild meta={meta} />}
             {route === "explorer" && <Explorer meta={meta} />}

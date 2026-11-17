@@ -30,7 +30,7 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
           ]}
         />
         <p className="flex flex-wrap gap-2 pt-1">
-          {publicChain ? <Badge>public testnet</Badge> : <Badge tone="amber">local chain</Badge>}
+          {publicChain ? <Badge>public testnet</Badge> : <Badge tone="amber">development network</Badge>}
           <Badge>real transactions</Badge>
           <Badge tone="slate">test currency only</Badge>
         </p>
@@ -56,7 +56,7 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
           rows={[
             ["Contract audit", "Nothing else on this list matters if the escrow can be drained."],
             ["Source verification on Etherscan", "Turns the deployed address into readable, checkable code."],
-            ["Wallet connect", "Removes the server-held buyer and seller keys, which is the biggest honest gap."],
+            ["Wallet connect", "Removes the server-held buyer and seller keys."],
             ["Image storage + CDN", "The last missing piece of a usable listing."],
             ["Alerting and a read replica", "Only once real traffic exists."],
           ]}
@@ -71,12 +71,12 @@ export function Roadmap({ meta }: { meta: Meta | null }) {
             ["D-15", "systemd instead of Docker — 2 GB host shared with another app"],
             ["D-17", "14-day timeout plus dispute — fixes the buyer-ghosting deadlock"],
             ["D-18", "Held back TypeScript 7 and Prisma 7 — breaking majors mid-MVP"],
-            ["D-29", "Sepolia deployment with fresh keys after anvil's defaults proved squatted"],
+            ["D-29", "Sepolia deployment with fresh keys after the default development keys proved squatted"],
           ]}
         />
       </Card>
 
-      <Callout tone="slate" title="The honest summary">
+      <Callout tone="slate" title="Summary">
         <p>
           This is a working escrow on a public testnet with real transactions, a real indexer and a
           real deployment pipeline. It is not audited, it is not on mainnet, and users do not sign
