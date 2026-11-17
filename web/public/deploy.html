@@ -32,6 +32,9 @@
   li.active{color:var(--text)}
   code{font-family:var(--mono);font-size:12px;background:#101113;border:1px solid var(--line);
     border-radius:3px;padding:1px 5px;word-break:break-all}
+  .plan{margin:10px 0 0;padding-left:20px}
+  .plan li{color:var(--text)}
+  .note{font-size:13px;color:var(--faint);margin-top:10px}
   .mono{font-family:var(--mono);font-size:12px;word-break:break-all}
   .err{color:var(--danger)}
   a{color:var(--accent)}
@@ -43,13 +46,19 @@
 <div class="wrap">
   <p class="kicker">Deploy · Ethereum Sepolia</p>
   <h1>Deploy the escrow from your own wallet</h1>
-  <p>
-    Five transactions, signed by you: a test USDC token, the escrow contract, and a mint of
-    1,000,000 test USDC to your address. Your keys never leave MetaMask. Copy the two addresses
-    back into the API when it finishes.
-  </p>
-
-  <div class="card">
+  <p>Six transactions, signed by you. Nothing leaves your wallet except gas.</p>
+  <ol class="plan">
+    <li>Deploy a 6-decimal test USDC token</li>
+    <li>Deploy the escrow, naming the API&rsquo;s arbiter key</li>
+    <li>Mint 1,000,000 USDC <strong>to the demo buyer</strong> &mdash; the API signs as that account, not as you</li>
+    <li>Send 0.003 ETH to the demo buyer for gas</li>
+    <li>Send 0.003 ETH to the demo seller for gas</li>
+    <li>Send 0.003 ETH to the arbiter for gas</li>
+  </ol>
+  <p class="note">
+    All three signers need gas: buyer funds and confirms, seller ships, arbiter refunds. The USDC goes
+    to the demo buyer for the same reason &mdash; the API signs as that account, not as you.
+  </p><div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
       <span class="pill" id="net">network: unknown</span>
       <span class="pill" id="acct">wallet: not connected</span>
@@ -63,8 +72,8 @@
       <li id="s1">Connect wallet on Sepolia</li>
       <li id="s2">Deploy test USDC</li>
       <li id="s3">Deploy escrow contract</li>
-      <li id="s4">Mint 1,000,000 test USDC to you</li>
-      <li id="s5">Fund the two demo signers with gas</li>
+      <li id="s4">Mint 1,000,000 USDC to the demo buyer</li>
+      <li id="s5">Fund the three demo signers with gas (3 transactions)</li>
     </ol>
     <p id="msg"></p>
   </div>
@@ -73,7 +82,10 @@
     <p class="kicker">Result</p>
     <p>Token address<br><code id="rToken"></code></p>
     <p>Escrow address<br><code id="rEscrow"></code></p>
-    <p>Then run on the server:</p>
+    <p class="note">
+      Send these two addresses to the operator. The API has to be repointed at them and restarted;
+      that cannot be done from this page, because it needs the server environment.
+    </p>
     <pre class="mono" id="rCmd"></pre>
   </div>
 </div>
@@ -172,12 +184,13 @@ el("deploy").onclick = async () => {
 
     setMsg("Confirm the mint in MetaMask…");
     el("s4").className = "active";
-    const mintData = art.mintSelector + pad(account) + padNum(1000000000000n);
+    const mintData = art.mintSelector + pad(DEMO_BUYER) + padNum(1000000000000n);
     await send(mintData, tokenAddr);
     el("s4").className = "done";
+    el("s4").textContent = "Minted 1,000,000 USDC to the demo buyer";
 
-    setMsg("Funding the two demo signers so they can transact…");
-    for (const acct of [DEMO_BUYER, DEMO_SELLER]) {
+    setMsg("Funding the three demo signers so they can transact…");
+    for (const acct of [DEMO_BUYER, DEMO_SELLER, SERVER_ARBITER]) {
       await window.ethereum.request({
         method: "eth_sendTransaction",
         params: [{ from: account, to: acct, value: "0x" + (3000000000000000n).toString(16) }],
@@ -191,6 +204,8 @@ el("deploy").onclick = async () => {
     el("rToken").textContent = tokenAddr;
     el("rEscrow").textContent = escrowAddr;
     el("rCmd").textContent =
+      "escrow: " + escrowAddr + "\n" +
+      "token:  " + tokenAddr + "\n\n" +
       "https://sepolia.etherscan.io/address/" + escrowAddr + "\n" +
       "https://sepolia.etherscan.io/address/" + tokenAddr;
   } catch (e) {
