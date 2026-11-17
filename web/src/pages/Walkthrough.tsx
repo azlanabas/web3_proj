@@ -144,10 +144,18 @@ export function Walkthrough({ meta }: { meta: Meta | null }) {
       lede="One session, both parties, in order. Each turn names who acts, what it does, and then shows the transaction and where the money moved."
     >
       {/* session + vehicle, one strip */}
-      <div className="rounded-lg border border-line">
+      <div className="border border-line">
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-ink px-4 py-2 text-paper">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em]">
+            escrow record {selected ? `#${selected.onchainId}` : "— not open —"}
+          </p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em]">
+            {selected?.status ?? "new"} · turn {turn.n}/5 · {turn.role}
+          </p>
+        </div>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-            turn {turn.n} of 5 · acting as {turn.role}
+          <p className="font-mono text-[11px] text-muted">
+            contract {meta ? `${meta.chain.escrow.slice(0, 10)}…${meta.chain.escrow.slice(-4)}` : "…"}
           </p>
           <div className="flex items-center gap-3">
             {escrows.length > 1 && (
