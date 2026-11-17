@@ -19,6 +19,8 @@ Facts below were measured **2026-11-17 23:35 GMT+8**.
 
 | File | What it answers |
 |---|---|
+| [`architecture.md`](architecture.md) | The whole system: stack, data model, contract, API, deployment, trust |
+| [`plan.md`](plan.md) · [`todo.md`](todo.md) | Order of work, and the concrete checklist |
 | [`docs/01-mvp-scope.md`](docs/01-mvp-scope.md) | What we are building, and explicitly what we are not |
 | [`docs/02-architecture.md`](docs/02-architecture.md) | Stack, schema, API, contract interface, AWS topology |
 | [`docs/03-decisions.md`](docs/03-decisions.md) | Every decision made so far, with rationale and reversal trigger |

@@ -215,3 +215,39 @@ risk. The host's own established pattern is systemd + local Postgres + nginx.
 deploy path is more manual. Accepted for an MVP on a shared small instance.
 
 **Reverses if:** the app moves to a larger instance, or a second environment is needed.
+
+---
+
+## D-16 — Stack signed off (core + Web3)
+
+**Status:** LOCKED (2026-11-17)
+
+Owner confirmed the full stack in `architecture.md` §4: NestJS + Vite/React/Tailwind +
+PostgreSQL 16 + Prisma + Zod + SIWE; Solidity with **Foundry**; **viem** + **wagmi v2 +
+RainbowKit**; OpenZeppelin v5; custom `getLogs` indexer.
+
+On-chain facts verified before sign-off: Sepolia reachable via Alchemy and public RPC; USDC
+at `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238` reports `symbol()`/`name()` `"USDC"` and
+`decimals()` **6**.
+
+**Pinning policy:** no version is invented. Each is read at install and recorded.
+
+---
+
+## D-17 — Buyer-ghosting deadlock is UNRESOLVED
+
+**Status:** OPEN — **blocks freezing the contract interface**
+
+If the buyer never confirms after shipment, funds are locked permanently: the arbiter can
+refund but not release, so nothing can move the money to the seller.
+
+Options considered:
+
+- **(a)** Timeout auto-release to the seller after N days, with the buyer able to open a
+  dispute before it expires. Preserves the refund-only asymmetry. **Recommended.**
+- **(b)** Give the arbiter release power after the timeout. Simpler, but weakens the core
+  invariant that the arbiter can never pay the seller.
+- **(c)** Leave it. Unacceptable — sellers would lose funds to an unresponsive buyer.
+
+**Reverses if:** the escrow model changes to a licensed custodian, where a human arbiter
+resolves every case.

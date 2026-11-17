@@ -5,7 +5,7 @@
 **Updated:** 2026-11-17 GMT+8
 **Status:** PLANNING — no code, nothing deployed
 
-Companion documents: [`docs/01-mvp-scope.md`](docs/01-mvp-scope.md) ·
+Companion documents: [`architecture.md`](architecture.md) · [`docs/01-mvp-scope.md`](docs/01-mvp-scope.md) ·
 [`docs/02-architecture.md`](docs/02-architecture.md) ·
 [`docs/03-decisions.md`](docs/03-decisions.md) ·
 [`docs/04-gap-register.md`](docs/04-gap-register.md) ·
