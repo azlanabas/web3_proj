@@ -330,6 +330,10 @@ single-page walkthrough. Live at `https://web3.heurist.online`, systemd-managed,
 Settlement is **simulated** (D-19): no chain transaction is sent. The contract is written and
 tested but undeployed.
 
+**Documentation UI (2026-11-17):** the frontend is a 12-section navigable walkthrough driven by a
+section registry, with hash routing, per-component pages and an API explorer that reads
+`GET /api/meta`. Bundle: 274 kB raw / 85.5 kB gzipped.
+
 ## 13. Known risks
 
 | Risk | Impact | Mitigation |

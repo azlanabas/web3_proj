@@ -4,10 +4,11 @@ import { DemoModule } from "./demo/demo.module";
 import { EscrowModule } from "./escrow/escrow.module";
 import { HealthController } from "./health/health.controller";
 import { ListingsModule } from "./listings/listings.module";
+import { MetaModule } from "./meta/meta.module";
 import { PrismaModule } from "./prisma/prisma.module";
 
 @Module({
-  imports: [PrismaModule, AuthModule, ListingsModule, EscrowModule, DemoModule],
+  imports: [PrismaModule, AuthModule, ListingsModule, EscrowModule, DemoModule, MetaModule],
   controllers: [HealthController],
 })
 export class AppModule {}
