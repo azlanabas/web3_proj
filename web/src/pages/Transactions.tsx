@@ -5,7 +5,7 @@ export function Transactions() {
   return (
     <Page
       kicker={kickerFor("transactions")}
-      title="Transaction lifecycle and indexing"
+      title="Transactions and indexing"
       lede="A click becomes a signed transaction, a mined block, a receipt, a log, a database row and finally a state change on screen. Nothing is written to the database that the chain did not first confirm."
     >
       <Card title="The path of one action" tag="end to end">

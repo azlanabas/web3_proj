@@ -24,7 +24,7 @@ export function SourceMap() {
   return (
     <Page
       kicker={kickerFor("sourcemap")}
-      title="Where every Web3 component lives"
+      title="Where everything lives"
       lede="Two locations matter for each component: the source in the repository, and the runtime location — an address on a chain, a port, or a unit. This is that map, with the command to verify each one."
     >
       <Table

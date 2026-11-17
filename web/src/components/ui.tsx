@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { ACTS, HANDOFFS, SECTIONS, actOf, sectionsOf } from "../nav";
+import { useRoute } from "../lib/route";
 
 export function Page({
   kicker,
@@ -11,12 +13,55 @@ export function Page({
   lede: string;
   children: ReactNode;
 }) {
+  const route = useRoute();
+  const index = SECTIONS.findIndex((s) => s.id === route);
+  const section = index >= 0 ? SECTIONS[index] : undefined;
+  const next = index >= 0 ? SECTIONS[index + 1] : undefined;
+  const act = section ? actOf(section.group) : undefined;
+  const nextAct = next ? actOf(next.group) : undefined;
+  const isActStart = section ? sectionsOf(section.group)[0]?.id === route : false;
+  const crossesAct = Boolean(next && section && next.group !== section.group);
+  const handoff = HANDOFFS[route];
+
   return (
     <article className="mx-auto max-w-4xl px-6 py-12">
+      {isActStart && act && (
+        <div className="mb-8 rounded-xl border border-line bg-surface p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
+              Act {act.number} of {ACTS.length}
+            </p>
+            <p className="font-mono text-[10px] text-faint">
+              {sectionsOf(act.group).length} pages
+            </p>
+          </div>
+          <p className="mt-1.5 text-sm font-semibold text-ink">{act.label}</p>
+          <p className="mt-0.5 text-[12px] leading-relaxed text-muted">{act.blurb}</p>
+        </div>
+      )}
+
       <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{kicker}</p>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{title}</h1>
       <p className="mt-4 text-base leading-relaxed text-muted">{lede}</p>
+
       <div className="mt-10 space-y-8">{children}</div>
+
+      {next && handoff && (
+        <div className="mt-12 border-t border-line pt-6">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+            {crossesAct
+              ? `End of act ${act?.number ?? 0} · next: act ${nextAct?.number ?? ""} · ${nextAct?.label ?? ""}`
+              : "Next in this act"}
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed text-muted">{handoff}</p>
+          <a
+            href={`#/${next.id}`}
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-paper transition hover:bg-accent-strong"
+          >
+            {next.label} →
+          </a>
+        </div>
+      )}
     </article>
   );
 }

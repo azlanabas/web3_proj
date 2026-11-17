@@ -28,7 +28,7 @@ export function ToolingMap() {
   return (
     <Page
       kicker={kickerFor("tooling")}
-      title="Tooling map: what is used, and what is not"
+      title="Tooling map"
       lede="A typical Web3 bookmark bar has twenty tools. This build needs five. Here is every common one, whether it appears in this project, and the reason either way — including the one that no longer exists."
     >
       <Card title="The five things this project actually depends on" tag="the stack">

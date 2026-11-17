@@ -23,7 +23,7 @@ export function Requirements() {
   return (
     <Page
       kicker={kickerFor("requirements")}
-      title="Every line of the brief, and where it actually lives"
+      title="Every line of the brief, traced"
       lede="The original brief was a recruitment message describing a vehicle marketplace with crypto escrow and smart contracts. This maps each stated requirement onto the component that implements it."
     >
       <Table

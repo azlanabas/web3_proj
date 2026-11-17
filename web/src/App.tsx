@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated, signOut } from "./lib/auth";
+import { RouteContext } from "./lib/route";
 import { Login } from "./pages/Login";
 import { Sidebar } from "./components/Sidebar";
 import { SECTIONS } from "./nav";
@@ -146,6 +147,7 @@ export default function App() {
           <div className="cluster-ticks" aria-hidden="true" />
 
           <main className="pb-4">
+            <RouteContext.Provider value={route}>
             {route === "overview" && <Overview />}
             {route === "architecture" && <Architecture />}
             {route === "requirements" && <Requirements />}
@@ -168,6 +170,7 @@ export default function App() {
             {route === "security" && <Security />}
             {route === "operations" && <Operations />}
             {route === "roadmap" && <Roadmap />}
+            </RouteContext.Provider>
           </main>
 
           <nav className="mx-auto flex max-w-4xl items-center justify-between gap-4 border-t border-line px-6 py-8">

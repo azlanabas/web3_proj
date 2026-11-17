@@ -5,7 +5,7 @@ export function Contract() {
   return (
     <Page
       kicker={kickerFor("contract")}
-      title="The escrow contract"
+      title="Escrow contract"
       lede="Two hundred and fourteen lines of Solidity that hold other people's money. Immutable, non-upgradeable, and designed so the platform can never pay itself."
     >
       <Table

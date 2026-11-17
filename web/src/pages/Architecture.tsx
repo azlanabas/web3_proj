@@ -53,7 +53,7 @@ export function Architecture() {
   return (
     <Page
       kicker={kickerFor("architecture")}
-      title="Architecture: every component, and how it is built"
+      title="Architecture"
       lede="A complete inventory of what exists in this system, which tool produces each artefact, and the order the pieces were assembled in. If it is not on this page, it is not in the build."
     >
       <Card title="How the three artefacts are produced" tag="build pipeline">

@@ -5,7 +5,7 @@ export function Chain() {
   return (
     <Page
       kicker={kickerFor("chain")}
-      title="Chain and networks"
+      title="Chains and networks"
       lede="Ethereum is a state machine: accounts hold balances, transactions mutate state, and every mutation produces a receipt with logs. This escrow uses that machine for exactly one thing — deciding when money moves."
     >
       <Stats

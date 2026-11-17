@@ -5,7 +5,7 @@ export function Token() {
   return (
     <Page
       kicker={kickerFor("token")}
-      title="USDC and the ERC-20 transfer model"
+      title="USDC and ERC-20"
       lede="Money is a token contract, not a column in a database. That single fact drives decimals handling, the two-step approval flow, and why escrow arithmetic is done in integers."
     >
       <Card title="Token addresses" tag="per network">

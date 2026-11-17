@@ -85,3 +85,32 @@ export function kickerFor(id: string): string {
   const index = list.findIndex((s) => s.id === id) + 1;
   return `${act?.number ?? 0} · ${act?.label ?? section.group} · ${index} of ${list.length}`;
 }
+
+/**
+ * The handoff from each section to the next: what the reader just learned and
+ * why the next page follows. Written per section so no transition is generic.
+ */
+export const HANDOFFS: Record<string, string> = {
+  overview: "You have the shape of it. The next page takes the brief that started this project and traces every line to where it actually lives.",
+  requirements: "The brief asked for secure transactions. The next page is what secure means here: seven states, and who is allowed to move between them.",
+  lifecycle: "The rules are clear. Now drive them: open an escrow and push it through every state yourself.",
+  demo: "You have watched the product work. The next act opens the machine: every file, every module, and the order it was built.",
+  architecture: "The inventory is the map. Now the layers, starting at the surface.",
+  web: "The browser sends JSON and nothing else. Here is what receives it.",
+  api: "Every request ends in a transaction. Here is where the state lives.",
+  data: "The schema describes shape. The next page says where each piece physically sits and how to verify it.",
+  sourcemap: "The application is mapped. The next act goes down to the chain it settles on, starting with Ethereum itself.",
+  fundamentals: "Those are the concepts. Here is the chain actually running.",
+  chain: "Networks decide where blocks come from. This page is what a block contains, and why blocks chain.",
+  blockchain: "Blocks are held together by hashes. So is every transaction, address, selector and login.",
+  crypto: "Authentication uses keccak and HMAC. The money uses a token standard, which is next.",
+  token: "USDC is the asset. The contract is what holds it and decides when it moves.",
+  contract: "The contract defines the rules. A transaction is how one rule is executed.",
+  transactions: "You have followed one transaction end to end. These are the tools that made it possible, and the ones that did not.",
+  tooling: "Every tool has a primary source. Here they are.",
+  references: "The chain is explained. The next act is the evidence that it runs.",
+  explorer: "You can call the API. This is what protects it.",
+  security: "Security is what was designed. Operations is what keeps it alive.",
+  operations: "The system runs. This is what was built, what was deferred, and in what order it comes next.",
+  roadmap: "One page holds all of it, and it prints.",
+};
