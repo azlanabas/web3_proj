@@ -30,7 +30,33 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
       title="The live build"
       lede="Deployment record: contract addresses, block height, and the transactions produced by the running service."
     >
-      <Card title="Where it is deployed" tag="live from /api/meta">
+      <Card title="The transactions that prove it" tag="recent events, newest first">
+        {events.length === 0 ? (
+          <p className="text-muted">No events indexed yet.</p>
+        ) : (
+          <Table
+            head={["Event", "Block", "Transaction", "Escrow"]}
+            rows={events.slice(0, 12).map((e) => [
+              <span className="font-mono text-[11px] text-accent">{e.eventName}</span>,
+              <span className="font-mono text-[11px]">{e.blockNumber}</span>,
+              explorer ? (
+                <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer" className="font-mono text-[10px] text-muted underline-offset-4 hover:text-accent hover:underline">
+                  {e.txHash.slice(0, 14)}…
+                </a>
+              ) : (
+                <span className="font-mono text-[10px]">{e.txHash.slice(0, 14)}…</span>
+              ),
+              <span className="font-mono text-[11px]">#{e.escrowId ?? "—"}</span>,
+            ])}
+          />
+        )}
+        <p className="text-xs">
+          Each row was written by the indexer after reading a log from the chain — not by the page
+          you are looking at.
+        </p>
+      </Card>
+
+<Card title="Where it is deployed" tag="live from /api/meta">
         <Table
           head={["Property", "Value"]}
           rows={[
@@ -58,32 +84,7 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
         </p>
       </Card>
 
-      <Card title="The transactions that prove it" tag="recent events, newest first">
-        {events.length === 0 ? (
-          <p className="text-muted">No events indexed yet.</p>
-        ) : (
-          <Table
-            head={["Event", "Block", "Transaction", "Escrow"]}
-            rows={events.slice(0, 12).map((e) => [
-              <span className="font-mono text-[11px] text-accent">{e.eventName}</span>,
-              <span className="font-mono text-[11px]">{e.blockNumber}</span>,
-              explorer ? (
-                <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer" className="font-mono text-[10px] text-muted underline-offset-4 hover:text-accent hover:underline">
-                  {e.txHash.slice(0, 14)}…
-                </a>
-              ) : (
-                <span className="font-mono text-[10px]">{e.txHash.slice(0, 14)}…</span>
-              ),
-              <span className="font-mono text-[11px]">#{e.escrowId ?? "—"}</span>,
-            ])}
-          />
-        )}
-        <p className="text-xs">
-          Each row was written by the indexer after reading a log from the chain — not by the page
-          you are looking at.
-        </p>
-      </Card>
-
+      
       <Card title="Verify it yourself, in four commands" tag="no trust required">
         <Code>{`cast chain-id --rpc-url $RPC            # ${c?.chainId ?? "chain id"}
 cast call $ESCROW "getEscrow(uint256)(address,address,uint256,uint64,uint64,uint8)" 1
