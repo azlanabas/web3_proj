@@ -68,7 +68,7 @@ export function References() {
     <Page
       kicker={kickerFor("references")}
       title="External references"
-      lede="Every third-party component this project depends on, with the primary source. Local contracts have no public explorer — they exist only on the anvil chain on this host — so those rows point at the standards and tools rather than an address page."
+      lede="Every third-party component this project depends on, with the primary source. Contract addresses are listed on the Live build page and are verifiable on Etherscan."
     >
       {SECTIONS.map((section) => (
         <Card key={section.title} title={section.title} tag={section.tag}>
@@ -90,7 +90,7 @@ export function References() {
         </Card>
       ))}
 
-      <Card title="What has no external link, and why" tag="honest">
+      <Card title="What has no external link, and why" tag="notes">
         <p>
           The escrow contract at <code className="font-mono text-[11px]">0x4e8D…3e0E</code> and the
           test USDC at <code className="font-mono text-[11px]">0xBA24…b8e3</code> are deployed to a

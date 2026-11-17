@@ -221,7 +221,7 @@ CANCELLED         REFUNDED              DISPUTED ──arbiter──▶ REFUNDED
     <pre>POST /api/escrows/:id/fund
   → EscrowService: state + role checks
   → viem walletClient.writeContract  (signed locally)
-  → anvil mempool → block → execution → logs
+  → mempool → block → execution → logs
   → waitForTransactionReceipt (status must be success)
   → escrow.status updated in PostgreSQL
   → indexer getLogs → decode → ChainEvent row

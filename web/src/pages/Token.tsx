@@ -1,7 +1,8 @@
 import { Callout, Card, Code, List, Page, Table } from "../components/ui";
 import { kickerFor } from "../nav";
+import type { Meta } from "../lib/meta";
 
-export function Token() {
+export function Token({ meta }: { meta: Meta | null }) {
   return (
     <Page
       kicker={kickerFor("token")}
@@ -12,7 +13,7 @@ export function Token() {
         <Table
           head={["Network", "USDC contract", "Decimals", "Used here"]}
           rows={[
-            ["Sepolia (this deployment)", <code className="font-mono text-[10px] break-all">0xBA24365396f6f92BDA5C0087d8806B7C545eb8e3</code>, "6", "Yes — the settlement token, minted on Sepolia"],
+            ["Sepolia (this deployment)", <code className="font-mono text-[10px] break-all">{meta?.chain.token ?? "—"}</code>, "6", "Yes — the settlement token, minted on Sepolia"],
             ["Sepolia (Circle USDC)", <a href="https://sepolia.etherscan.io/address/0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" target="_blank" rel="noreferrer" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">0x1c7D…7238</a>, "6", "Reference — verified on-chain, not used by this build"],
             ["Mainnet", <a href="https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" target="_blank" rel="noreferrer" className="font-mono text-[10px] text-accent underline-offset-4 hover:underline">0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48</a>, "6", "No"],
           ]}

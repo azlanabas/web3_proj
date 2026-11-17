@@ -3,7 +3,7 @@ import { kickerFor } from "../nav";
 
 const CONTRACTS: [string, string][] = [
   ["VehicleEscrow.sol", "214 lines — escrow state machine, 9 functions, 7 events, immutable arbiter"],
-  ["MockUSDC.sol", "6-decimal ERC-20 used as test settlement currency on the local chain"],
+  ["MockUSDC.sol", "6-decimal ERC-20 used as test settlement currency on Sepolia chain"],
   ["VehicleEscrow.t.sol", "23 tests: happy path, arbiter asymmetry, dispute gating, timeouts, reentrancy"],
   ["MockUSDC.sol (test)", "Mock token plus a malicious reentrant token used in the attack test"],
   ["foundry.toml", "solc 0.8.28, optimizer on, remappings for OpenZeppelin and forge-std"],
@@ -13,7 +13,7 @@ const API: [string, string][] = [
   ["main.ts", "Bootstrap: helmet, cookie-parser, global /api prefix, BigInt JSON, port 8310 on localhost"],
   ["app.module.ts", "Wires modules plus the global throttler guard"],
   ["prisma/schema.prisma", "6 models, enums, numeric(20,6) money, unique event index"],
-  ["prisma/migrations/", "2 versioned migrations (init, escrow simulation fields)"],
+  ["prisma/migrations/", "2 versioned migrations (init, escrow fields)"],
   ["auth/auth.service.ts", "SIWE nonce issue and verify, single-use, domain check, user upsert"],
   ["auth/auth.guard.ts", "HMAC cookie → user lookup, attaches req.user"],
   ["auth/session.ts", "Signed session payload, 2h expiry, timing-safe compare"],
@@ -41,7 +41,7 @@ const WEB: [string, string][] = [
 
 const OPS: [string, string][] = [
   ["web3proj-api.service", "systemd unit: node dist/main.js, 400 MB heap cap, auto-restart"],
-  ["anvil.service", "systemd unit: local EVM on 127.0.0.1:8545, 1s block time"],
+  ["RPC endpoint", "Sepolia via public RPC; CHAIN_MODE selects the network"],
   ["nginx vhost", "TLS termination, static frontend, /api proxy to 127.0.0.1:8310"],
   ["cron.d/web3proj-backup", "Nightly pg_dump at 03:00 GMT+8, 7-day rotation"],
   ["scripts/backup-db.sh", "Compressed dump using the migration role"],
@@ -76,11 +76,11 @@ forge create                        systemd restart                 nginx serves
   └── nginx ──/──────────────▶ web/dist (static React build)
         └──/api/*────────────▶ NestJS :8310
                                  ├── Prisma ──▶ PostgreSQL :5432
-                                 ├── viem ────▶ anvil :8545
+                                 ├── viem ────▶ Sepolia RPC
                                  │                └── VehicleEscrow + MockUSDC
                                  └── indexer ──▶ getLogs ──▶ ChainEvent rows
 
-contracts/ ──deployed to──▶ anvil ──address written to──▶ api/.env`}</Code>
+contracts/ ──deployed to──▶ Sepolia ──address written to──▶ api/.env`}</Code>
       </Card>
 
       <Card title="Contracts" tag="the on-chain code">
@@ -106,7 +106,7 @@ contracts/ ──deployed to──▶ anvil ──address written to──▶ ap
             "Escrow contract first, because the API's shape is dictated by the contract's events, not the reverse.",
             "Twenty-three Foundry tests before deployment, including a reentrancy attack.",
             "PostgreSQL schema and migrations, then SIWE auth, then listings, then the escrow service.",
-            "Real chain settlement: anvil, contract deployment, viem writes, then the log indexer.",
+            "Real chain settlement: Sepolia, contract deployment, viem writes, then the log indexer.",
             "Frontend last, built against a working loop rather than mocks.",
             "Hardening: rate limits, least-privilege DB role, backups, CI.",
             "Documentation: this walkthrough plus a standalone printable blueprint.",

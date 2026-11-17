@@ -11,8 +11,8 @@ export function Chain({ meta }: { meta: Meta | null }) {
     >
       <Stats
         items={[
-          { value: "31337", label: "active chain id (local anvil)" },
-          { value: "11155111", label: "Sepolia, the public target" },
+          { value: meta ? String(meta.chain.chainId) : "—", label: "active chain id" },
+          { value: meta ? meta.chain.network : "—", label: "settlement network" },
           { value: "~12 s", label: "block time on Sepolia" },
           { value: "23/23", label: "contract tests before deployment" },
         ]}
@@ -41,22 +41,22 @@ export function Chain({ meta }: { meta: Meta | null }) {
       </Card>
 
 
-      <Card title="Anvil today, Sepolia next: what actually changes" tag="be precise">
+      <Card title="What a public network changes" tag="by property">
         <Table
-          head={["Property", "anvil (today)", "Sepolia", "mainnet"]}
+          head={["Property", "Development chain", "Sepolia (live)", "mainnet"]}
           rows={[
-            ["Consensus", "None — a block timer", "Proof of Stake, real validators", "Proof of Stake, real money"],
+            ["Consensus", "Block timer", "Proof of Stake, real validators", "Proof of Stake, real money"],
             ["Block time", "1 second", "~12 seconds", "~12 seconds"],
             ["Finality", "Immediate", "~12.8 minutes", "~12.8 minutes"],
-            ["Reorg risk", "Zero", "Real until finality", "Real until finality"],
+            ["Reorg risk", "None", "Real until finality", "Real until finality"],
             ["Cost to run", "Free", "Free test ETH, real gas mechanics", "Real ETH"],
-            ["Who can verify", "Anyone with access to this host", "Anyone — public explorer", "Anyone"],
-            ["Contract verification", "Not possible", "Etherscan source verification", "Etherscan source verification"],
-            ["Data availability", "One process, in memory", "Replicated across nodes", "Replicated across nodes"],
+            ["Who can verify", "This host", "Anyone — public explorer", "Anyone"],
+            ["Contract verification", "Local bytecode", "Etherscan source verification", "Etherscan source verification"],
+            ["Data availability", "One process", "Replicated across nodes", "Replicated across nodes"],
           ]}
         />
         <p>
-          The application code is identical in all three. What changes is four environment values
+          The application code is identical in all three. Four environment values change
           (<code className="font-mono text-[11px]">RPC_URL</code>,{" "}
           <code className="font-mono text-[11px]">CHAIN_ID</code>,{" "}
           <code className="font-mono text-[11px]">CONTRACT_ADDRESS</code>,{" "}
@@ -70,11 +70,11 @@ export function Chain({ meta }: { meta: Meta | null }) {
         </p>
       </Card>
 
-      <Card title="Why the build started on a local chain" tag="history">
+      <Card title="Development environment" tag="history">
         <List
           items={[
             "Sepolia requires testnet ETH for gas; every faucet needs a browser session or a mainnet balance.",
-            "A local chain gives deterministic accounts, so the flow runs without a wallet extension.",
+            "A development chain gives deterministic accounts, so the flow runs without a wallet extension.",
             "Blocks are mined on demand, so the 14-day timeout can be exercised with evm_increaseTime instead of waiting.",
             "The transaction path is identical: real signing, real broadcast, real receipts, real logs.",
           ]}
@@ -103,7 +103,7 @@ export function Chain({ meta }: { meta: Meta | null }) {
 
       <Card title="Inspect it yourself" tag="cast">
         <Code>{`# chain is alive
-cast chain-id --rpc-url http://127.0.0.1:8545        # 31337
+cast chain-id --rpc-url $RPC                            # chain id
 cast block-number --rpc-url http://127.0.0.1:8545
 
 # escrow state for escrow #1

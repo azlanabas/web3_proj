@@ -142,8 +142,8 @@ export default function App() {
             <div className="border-b border-line bg-surface">
               <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-6 py-2.5">
                 <p className="font-mono text-[11px] text-muted">
-                  <span className="text-warn">local chain</span> · this deployment settles on anvil.
-                  Sepolia is one signed deployment away.
+                  <span className="text-good">{meta?.chain.network ?? "Ethereum Sepolia"}</span> · every escrow
+                  action is a signed transaction with a receipt.
                 </p>
                 <a
                   href="/deploy.html"
@@ -162,7 +162,7 @@ export default function App() {
             {route === "requirements" && <Requirements meta={meta} />}
             {route === "chain" && <Chain meta={meta} />}
             {route === "crypto" && <Crypto />}
-            {route === "token" && <Token />}
+            {route === "token" && <Token meta={meta} />}
             {route === "lifecycle" && <Lifecycle />}
             {route === "references" && <References />}
             {route === "walkthrough" && <Walkthrough meta={meta} />}
@@ -198,7 +198,7 @@ export default function App() {
           </nav>
 
           <footer className="border-t border-line px-6 py-6 text-center font-mono text-[10px] text-faint">
-            web3_proj · AWS ap-southeast-1 · anvil 31337 · on-chain with test USDC
+            web3_proj · AWS ap-southeast-1 · {meta?.chain.network ?? "Ethereum Sepolia"} · on-chain with test USDC
             <span className="mx-2 text-faint">·</span>
             <a
               href="https://github.com/azlanabas/web3_proj"

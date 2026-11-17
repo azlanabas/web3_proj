@@ -74,8 +74,8 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
           ]}
         />
         <p className="flex flex-wrap gap-2 pt-1">
-          {publicChain ? <Badge>public testnet</Badge> : <Badge tone="amber">local chain</Badge>}
-          <Badge tone="slate">{live ? "real transactions" : "simulated"}</Badge>
+          {publicChain ? <Badge>public testnet</Badge> : <Badge tone="amber">development network</Badge>}
+          <Badge tone="slate">real transactions</Badge>
           {explorer && (
             <a href={`${explorer}/address/${c?.escrow}`} target="_blank" rel="noreferrer" className="font-mono text-[11px] text-accent underline-offset-4 hover:underline">
               view on Etherscan ↗
