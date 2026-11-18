@@ -6,7 +6,7 @@
  * opens on a sign-in card, not to protect anything.
  */
 const CREDENTIAL_SHA256 =
-  "2165d2ecf9bfbd80467dca835c1761924c6fc1647351906f7c1f3c73947584b1";
+  "4a2ff5c1d93211730acb79fc5e8a88f777dd13f095ac65c0770e940d499cfe43";
 
 const KEY = "w3_auth";
 const TTL_MS = 12 * 60 * 60 * 1000;

@@ -119,7 +119,7 @@ on each request:
         <Code>{`cast sig "fund(uint256)"
 cast keccak "Funded(uint256)"
 cast wallet address --private-key $BUYER_PRIVATE_KEY   # key → address
-printf 'pattinson:bond' | shasum -a 256                # access gate digest`}</Code>
+printf 'web:3bew' | shasum -a 256                      # access gate digest`}</Code>
       </Card>
     </Page>
   );
