@@ -40,8 +40,10 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
               <span className="font-mono text-[11px] text-accent">{e.eventName}</span>,
               <span className="font-mono text-[11px]">{e.blockNumber}</span>,
               explorer ? (
-                <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer" className="font-mono text-[10px] text-muted underline-offset-4 hover:text-accent hover:underline">
-                  {e.txHash.slice(0, 14)}…
+                <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer"
+                   className="inline-flex items-baseline gap-1 font-mono text-[10px] text-ink underline-offset-4 hover:text-accent hover:underline">
+                  {e.txHash.slice(0, 10)}…
+                  <span className="text-[9px] uppercase tracking-wider text-accent">Etherscan ↗</span>
                 </a>
               ) : (
                 <span className="font-mono text-[10px]">{e.txHash.slice(0, 14)}…</span>
@@ -50,9 +52,25 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
             ])}
           />
         )}
+        {explorer && (
+          <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-line pt-3 font-mono text-[11px]">
+            <a href={`${explorer}/address/${c?.escrow}`} target="_blank" rel="noreferrer"
+               className="text-accent underline-offset-4 hover:underline">
+              escrow contract ↗
+            </a>
+            <a href={`${explorer}/address/${c?.token}`} target="_blank" rel="noreferrer"
+               className="text-accent underline-offset-4 hover:underline">
+              USDC token ↗
+            </a>
+            <a href={`${explorer}/address/${c?.escrow}#transactions`} target="_blank" rel="noreferrer"
+               className="text-accent underline-offset-4 hover:underline">
+              all transactions ↗
+            </a>
+          </div>
+        )}
         <p className="text-xs">
-          Each row was written by the indexer after reading a log from the chain — not by the page
-          you are looking at.
+          Every hash above is a real Sepolia transaction. Each row was written by the indexer after
+          reading a log from the chain.
         </p>
       </Card>
 
