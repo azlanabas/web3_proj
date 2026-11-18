@@ -40,11 +40,13 @@ export function LiveBuild({ meta }: { meta: Meta | null }) {
               <span className="font-mono text-[11px] text-accent">{e.eventName}</span>,
               <span className="font-mono text-[11px]">{e.blockNumber}</span>,
               explorer ? (
-                <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer"
-                   className="inline-flex items-baseline gap-1 font-mono text-[10px] text-ink underline-offset-4 hover:text-accent hover:underline">
-                  {e.txHash.slice(0, 10)}…
-                  <span className="text-[9px] uppercase tracking-wider text-accent">Etherscan ↗</span>
-                </a>
+                <span className="inline-flex items-baseline gap-2 font-mono text-[10px]">
+                  <span className="text-muted">{e.txHash.slice(0, 10)}…</span>
+                  <a href={`${explorer}/tx/${e.txHash}`} target="_blank" rel="noreferrer"
+                     className="border-b border-accent/40 text-[10px] uppercase tracking-wider text-accent hover:border-accent">
+                    view ↗
+                  </a>
+                </span>
               ) : (
                 <span className="font-mono text-[10px]">{e.txHash.slice(0, 14)}…</span>
               ),
